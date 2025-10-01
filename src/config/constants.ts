@@ -24,7 +24,7 @@ export const CONFIG = {
       },
     },
   
-    MONGO_URL: process.env.MONGO_URL || 'mongodb://localhost:27017/x-invoice',
+    MONGO_URL: process.env.MONGO_URL || 'mongodb+srv://launchixai_db_user:TdKQsrePYY2a3mY1@launchix0.0pblfpo.mongodb.net/',
   
     FRONTEND_URL: process.env.Frontend_URL || 'http://localhost:3000',
   };
