@@ -10,8 +10,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => {
-        const uri = configService.get<string>('MONGO_URL') || process.env.MONGO_URL || 'mongodb+srv://launchixai_db_user:TdKQsrePYY2a3mY1@launchix0.0pblfpo.mongodb.net/';
-        console.log('Attempting to connect to MongoDB with URI:', uri ? 'URI found' : 'URI missing');
+        const uri = 'mongodb+srv://launchixai_db_user:TdKQsrePYY2a3mY1@launchix0.0pblfpo.mongodb.net/launchix?retryWrites=true&w=majority&appName=launchix0';
         return {
           uri,
           useNewUrlParser: true,
