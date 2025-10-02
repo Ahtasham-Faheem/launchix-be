@@ -13,8 +13,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         const uri = 'mongodb+srv://launchixai_db_user:TdKQsrePYY2a3mY1@launchix0.0pblfpo.mongodb.net/launchix?retryWrites=true&w=majority&appName=launchix0';
         return {
           uri,
-          useNewUrlParser: true,
-          useUnifiedTopology: true,
         };
       },
       inject: [ConfigService],
