@@ -17,7 +17,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     //   },
     //   inject: [ConfigService],
     // }), 
-    MongooseModule.forRoot('mongodb+srv://launchixai_db_user:TdKQsrePYY2a3mY1@launchix0.0pblfpo.mongodb.net/launchix?retryWrites=true&w=majority&appName=launchix0')
+    MongooseModule.forRoot(process.env.MONGO_URL),
   ],
 })
 export class DatabaseModule {}
