@@ -44,7 +44,7 @@ const bootstrap = async () => {
   SwaggerModule.setup('api-docs', app, document); // http://localhost:PORT/api-docs
 
   // Set and validate the port
-  const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+  const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 5000;
 
   if (isNaN(port) || port < 0 || port > 65535) {
     console.error('Invalid PORT value. Using default port 3000.');
