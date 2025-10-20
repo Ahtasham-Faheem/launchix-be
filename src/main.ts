@@ -6,12 +6,32 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { GlobalExceptionFilter } from './exception/global-exception';
 
 const bootstrap = async () => {
-  const app = await NestFactory.create(AppModule, {
-    cors: {
-      origin: '*', // You can replace '*' with allowed origins in production
-      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-      credentials: true,
-    },
+  const app = await NestFactory.create(AppModule);
+
+  // Configure CORS
+  app.enableCors({
+    origin: [
+      'http://localhost:3000',     // Local development
+      'http://localhost:5173',     // Vite default port
+      'http://3.92.141.250:3000',
+      'http://3.92.141.250:5173',
+      'https://platform.launchix.ai'
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS', 'HEAD'],
+    credentials: true,
+    allowedHeaders: [
+      'Origin',
+      'X-Requested-With',
+      'Content-Type',
+      'Accept',
+      'Authorization',
+      'Access-Control-Allow-Headers',
+      'Access-Control-Request-Method',
+      'Access-Control-Request-Headers',
+    ],
+    exposedHeaders: ['Set-Cookie'],
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
   });
 
   // Increase payload size limit to 5MB (adjust as needed)
