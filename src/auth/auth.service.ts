@@ -28,7 +28,7 @@ export class AuthService {
       lastName,
     });
 
-    const token = this.jwtService.sign({ id: user._id });
+    const token = this.jwtService.sign({ id: user._id, email: user.email });
     return { success: true, userId: user._id, token };
   }
 

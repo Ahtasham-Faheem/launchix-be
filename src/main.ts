@@ -11,10 +11,7 @@ const bootstrap = async () => {
   // Configure CORS
   app.enableCors({
     origin: [
-      'http://localhost:3000',     // Local development
-      'http://localhost:5173',     // Vite default port
-      'http://3.92.141.250:3000',
-      'http://3.92.141.250:5173',
+      'http://localhost:3000',
       'https://platform.launchix.ai'
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS', 'HEAD'],
@@ -57,7 +54,6 @@ const bootstrap = async () => {
     .setVersion('1.0')
     .addBearerAuth() // JWT Auth for Swagger "Authorize" button
     .build();
-
 
   app.useGlobalFilters(new GlobalExceptionFilter());
   const document = SwaggerModule.createDocument(app, config);
