@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { CONFIG } from 'src/config/constants';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     //   },
     //   inject: [ConfigService],
     // }), 
-    MongooseModule.forRoot(process.env.MONGO_URL),
+    MongooseModule.forRoot(CONFIG.MONGO_URL),
   ],
 })
 export class DatabaseModule {}
