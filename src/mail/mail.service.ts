@@ -1,16 +1,22 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 import { Resend } from 'resend';
+import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as Handlebars from 'handlebars';
-import { CONFIG } from 'src/config/constants';
 
 @Injectable()
 export class MailService {
-  private resend: Resend;
+  private readonly resend: Resend;
+  private readonly logger = new Logger(MailService.name);
 
-  constructor() {
-    this.resend = new Resend(CONFIG.MAIL.RESEND_API_KEY);
+  constructor(private readonly configService: ConfigService) {
+    const apiKey = this.configService.get<string>('RESEND_API_KEY');
+    if (!apiKey) {
+      this.logger.warn('⚠️ RESEND_API_KEY not found in environment variables');
+    }
+
+    this.resend = new Resend(apiKey);
   }
 
   /**
@@ -23,17 +29,20 @@ export class MailService {
         year: new Date().getFullYear(),
       });
 
+      const from = this.configService.get<string>('MAIL_FROM');
+      const subject = 'Verify your email - Launchix AI';
+
       const response = await this.resend.emails.send({
-        from: CONFIG.MAIL.EMAIL_FROM,
+        from,
         to,
-        subject: 'Verify your email - Launchix AI',
+        subject,
         html,
       });
 
-      console.log('Verification email sent:', response);
+      this.logger.log(`Verification email sent to ${to}`);
       return response;
     } catch (error) {
-      console.error('Error sending verification email:', error);
+      this.logger.error('Error sending verification email:', error.stack || error);
       throw new InternalServerErrorException('Failed to send verification email');
     }
   }
@@ -49,17 +58,20 @@ export class MailService {
         resend: true,
       });
 
+      const from = this.configService.get<string>('MAIL_FROM');
+      const subject = 'Your new verification code - Launchix AI';
+
       const response = await this.resend.emails.send({
-        from: CONFIG.MAIL.EMAIL_FROM,
+        from,
         to,
-        subject: 'Your new verification code - Launchix AI',
+        subject,
         html,
       });
 
-      console.log('Resent verification email:', response);
+      this.logger.log(`Resent verification email to ${to}`);
       return response;
     } catch (error) {
-      console.error('Error resending verification email:', error);
+      this.logger.error('Error resending verification email:', error.stack || error);
       throw new InternalServerErrorException('Failed to resend verification email');
     }
   }
@@ -68,9 +80,14 @@ export class MailService {
    * 🧩 Renders an HTML template using Handlebars
    */
   private async renderTemplate(templateName: string, context: any): Promise<string> {
-    const templatePath = path.join(__dirname, `../templates/${templateName}`);
-    const source = await fs.promises.readFile(templatePath, 'utf-8');
-    const template = Handlebars.compile(source);
-    return template(context);
+    try {
+      const templatePath = path.join(__dirname, `../templates/${templateName}`);
+      const source = await fs.promises.readFile(templatePath, 'utf-8');
+      const template = Handlebars.compile(source);
+      return template(context);
+    } catch (error) {
+      this.logger.error(`Error rendering template ${templateName}:`, error);
+      throw new InternalServerErrorException('Failed to render email template');
+    }
   }
 }

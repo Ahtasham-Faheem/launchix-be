@@ -4,15 +4,19 @@ import { CreateUserDto } from './dto/createUser.dto';
 import { LoginUserDto } from './dto/loginUser.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
-import { CONFIG } from 'src/config/constants';
 import { JwtService } from '@nestjs/jwt';
 import ResponseHelper from 'src/utils/response-helper';
 import { ApiOperation } from '@nestjs/swagger';
 import { VerifyEmailDto } from './dto/verify-email.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService, private readonly jwtService: JwtService) { }
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly authService: AuthService,
+    private readonly jwtService: JwtService
+  ) { }
 
   @Post('signup')
   async signup(@Body() createUserDto: CreateUserDto) {
@@ -51,17 +55,37 @@ export class AuthController {
   }
 
 
-  // Google will redirect back to here
+  /**
+   * ✅ Google OAuth Callback
+   * Google redirects to this route after successful authentication
+   */
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
   async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
-    // req.user is object returned via done(null, user) in strategy.validate
-    const user = req.user as any;
-    // Here we can set cookie or redirect with token
-    // Example: redirect to frontend with token as query (avoid for production—use httpOnly cookie)
-    const frontendUrl = CONFIG.GOOGLE.FRONTEND_LANDING_URL;
-    // user.token should be created in authService.findOrCreateFromGoogle
+    const user = req.user as any; // Returned from strategy.validate()
+
+    if (!user || !user.token) {
+      return res.status(400).json({ message: 'Authentication failed' });
+    }
+
+    // Dynamically load the frontend redirect URL from ConfigService
+    const frontendUrl = this.configService.get<string>('GOOGLE_FRONTEND_LANDING_URL');
+
+    if (!frontendUrl) {
+      console.error('⚠️ Missing GOOGLE_FRONTEND_LANDING_URL in .env');
+      return res.status(500).json({ message: 'Server configuration error' });
+    }
+
+    // Option 1: Redirect with token in query string (simple for development)
     return res.redirect(`${frontendUrl}?token=${user.token}`);
+
+    // Option 2 (recommended for production):
+    // res.cookie('auth_token', user.token, {
+    //   httpOnly: true,
+    //   secure: process.env.NODE_ENV === 'production',
+    //   sameSite: 'lax',
+    // });
+    // return res.redirect(frontendUrl);
   }
 
 
