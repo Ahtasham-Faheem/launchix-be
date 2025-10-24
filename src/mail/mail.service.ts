@@ -29,7 +29,7 @@ export class MailService {
         year: new Date().getFullYear(),
       });
 
-      const from = this.configService.get<string>('MAIL_FROM');
+      const from = this.configService.get<string>('EMAIL_FROM');
       const subject = 'Verify your email - Launchix AI';
 
       const response = await this.resend.emails.send({
@@ -58,7 +58,7 @@ export class MailService {
         resend: true,
       });
 
-      const from = this.configService.get<string>('MAIL_FROM');
+      const from = this.configService.get<string>('EMAIL_FROM');
       const subject = 'Your new verification code - Launchix AI';
 
       const response = await this.resend.emails.send({
