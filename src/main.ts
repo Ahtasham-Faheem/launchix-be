@@ -13,7 +13,8 @@ const bootstrap = async () => {
     origin: [
       'http://localhost:3000',
       'http://localhost:5173',
-      'https://platform.launchix.ai'
+      'https://platform.launchix.ai',
+      'https://launchix-genesis-spark.lovable.app'
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS', 'HEAD'],
     credentials: true,
