@@ -12,6 +12,7 @@ const bootstrap = async () => {
   app.enableCors({
     origin: [
       'http://localhost:3000',
+      'http://localhost:5173',
       'https://platform.launchix.ai'
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS', 'HEAD'],

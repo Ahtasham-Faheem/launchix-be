@@ -1,70 +1,76 @@
-import { Injectable } from '@nestjs/common';
-import * as nodemailer from 'nodemailer';
-import * as path from 'path';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Resend } from 'resend';
 import * as fs from 'fs';
+import * as path from 'path';
 import * as Handlebars from 'handlebars';
 import { CONFIG } from 'src/config/constants';
 
 @Injectable()
 export class MailService {
-  private transporter: nodemailer.Transporter;
+  private resend: Resend;
 
   constructor() {
-    if (CONFIG.EMAIL.SERVICE === 'gmail') {
-      console.log('Running GMAIL', console.log('Running CUSTOM SMTP', CONFIG.EMAIL))
-      this.transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: CONFIG.EMAIL.USER,
-          pass: CONFIG.EMAIL.PASS,
-        },
+    this.resend = new Resend(CONFIG.MAIL.RESEND_API_KEY);
+  }
+
+  /**
+   * ✅ Send verification email (Launchix AI)
+   */
+  async sendVerificationEmail(to: string, verificationCode: string) {
+    try {
+      const html = await this.renderTemplate('verification-email.hbs', {
+        code: verificationCode,
+        year: new Date().getFullYear(),
       });
-    } else {
-      this.transporter = nodemailer.createTransport({
-        host: CONFIG.EMAIL.SMTP.HOST,
-        port: CONFIG.EMAIL.SMTP.PORT,
-        secure: CONFIG.EMAIL.SMTP.SECURE,
-        auth: {
-          user: CONFIG.EMAIL.SMTP.USER,
-          pass: CONFIG.EMAIL.SMTP.PASS,
-        },
-        tls: {
-          rejectUnauthorized: false,
-        },
+
+      const response = await this.resend.emails.send({
+        from: CONFIG.MAIL.EMAIL_FROM,
+        to,
+        subject: 'Verify your email - Launchix AI',
+        html,
       });
+
+      console.log('Verification email sent:', response);
+      return response;
+    } catch (error) {
+      console.error('Error sending verification email:', error);
+      throw new InternalServerErrorException('Failed to send verification email');
     }
   }
 
-  async sendResetPasswordEmail(email: string, token: string) {
-    const resetUrl = `${CONFIG.FRONTEND_URL}/reset-password?token=${token}`;
+  /**
+   * ✅ Resend verification email (new code)
+   */
+  async resendVerificationEmail(to: string, newCode: string) {
+    try {
+      const html = await this.renderTemplate('verification-email.hbs', {
+        code: newCode,
+        year: new Date().getFullYear(),
+        resend: true,
+      });
 
-    await this.transporter.sendMail({
-      from: `"X-Invoice" <${this.getSenderEmail()}>`,
-      to: email,
-      subject: 'Reset Password',
-      text: `You requested a password reset. Please click the following link to reset your password: ${resetUrl}`,
-    });
+      const response = await this.resend.emails.send({
+        from: CONFIG.MAIL.EMAIL_FROM,
+        to,
+        subject: 'Your new verification code - Launchix AI',
+        html,
+      });
+
+      console.log('Resent verification email:', response);
+      return response;
+    } catch (error) {
+      console.error('Error resending verification email:', error);
+      throw new InternalServerErrorException('Failed to resend verification email');
+    }
   }
 
-  async sendVerificationEmail(to: string, verificationCode: string) {
-    const mailOptions = {
-      from: `"X-Invoice" <${this.getSenderEmail()}>`,
-      to,
-      subject: 'Verification Email',
-      html: await this.generateEmailTemplate(verificationCode),
-    };
-
-    await this.transporter.sendMail(mailOptions);
-  }
-
-  private async generateEmailTemplate(verificationCode: string): Promise<string> {
-    const filePath = path.join(__dirname, '../templates/verification-email.hbs');
-    const templateSource = await fs.promises.readFile(filePath, 'utf-8');
-    const template = Handlebars.compile(templateSource);
-    return template({ code: verificationCode });
-  }
-
-  private getSenderEmail(): string {
-    return CONFIG.EMAIL.SERVICE === 'gmail' ? CONFIG.EMAIL.USER : CONFIG.EMAIL.SMTP.USER;
+  /**
+   * 🧩 Renders an HTML template using Handlebars
+   */
+  private async renderTemplate(templateName: string, context: any): Promise<string> {
+    const templatePath = path.join(__dirname, `../templates/${templateName}`);
+    const source = await fs.promises.readFile(templatePath, 'utf-8');
+    const template = Handlebars.compile(source);
+    return template(context);
   }
 }
