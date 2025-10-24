@@ -9,6 +9,7 @@ import ResponseHelper from 'src/utils/response-helper';
 import { ApiOperation } from '@nestjs/swagger';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { ConfigService } from '@nestjs/config';
+import { ResendVerificationDto } from './dto/resend-verification.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -37,14 +38,10 @@ export class AuthController {
     return ResponseHelper.createResponse({ token: data.token }, HttpStatus.OK, 'Login successful');
   }
 
-  /**
- * ✅ Resend Verification Email
- * @route POST /auth/resend-verification
- * @body { email: string }
- */
   @Post('resend-verification')
-  async resendVerification(@Body('email') email: string) {
-    const data = await this.authService.resendVerification(email);
+  @ApiOperation({ summary: 'Resend verification email' })
+  async resendVerification(@Body() body: ResendVerificationDto) {
+    const data = await this.authService.resendVerification(body.email);
     return ResponseHelper.createResponse({}, HttpStatus.OK, data.message);
   }
 
