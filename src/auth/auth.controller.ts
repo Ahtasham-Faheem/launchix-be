@@ -28,13 +28,13 @@ export class AuthController {
   @Post('verify-email')
   async verifyEmail(@Body() body: VerifyEmailDto) {
     const data = await this.authService.verifyEmail(body.email, body.code);
-    return ResponseHelper.createResponse({ userId: data.userId, token: data.token }, HttpStatus.OK, data.message);
+    return ResponseHelper.createResponse({ token: data.token }, HttpStatus.OK, data.message);
   }
 
   @Post('login')
   async login(@Body() loginUserDto: LoginUserDto) {
     const data = await this.authService.login(loginUserDto);
-    return ResponseHelper.createResponse({ userId: data.userId, token: data.token }, HttpStatus.OK, 'Login successful');
+    return ResponseHelper.createResponse({ token: data.token }, HttpStatus.OK, 'Login successful');
   }
 
   /**
