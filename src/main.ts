@@ -44,9 +44,9 @@ async function bootstrap() {
   // ✅ Swagger Configuration
   // ─────────────────────────────
   const swaggerConfig = new DocumentBuilder()
-    .setTitle(configService.get<string>('SWAGGER_TITLE') || 'Launchix AI')
-    .setDescription(configService.get<string>('SWAGGER_DESCRIPTION') || 'Brand generation APIs')
-    .setVersion(configService.get<string>('SWAGGER_VERSION') || '1.0')
+    .setTitle('Launchix AI')
+    .setDescription('Brand generation APIs')
+    .setVersion('1.0')
     .addBearerAuth()
     .build();
 
