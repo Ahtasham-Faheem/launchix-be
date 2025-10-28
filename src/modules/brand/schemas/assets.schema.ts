@@ -6,17 +6,30 @@ export class BrandAssets {
   @Prop({ type: Types.ObjectId, ref: 'Brand', required: true })
   brand: Types.ObjectId;
 
+  // 🎨 Brand color palette (hex or rgb values)
   @Prop({ type: [String], default: [] })
   palette: string[];
 
-  @Prop({ type: [String], default: [] })
-  logos: string[];
+  // 🖼 Logos with explicit variant structure
+  @Prop({
+    type: [
+      {
+        type: { type: String, required: true }, // e.g., "Primary Logo"
+        url: { type: String, required: true },   // S3 or DALL·E URL
+      },
+    ],
+    default: [],
+  })
+  logos: { type: string; url: string }[];
 
-  @Prop({ type: Object })
+  // 🌐 Website content JSON (Grapes.js compatible structure)
+  @Prop({ type: Object, default: {} })
   websiteJson?: any;
 
+  // 🧢 Product or brand mockups (image URLs)
   @Prop({ type: [String], default: [] })
   mockups?: string[];
 }
+
 export type BrandAssetsDocument = HydratedDocument<BrandAssets>;
 export const BrandAssetsSchema = SchemaFactory.createForClass(BrandAssets);

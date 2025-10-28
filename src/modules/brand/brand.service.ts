@@ -68,7 +68,10 @@ export class BrandService {
     const brand = await this.brandModel.findById(brandId);
     if (!brand) throw new NotFoundException('Brand not found');
     const palette = this.ai.pickColors(brand.brandStyle);
-    const logos = await this.ai.generateLogos(brand.businessName, palette);
+    
+    const logos = await this.ai.generateLogos(brand as Brand, palette);
+    
+    
     const websiteJson = await this.ai.generateWebsiteJson(brand.toObject(), palette);
     const mockups = await this.ai.createMockups();
     const assets = await this.assetsModel.findOneAndUpdate(

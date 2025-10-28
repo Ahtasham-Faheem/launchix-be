@@ -1,5 +1,6 @@
 import OpenAI from 'openai';
 import { brandGenratePrompt } from './prompts/brandGenratePrompt';
+import { Brand } from '../brand/schemas/brand.schema';
 
 export const BRAND_FIELDS = ['businessName', 'industry', 'tagline', 'brandStyle'] as const;
 
@@ -120,26 +121,73 @@ Return JSON with only those fields.`;
     return uniqueColors.length > 0 ? uniqueColors : palettes['Modern'];
   }
 
-  async generateLogos(brandName: string, colors: string[]) {
+  async generateLogos(brand: Brand, colors: string[]) {
+    const brandName = brand.businessName || 'Your Brand';
+    const tagline = brand.tagline ? ` — tagline: "${brand.tagline}"` : '';
+    const styles = Array.isArray(brand.brandStyle)
+      ? brand.brandStyle.join(', ')
+      : brand.brandStyle || 'Modern';
+
+    // 🎨 Safely map brand colors
+    const primary = colors[0] || '#4F46E5';
+    const secondary = colors[1] || '#22D3EE';
+    const background = colors[2] || '#F9FAFB';
+    const accent = colors[3] || '#111827';
+
+    // 🧠 Build 4 variant-specific logo prompts
     const prompts = [
-      `Minimal flat logo mark for ${brandName}, ${colors[0]} primary, vector, centered`,
-      `Wordmark logo for ${brandName}, clean sans-serif, ${colors[1]} accent`,
-      `Badge logo for ${brandName}, ${colors[2]} background, high contrast`,
-      `Icon + text lockup for ${brandName}, ${colors[0]} + ${colors[3]}`,
+      {
+        type: 'Primary Logo',
+        prompt: `Design a **primary brand logo** for "${brandName}"${tagline}. 
+      It should combine an icon or abstract mark with the brand text in a balanced layout. 
+      Style: ${styles}. 
+      Use ${primary} as the main color and ${secondary} as an accent. 
+      Keep it professional, vector-based, and suitable for both digital and print.`,
+      },
+      {
+        type: 'Secondary Logo',
+        prompt: `Create a **secondary simplified logo** for "${brandName}"${tagline}. 
+      This should be a flexible alternate version that works well in small sizes or dark backgrounds. 
+      Style: ${styles}. 
+      Focus on ${secondary} and ${accent} tones for contrast.`,
+      },
+      {
+        type: 'Icon-based Logo',
+        prompt: `Generate an **icon-only logo** (no text) for "${brandName}"${tagline}. 
+      It should represent the brand symbolically — think app icon or favicon.
+      Style: ${styles}. 
+      Use ${primary} and ${background} in a flat vector design.`,
+      },
+      {
+        type: 'Text Logo',
+        prompt: `Design a **text-only wordmark logo** for "${brandName}"${tagline}. 
+      Focus on typography — clean, modern, and minimal. 
+      Style: ${styles}. 
+      Use ${accent} text color on a white or light background.`,
+      },
     ];
-    const results: string[] = [];
-    for (const p of prompts) {
-      const img = await this.client.images.generate({
-        model: 'dall-e-3',
-        prompt: p,
-        size: '1024x1024',
-        n: 1,
-      });
-      const url = img.data[0].url!;
-      results.push(url);
+
+    const results: { type: string; url: string }[] = [];
+
+    // ⚙️ Generate each logo variant
+    for (const { type, prompt } of prompts) {
+      try {
+        const img = await this.client.images.generate({
+          model: 'dall-e-3',
+          prompt,
+          size: '1024x1024',
+          n: 1,
+        });
+        const url = img.data?.[0]?.url;
+        if (url) results.push({ type, url });
+      } catch (err) {
+        console.error(`❌ Failed to generate ${type}:`, err.message);
+      }
     }
+
     return results;
   }
+
 
   async generateWebsiteJson(context: any, colors: string[]) {
     return {
