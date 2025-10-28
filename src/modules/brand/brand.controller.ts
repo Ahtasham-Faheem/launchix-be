@@ -16,6 +16,7 @@ export class BrandController {
   @Post('parse')
   async parse(@Body() dto: ParsePromptDto, @Req() req: Request) {
     const user = (req as any).user;
+    console.log('user in brand controller:', user);
     return this.service.createFromPrompt(user, dto.prompt);
   }
 
