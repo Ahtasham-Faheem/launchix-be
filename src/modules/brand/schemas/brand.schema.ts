@@ -15,8 +15,8 @@ export class Brand {
   @Prop({ required: true })
   tagline: string;
 
-  @Prop({ required: true, enum: ['Modern','Warm','Cozy','Artisan'] })
-  brandStyle: string;
+  @Prop({ required: true, type: [String] })
+  brandStyle: string[];
 
   @Prop({ type: Object, default: {} })
   aiFlags: Record<string, boolean>;

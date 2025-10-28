@@ -1,46 +1,83 @@
 import OpenAI from 'openai';
+import { brandGenratePrompt } from './prompts/brandGenratePrompt';
 
-const BRAND_FIELDS = ['businessName','industry','tagline','brandStyle'] as const;
-export type BrandFields = Record<typeof BRAND_FIELDS[number], string> & { aiFlags: Record<string, boolean> };
+export const BRAND_FIELDS = ['businessName', 'industry', 'tagline', 'brandStyle'] as const;
+
+export type BrandFields = {
+  businessName: string;
+  industry: string;
+  tagline: string;
+  brandStyle: string[]; // array of 2–3 styles
+  aiFlags: Record<string, boolean>;
+  errors?: string[]; // optional, empty on success
+};
+
+export type BrandExtractionResult =
+  | BrandFields // success
+  | { errors: string[] };
 
 export class AiService {
   private client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-  async extractFromPrompt(prompt: string): Promise<BrandFields> {
-    const sys = `You are an expert brand strategist. Extract four fields from user prompt:
-- businessName (string)
-- industry (string, concise)
-- tagline (short, catchy)
-- brandStyle (one of: Modern, Warm, Cozy, Artisan).
-If a field is absent, invent a good value and mark its flag in aiFlags as true. Respond in strict JSON.`;
-
+  async extractFromPrompt(prompt: string): Promise<BrandExtractionResult> {
     const resp = await this.client.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [
-        { role: 'system', content: sys },
+        { role: 'system', content: brandGenratePrompt }, // your new AI instruction
         { role: 'user', content: prompt },
       ],
       temperature: 0.7,
       response_format: { type: 'json_object' },
     });
 
-    const json = JSON.parse(resp.choices[0].message.content || '{}');
-    const aiFlags = {
-      businessName: !json.businessName || json.aiGenerated?.businessName === true,
-      industry: !json.industry || json.aiGenerated?.industry === true,
-      tagline: !json.tagline || json.aiGenerated?.tagline === true,
-      brandStyle: !json.brandStyle || json.aiGenerated?.brandStyle === true,
-    };
+    const raw = resp.choices?.[0]?.message?.content || '{}';
+    console.log('🧠 AI Raw Response:', raw);
+
+    let json: any;
+    try {
+      json = JSON.parse(raw);
+    } catch (err) {
+      console.error('❌ JSON parse error:', err);
+      return { errors: ['AI returned invalid JSON response. Please refine the prompt.'] };
+    }
+
+    console.log('🧩 AI Parsed JSON:', json);
+
+    // ✅ If AI provided errors — trust them fully and stop here
+    if (Array.isArray(json.errors) && json.errors.length > 0) {
+      return { errors: json.errors };
+    }
+
+    // ✅ Trust AI’s aiFlags — do not recompute
+    const aiFlags =
+      json.aiFlags && typeof json.aiFlags === 'object'
+        ? json.aiFlags
+        : {
+          businessName: false,
+          industry: false,
+          tagline: false,
+          brandStyle: false,
+        };
+
+    // ✅ Ensure brandStyle is normalized as array
+    const brandStyle = Array.isArray(json.brandStyle)
+      ? json.brandStyle
+      : [json.brandStyle].filter(Boolean);
+
+    // ✅ Return the AI’s structured fields, even if empty — let higher layer decide next steps
     return {
-      businessName: json.businessName,
-      industry: json.industry,
-      tagline: json.tagline,
-      brandStyle: json.brandStyle,
+      businessName: json.businessName || '',
+      industry: json.industry || '',
+      tagline: json.tagline || '',
+      brandStyle,
       aiFlags,
+      errors: [],
     };
   }
 
-  async regenerate(fields: Partial<Record<'businessName'|'industry'|'tagline'|'brandStyle', boolean>>, context: any) {
+
+
+  async regenerate(fields: Partial<Record<'businessName' | 'industry' | 'tagline' | 'brandStyle', boolean>>, context: any) {
     const needs = Object.keys(fields).filter(k => (fields as any)[k]);
     const prompt = `Regenerate the following brand fields for a company with context:
 ${JSON.stringify(context, null, 2)}
@@ -58,14 +95,29 @@ Return JSON with only those fields.`;
     return JSON.parse(resp.choices[0].message.content || '{}');
   }
 
-  pickColors(brandStyle: string) {
+  pickColors(brandStyles: string[]): string[] {
     const palettes: Record<string, string[]> = {
-      Modern: ['#4F46E5','#22D3EE','#0F172A','#E2E8F0','#FFFFFF'],
-      Warm: ['#B45309','#D97706','#FDE68A','#1F2937','#FFFFFF'],
-      Cozy: ['#8B5CF6','#D946EF','#F5D0FE','#111827','#FFFFFF'],
-      Artisan: ['#6B4F2A','#D2691E','#F5F5DC','#000000','#FFFFFF'],
+      Modern: ['#4F46E5', '#22D3EE', '#0F172A', '#E2E8F0', '#FFFFFF'],
+      Warm: ['#B45309', '#D97706', '#FDE68A', '#1F2937', '#FFFFFF'],
+      Cozy: ['#8B5CF6', '#D946EF', '#F5D0FE', '#111827', '#FFFFFF'],
+      Artisan: ['#6B4F2A', '#D2691E', '#F5F5DC', '#000000', '#FFFFFF'],
+      Minimal: ['#111827', '#9CA3AF', '#E5E7EB', '#F9FAFB', '#FFFFFF'],
+      Luxury: ['#1F2937', '#B45309', '#D1D5DB', '#F3F4F6', '#FFFFFF'],
     };
-    return palettes[brandStyle] || palettes['Modern'];
+
+    // 🧩 If no valid styles provided, default to Modern
+    if (!brandStyles || brandStyles.length === 0) {
+      return palettes['Modern'];
+    }
+
+    // 🧠 Collect all unique colors from selected styles
+    const colors = brandStyles.flatMap((style) => palettes[style] || []);
+
+    // 🧹 Remove duplicates while keeping order
+    const uniqueColors = Array.from(new Set(colors));
+
+    // 🎨 If somehow empty (unknown styles), fallback
+    return uniqueColors.length > 0 ? uniqueColors : palettes['Modern'];
   }
 
   async generateLogos(brandName: string, colors: string[]) {
@@ -97,21 +149,26 @@ Return JSON with only those fields.`;
         {
           id: 'home',
           components: [
-            { type: 'section', attributes: { class: 'hero', style: { background: colors[0], color: '#fff' } },
+            {
+              type: 'section', attributes: { class: 'hero', style: { background: colors[0], color: '#fff' } },
               components: [
                 { type: 'h1', content: context.businessName },
                 { type: 'p', content: context.tagline },
                 { type: 'button', content: 'Get Started' }
               ]
             },
-            { type: 'section', attributes: { class: 'features' }, components: [
-              { type: 'h2', content: 'Why Choose Us' },
-              { type: 'list', components: [
-                { type: 'li', content: 'Quality' },
-                { type: 'li', content: 'Speed' },
-                { type: 'li', content: 'Style' },
-              ]}
-            ]}
+            {
+              type: 'section', attributes: { class: 'features' }, components: [
+                { type: 'h2', content: 'Why Choose Us' },
+                {
+                  type: 'list', components: [
+                    { type: 'li', content: 'Quality' },
+                    { type: 'li', content: 'Speed' },
+                    { type: 'li', content: 'Style' },
+                  ]
+                }
+              ]
+            }
           ]
         }
       ]

@@ -4,7 +4,7 @@ import { Model, Types } from 'mongoose';
 import { Brand } from './schemas/brand.schema';
 import { User } from './schemas/user.schema';
 import { BrandAssets } from './schemas/assets.schema';
-import { AiService } from '../ai/ai.service';
+import { AiService, BrandFields } from '../ai/ai.service';
 
 @Injectable()
 export class BrandService {
@@ -13,7 +13,7 @@ export class BrandService {
     @InjectModel(User.name) private userModel: Model<User>,
     @InjectModel(BrandAssets.name) private assetsModel: Model<BrandAssets>,
     private readonly ai: AiService,
-  ) {}
+  ) { }
 
   async upsertUser(clerk: { userId: string; email?: string; firstName?: string; lastName?: string; }) {
     const found = await this.userModel.findOneAndUpdate(
@@ -27,10 +27,31 @@ export class BrandService {
   async createFromPrompt(ownerClerk: any, prompt: string) {
     const owner = await this.upsertUser(ownerClerk);
     const parsed = await this.ai.extractFromPrompt(prompt);
+
+    // 🧠 If AI detected issues or returned an error, stop here
+    if ('errors' in parsed && parsed.errors.length > 0) {
+      return {
+        success: false,
+        message: 'Prompt validation failed',
+        errors: parsed.errors,
+      };
+    }
+
+    // ✅ If prompt is valid, create brand
+    if ('errors' in parsed && parsed.errors.length > 0) {
+      throw new Error('Unexpected state: parsed contains errors');
+    }
+
+    const data = { ...parsed } as BrandFields;
     const brand = await this.brandModel.create({
       owner: owner._id,
-      ...parsed,
+      businessName: data.businessName,
+      industry: data.industry,
+      tagline: data.tagline,
+      brandStyle: data.brandStyle,
+      aiFlags: data.aiFlags,
     });
+
     return brand;
   }
 
