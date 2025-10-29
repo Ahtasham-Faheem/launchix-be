@@ -80,7 +80,7 @@ export class QueueService {
     businessName: string,
     tagline: string,
     industry: string,
-    colors: string[],
+    brandStyle: string[],
     priority : number = JOB_PRIORITIES.NORMAL,
   ) {
     const jobData: WebsiteGenerationJobData = {
@@ -88,7 +88,7 @@ export class QueueService {
       businessName,
       tagline,
       industry,
-      colors,
+      brandStyle,
     };
 
     const job = await this.websiteQueue.add(JOB_NAMES.GENERATE_WEBSITE, jobData, {

@@ -4,6 +4,9 @@ import { Job } from 'bullmq';
 import { QUEUE_NAMES } from '../constants/queue.constants';
 import { LogoGenerationJobData, JobResult } from '../interfaces/job-data.interface';
 import { AiService } from '../../ai/ai.service';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model, Types } from 'mongoose';
+import { BrandAssets } from 'src/modules/brand/schemas/assets.schema';
 
 @Processor(QUEUE_NAMES.LOGO_GENERATION, {
   concurrency: 3, // Lower concurrency due to DALL-E rate limits
@@ -15,7 +18,10 @@ import { AiService } from '../../ai/ai.service';
 export class LogoGenerationProcessor extends WorkerHost {
   private readonly logger = new Logger(LogoGenerationProcessor.name);
 
-  constructor(private readonly aiService: AiService) {
+  constructor(private readonly aiService: AiService,
+    @InjectModel(BrandAssets.name)
+        private readonly assetsModel: Model<BrandAssets>,
+  ) {
     super();
   }
 
@@ -27,13 +33,27 @@ export class LogoGenerationProcessor extends WorkerHost {
     try {
       const prompt = this.buildLogoPrompt(brandName, tagline, brandStyles, colors, variant);
       
-      const logo = await this.aiService.generateSingleLogo(prompt, variant);
+      const logos = await this.aiService.generateSingleLogo(prompt, variant);
+
+      const brandObjectId = new Types.ObjectId(brandId);
+
+      await this.assetsModel.findOneAndUpdate(
+        { brand: brandObjectId },
+        {
+          $set: {
+            brand: brandObjectId,
+            logos,
+            updatedAt: new Date(),
+          },
+        },
+        { upsert: true, new: true },
+      );
 
       this.logger.log(`Successfully generated ${variant} logo for brand: ${brandId}`);
 
       return {
         success: true,
-        data: { logo },
+        data: { logos },
         brandId,
       };
     } catch (error) {

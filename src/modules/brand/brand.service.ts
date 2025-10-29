@@ -69,28 +69,6 @@ export class BrandService {
     return brand;
   }
 
-  /**
-   * Legacy buildAssets method - kept for backwards compatibility
-   * New implementations should use AssetOrchestrationService
-   */
-  async buildAssets(brandId: string) {
-    const brand = await this.brandModel.findById(brandId);
-    if (!brand) throw new NotFoundException('Brand not found');
-
-    const palette = this.ai.pickColors(brand.brandStyle);
-    const logos = await this.ai.generateLogos(brand as Brand, palette);
-    const websiteJson = await this.ai.generateWebsiteJson(brand.toObject(), palette);
-    const mockups = await this.ai.createMockups();
-
-    const assets = await this.assetsModel.findOneAndUpdate(
-      { brand: new Types.ObjectId(brandId) },
-      { $set: { palette, logos, websiteJson, mockups } },
-      { new: true, upsert: true },
-    );
-
-    return assets;
-  }
-
   async getBrand(brandId: string) {
     const brand = await this.brandModel.findById(brandId).populate('owner');
     if (!brand) throw new NotFoundException('Brand not found');

@@ -28,7 +28,7 @@ export interface WebsiteGenerationJobData {
   businessName: string;
   tagline: string;
   industry: string;
-  colors: string[];
+  brandStyle: string[];
 }
 
 export interface MockupGenerationJobData {

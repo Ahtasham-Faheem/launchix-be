@@ -4,6 +4,7 @@ import { brandGenratePrompt } from './prompts/brandGenratePrompt';
 import { Brand } from '../brand/schemas/brand.schema';
 import { BrandIdentityResult } from '../brand/interfaces/brand-identity.interface';
 import { brandIdentityPrompt } from './prompts/brandIdentityPrompt';
+import { websitePrompt } from './prompts/websitePrompt';
 
 export const BRAND_FIELDS = ['businessName', 'industry', 'tagline', 'brandStyle'] as const;
 
@@ -17,6 +18,36 @@ export type BrandFields = {
 };
 
 export type BrandExtractionResult = BrandFields | { errors: string[] };
+
+interface ColorScheme {
+  primary: string;
+  secondary: string;
+  accent: string;
+  background: string;
+  text: string;
+}
+
+interface WebsiteMetadata {
+  businessName: string;
+  industry: string;
+  colorScheme: ColorScheme;
+  logoUrl: string;
+  sections: string[];
+}
+
+interface GrapesJSWebsite {
+  html: string;
+  css: string;
+  components: any[];
+  assets: any[];
+  styles: any[];
+}
+
+interface WebsiteResult {
+  grapesjs?: GrapesJSWebsite;
+  metadata?: WebsiteMetadata;
+  errors?: string[];
+}
 
 @Injectable()
 export class AiService {
@@ -209,106 +240,293 @@ export class AiService {
   }
 
   /**
-   * Legacy method - kept for backwards compatibility but not recommended for new code
-   * Use QueueService instead for better scalability
+   * Generate premium website with AI-generated colors, working images, and logo
    */
-  async generateLogos(brand: Brand, colors: string[]): Promise<{ type: string; url: string }[]> {
-    this.logger.warn('Using legacy generateLogos method. Consider using QueueService for better performance.');
+  async generatePremiumWebsite(
+    businessName: string,
+    industry: string,
+    tagline: string,
+    vision: string,
+    mission: string,
+  ): Promise<WebsiteResult> {
+    this.logger.log(`Generating premium website for: ${businessName}`);
 
-    const brandName = brand.businessName || 'Your Brand';
-    const tagline = brand.tagline ? ` — tagline: "${brand.tagline}"` : '';
-    const styles = Array.isArray(brand.brandStyle)
-      ? brand.brandStyle.join(', ')
-      : brand.brandStyle || 'Modern';
+    // Build system prompt with all context
+    const systemContent = websitePrompt({
+      businessName,
+      tagline,
+      vision,
+      mission,
+      industry,
+    });
 
-    const primary = colors[0] || '#4F46E5';
-    const secondary = colors[1] || '#22D3EE';
-    const background = colors[2] || '#F9FAFB';
-    const accent = colors[3] || '#111827';
+    // User prompt to enforce requirements
+    const userPrompt = `
+Generate a complete GrapesJS website in JSON format for "${businessName}".
 
-    const prompts = [
-      {
-        type: 'Primary Logo',
-        prompt: `Design a **primary brand logo** for "${brandName}"${tagline}. 
-      It should combine an icon or abstract mark with the brand text in a balanced layout. 
-      Style: ${styles}. 
-      Use ${primary} as the main color and ${secondary} as an accent. 
-      Keep it professional, vector-based, and suitable for both digital and print.`,
-      },
-      {
-        type: 'Secondary Logo',
-        prompt: `Create a **secondary simplified logo** for "${brandName}"${tagline}. 
-      This should be a flexible alternate version that works well in small sizes or dark backgrounds. 
-      Style: ${styles}. 
-      Focus on ${secondary} and ${accent} tones for contrast.`,
-      },
-      {
-        type: 'Icon-based Logo',
-        prompt: `Generate an **icon-only logo** (no text) for "${brandName}"${tagline}. 
-      It should represent the brand symbolically — think app icon or favicon.
-      Style: ${styles}. 
-      Use ${primary} and ${background} in a flat vector design.`,
-      },
-      {
-        type: 'Text Logo',
-        prompt: `Design a **text-only wordmark logo** for "${brandName}"${tagline}. 
-      Focus on typography — clean, modern, and minimal. 
-      Style: ${styles}. 
-      Use ${accent} text color on a white or light background.`,
-      },
-    ];
+CRITICAL REQUIREMENTS:
+1. Generate UNIQUE color scheme (5 colors in hex format) based on industry and brand personality
+2. Create logo URL using placeholder.com with generated primary color
+3. Use ONLY real, working image URLs from Unsplash (photo IDs provided in prompt)
+4. All content must be specific to: "${businessName}" in ${industry} industry
+5. Vision: ${vision}
+6. Mission: ${mission}
 
-    const results: { type: string; url: string }[] = [];
+Return ONLY valid JSON with no markdown or comments.
+`.trim();
 
-    for (const { type, prompt } of prompts) {
+    try {
+      const resp = await this.client.chat.completions.create({
+        model: 'gpt-4o-mini',
+        messages: [
+          { role: 'system', content: systemContent },
+          { role: 'user', content: userPrompt },
+        ],
+        temperature: 0.7,
+        response_format: { type: 'json_object' },
+      });
+
+      const raw = resp.choices?.[0]?.message?.content || '{}';
+      this.logger.debug(`Website Raw Response: ${raw.slice(0, 500)}...`);
+
+      let json: any;
       try {
-        const logo = await this.generateSingleLogo(prompt, type);
-        results.push(logo);
+        json = JSON.parse(raw);
       } catch (err) {
-        this.logger.error(`Failed to generate ${type}:`, err.message);
+        this.logger.error('Website JSON parse failed:', err);
+        return { errors: ['AI returned invalid JSON. Please try again.'] };
       }
+
+      // Check for errors in response
+      if (json.errors && Array.isArray(json.errors) && json.errors.length > 0) {
+        return { errors: json.errors };
+      }
+
+      // Validate required structure
+      if (!json.grapesjs || typeof json.grapesjs !== 'object') {
+        this.logger.error('Missing grapesjs object in response');
+        return { errors: ['Invalid website structure. Missing GrapesJS data.'] };
+      }
+
+      if (!json.metadata || !json.metadata.colorScheme) {
+        this.logger.error('Missing metadata or color scheme');
+        return { errors: ['Invalid website structure. Missing metadata or colors.'] };
+      }
+
+      // Validate GrapesJS structure
+      const gjs = json.grapesjs;
+
+      if (!gjs.html || typeof gjs.html !== 'string') {
+        this.logger.warn('Missing or invalid HTML, using fallback');
+        gjs.html = '<div>Website content</div>';
+      }
+
+      if (!gjs.css || typeof gjs.css !== 'string') {
+        this.logger.warn('Missing or invalid CSS, using fallback');
+        gjs.css = this.generateFallbackCSS();
+      }
+
+      if (!Array.isArray(gjs.components)) {
+        this.logger.warn('Missing components array, initializing empty');
+        gjs.components = [];
+      }
+
+      if (!Array.isArray(gjs.assets)) {
+        this.logger.warn('Missing assets array, initializing empty');
+        gjs.assets = [];
+      }
+
+      if (!Array.isArray(gjs.styles)) {
+        this.logger.warn('Missing styles array, initializing empty');
+        gjs.styles = [];
+      }
+
+      // Validate metadata
+      const metadata = json.metadata;
+
+      if (!metadata.colorScheme || typeof metadata.colorScheme !== 'object') {
+        this.logger.error('Invalid color scheme in metadata');
+        return { errors: ['Invalid color scheme generated.'] };
+      }
+
+      // Ensure all required colors exist
+      const requiredColors = ['primary', 'secondary', 'accent', 'background', 'text'];
+      const missingColors = requiredColors.filter(color => !metadata.colorScheme[color]);
+
+      if (missingColors.length > 0) {
+        this.logger.error(`Missing colors: ${missingColors.join(', ')}`);
+        return { errors: [`Missing required colors: ${missingColors.join(', ')}`] };
+      }
+
+      // Validate hex color format
+      const hexColorRegex = /^#[0-9A-Fa-f]{6}$/;
+      const invalidColors = requiredColors.filter(
+        color => !hexColorRegex.test(metadata.colorScheme[color])
+      );
+
+      if (invalidColors.length > 0) {
+        this.logger.error(`Invalid color format: ${invalidColors.join(', ')}`);
+        return { errors: [`Invalid color format for: ${invalidColors.join(', ')}`] };
+      }
+
+      // Validate logo URL
+      if (!metadata.logoUrl || !metadata.logoUrl.startsWith('https://')) {
+        this.logger.warn('Invalid logo URL, generating fallback');
+        const primaryColor = metadata.colorScheme.primary.replace('#', '');
+        const brandName = businessName.replace(/\s+/g, '+');
+        metadata.logoUrl = `https://via.placeholder.com/200x60/${primaryColor}/FFFFFF?text=${brandName}`;
+      }
+
+      // Validate sections array
+      if (!Array.isArray(metadata.sections) || metadata.sections.length === 0) {
+        this.logger.warn('Missing sections array, using default');
+        metadata.sections = ['hero', 'about', 'services', 'gallery', 'testimonials', 'contact'];
+      }
+
+      // Log success with details
+      this.logger.log(`Successfully generated website for: ${businessName}`);
+      this.logger.log(`Color Scheme: ${JSON.stringify(metadata.colorScheme)}`);
+      this.logger.log(`Logo URL: ${metadata.logoUrl}`);
+      this.logger.log(`Sections: ${metadata.sections.join(', ')}`);
+      this.logger.log(`Components: ${gjs.components.length}`);
+      this.logger.log(`Assets: ${gjs.assets.length}`);
+
+      return json as WebsiteResult;
+    } catch (err: any) {
+      this.logger.error('Website generation failed:', err?.message || err);
+      return { errors: ['Failed to generate website. Please try again.'] };
     }
-
-    return results;
   }
 
-  async generateWebsiteJson(context: any, colors: string[]) {
-    return {
-      meta: { name: context.businessName, generatedAt: new Date().toISOString() },
-      colors,
-      pages: [
-        {
-          id: 'home',
-          components: [
-            {
-              type: 'section',
-              attributes: { class: 'hero', style: { background: colors[0], color: '#fff' } },
-              components: [
-                { type: 'h1', content: context.businessName },
-                { type: 'p', content: context.tagline },
-                { type: 'button', content: 'Get Started' },
-              ],
-            },
-            {
-              type: 'section',
-              attributes: { class: 'features' },
-              components: [
-                { type: 'h2', content: 'Why Choose Us' },
-                {
-                  type: 'list',
-                  components: [
-                    { type: 'li', content: 'Quality' },
-                    { type: 'li', content: 'Speed' },
-                    { type: 'li', content: 'Style' },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    };
+  /**
+   * Generate fallback CSS if AI doesn't provide valid CSS
+   */
+  private generateFallbackCSS(): string {
+    return `
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.6;
+        color: #1F2937;
+        background-color: #FFFFFF;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 80px 20px;
+      }
+
+      section {
+        width: 100%;
+      }
+
+      h1 {
+        font-size: 48px;
+        font-weight: 700;
+        line-height: 1.2;
+        margin: 0 0 16px 0;
+      }
+
+      h2 {
+        font-size: 36px;
+        font-weight: 700;
+        line-height: 1.3;
+        margin: 0 0 16px 0;
+      }
+
+      h3 {
+        font-size: 24px;
+        font-weight: 600;
+        line-height: 1.4;
+        margin: 0 0 16px 0;
+      }
+
+      p {
+        font-size: 16px;
+        line-height: 1.6;
+        margin: 0 0 16px 0;
+      }
+
+      a {
+        text-decoration: none;
+        transition: all 0.3s ease;
+      }
+
+      img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      button, .btn {
+        display: inline-block;
+        padding: 15px 30px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+      }
+
+      .grid {
+        display: grid;
+        gap: 24px;
+      }
+
+      .grid-2 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .grid-3 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .card {
+        background-color: #FFFFFF;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 40px 15px;
+        }
+
+        h1 {
+          font-size: 32px;
+        }
+
+        h2 {
+          font-size: 28px;
+        }
+
+        h3 {
+          font-size: 20px;
+        }
+
+        .grid-2,
+        .grid-3 {
+          grid-template-columns: 1fr;
+        }
+      }
+    `;
   }
+
 
   async createMockups(): Promise<string[]> {
     return [

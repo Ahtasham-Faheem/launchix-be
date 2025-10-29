@@ -143,7 +143,7 @@ export class BrandController {
       brand.businessName,
       brand.tagline,
       brand.industry,
-      colors,
+      brand.brandStyle,
     );
 
     return {

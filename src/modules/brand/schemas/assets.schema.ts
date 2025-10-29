@@ -6,11 +6,18 @@ export class BrandAssets {
   @Prop({ type: Types.ObjectId, ref: 'Brand', required: true })
   brand: Types.ObjectId;
 
-  // 🎨 Brand color palette (hex or rgb values)
-  @Prop({ type: [String], default: [] })
+  @Prop({ type: String, default: '' })
+  vision: string;
+  
+  @Prop({ type: String, default: '' })
+  mission: string;
+  
+  @Prop({ type: [String], default: null })
   palette: string[];
+  
+  @Prop({ type: Object, default: null })
+  typography: any;
 
-  // 🖼 Logos with explicit variant structure
   @Prop({
     type: [
       {
@@ -22,12 +29,10 @@ export class BrandAssets {
   })
   logos: { type: string; url: string }[];
 
-  // 🌐 Website content JSON (Grapes.js compatible structure)
-  @Prop({ type: Object, default: {} })
-  websiteJson?: any;
+  @Prop({ type: Object, default: null })
+  websit: any;
 
-  // 🧢 Product or brand mockups (image URLs)
-  @Prop({ type: [String], default: [] })
+  @Prop({ type: [String], default: null })
   mockups?: string[];
 }
 
