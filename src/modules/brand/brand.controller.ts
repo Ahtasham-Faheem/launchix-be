@@ -54,15 +54,6 @@ export class BrandController {
     return this.orchestrationService.initiateAssetGeneration(id);
   }
 
-  @Post(':id/assets/generate-sync')
-  @ApiOperation({ 
-    summary: 'Generate all assets synchronously (legacy)',
-    description: 'Waits for all assets to be generated. May take several minutes.'
-  })
-  @ApiResponse({ status: 200, description: 'All assets generated successfully' })
-  async generateAssetsSync(@Param('id') id: string) {
-    return this.orchestrationService.orchestrateAssetGeneration(id);
-  }
 
   @Get(':id/assets/status')
   @ApiOperation({ summary: 'Get asset generation status' })
@@ -178,18 +169,5 @@ export class BrandController {
       status: 'queued',
       message: 'Mockup generation job queued',
     };
-  }
-
-  // ==================== LEGACY ENDPOINT (DEPRECATED) ====================
-
-  @Post(':id/build-assets')
-  @ApiOperation({ 
-    summary: 'Build all assets (deprecated)',
-    description: 'DEPRECATED: Use /assets/initiate instead. This endpoint will be removed in v2.0'
-  })
-  @ApiResponse({ status: 200, description: 'Assets built successfully' })
-  async build(@Param('id') id: string) {
-    // Redirect to new async method
-    return this.orchestrationService.initiateAssetGeneration(id);
   }
 }
