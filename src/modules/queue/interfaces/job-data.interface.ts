@@ -8,6 +8,9 @@ export interface BrandCreationJobData {
 
 export interface ColorGenerationJobData {
   brandId: Types.ObjectId;
+  businessName: string;
+  tagline: string;
+  industry: string;
   brandStyles: string[];
 }
 

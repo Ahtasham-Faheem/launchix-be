@@ -8,7 +8,7 @@ import { QUEUE_NAMES } from '../queue/constants/queue.constants';
 @Controller('health')
 export class HealthController {
   constructor(
-    @InjectQueue(QUEUE_NAMES.COLOR_GENERATION) private colorQueue: Queue,
+    @InjectQueue(QUEUE_NAMES.IDENTITY_GENERATION) private colorQueue: Queue,
     @InjectQueue(QUEUE_NAMES.LOGO_GENERATION) private logoQueue: Queue,
     @InjectQueue(QUEUE_NAMES.WEBSITE_GENERATION) private websiteQueue: Queue,
     @InjectQueue(QUEUE_NAMES.MOCKUP_GENERATION) private mockupQueue: Queue,
@@ -28,7 +28,7 @@ export class HealthController {
   @ApiOperation({ summary: 'Queue health status' })
   async queueHealth() {
     const queues = [
-      { name: QUEUE_NAMES.COLOR_GENERATION, queue: this.colorQueue },
+      { name: QUEUE_NAMES.IDENTITY_GENERATION, queue: this.colorQueue },
       { name: QUEUE_NAMES.LOGO_GENERATION, queue: this.logoQueue },
       { name: QUEUE_NAMES.WEBSITE_GENERATION, queue: this.websiteQueue },
       { name: QUEUE_NAMES.MOCKUP_GENERATION, queue: this.mockupQueue },

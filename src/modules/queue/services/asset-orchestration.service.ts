@@ -31,6 +31,9 @@ export class AssetOrchestrationService {
     // Step 1: Generate color palette
     const colorJob = await this.queueService.addColorGenerationJob(
       brandObjectId,
+      brand.businessName,
+      brand.tagline,
+      brand.industry,
       brand.brandStyle,
       priority,
     );
@@ -185,7 +188,7 @@ export class AssetOrchestrationService {
     return {
       brandId,
       status: overallStatus,
-      jobs: statuses,
+      agents: statuses,
     };
   }
 }

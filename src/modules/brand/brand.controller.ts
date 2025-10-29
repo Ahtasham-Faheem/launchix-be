@@ -62,10 +62,10 @@ export class BrandController {
     return this.orchestrationService.getAssetGenerationStatus(id);
   }
 
-  @Post(':id/colors/generate')
+  @Post(':id/identity/generate')
   @HttpCode(HttpStatus.ACCEPTED)
-  @ApiOperation({ summary: 'Generate color palette only' })
-  @ApiResponse({ status: 202, description: 'Color generation job queued' })
+  @ApiOperation({ summary: 'Generate identity palette only' })
+  @ApiResponse({ status: 202, description: 'Identity generation job queued' })
   async generateColors(@Param('id') id: string) {
     const brand = await this.service.getBrandById(id);
     if (!brand) {
@@ -74,6 +74,9 @@ export class BrandController {
 
     const job = await this.queueService.addColorGenerationJob(
       brand._id,
+      brand.businessName,
+      brand.tagline,
+      brand.industry,
       brand.brandStyle,
     );
 
@@ -81,7 +84,7 @@ export class BrandController {
       jobId: job.id,
       brandId: id,
       status: 'queued',
-      message: 'Color generation job queued',
+      message: 'Identity generation job queued',
     };
   }
 

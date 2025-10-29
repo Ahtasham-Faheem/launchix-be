@@ -2,6 +2,8 @@ import OpenAI from 'openai';
 import { Injectable, Logger } from '@nestjs/common';
 import { brandGenratePrompt } from './prompts/brandGenratePrompt';
 import { Brand } from '../brand/schemas/brand.schema';
+import { BrandIdentityResult } from '../brand/interfaces/brand-identity.interface';
+import { brandIdentityPrompt } from './prompts/brandIdentityPrompt';
 
 export const BRAND_FIELDS = ['businessName', 'industry', 'tagline', 'brandStyle'] as const;
 
@@ -53,11 +55,11 @@ export class AiService {
       json.aiFlags && typeof json.aiFlags === 'object'
         ? json.aiFlags
         : {
-            businessName: false,
-            industry: false,
-            tagline: false,
-            brandStyle: false,
-          };
+          businessName: false,
+          industry: false,
+          tagline: false,
+          brandStyle: false,
+        };
 
     const brandStyle = Array.isArray(json.brandStyle)
       ? json.brandStyle
@@ -79,9 +81,9 @@ export class AiService {
   ) {
     const needs = Object.keys(fields).filter((k) => (fields as any)[k]);
     const prompt = `Regenerate the following brand fields for a company with context:
-${JSON.stringify(context, null, 2)}
-Fields: ${needs.join(', ')}
-Return JSON with only those fields.`;
+        ${JSON.stringify(context, null, 2)}
+        Fields: ${needs.join(', ')}
+        Return JSON with only those fields.`;
 
     const resp = await this.client.chat.completions.create({
       model: 'gpt-4o-mini',
@@ -114,6 +116,67 @@ Return JSON with only those fields.`;
     const uniqueColors = Array.from(new Set(colors));
 
     return uniqueColors.length > 0 ? uniqueColors : palettes['Modern'];
+  }
+
+  async generateBrandIdentity(businessName: string, industry: string, tagline: string, brandStyles: string[]): Promise<BrandIdentityResult> {
+    this.logger.log(`Generating brand identity for: ${businessName}`);
+
+    // Build contextual prompt
+    const userPrompt = `
+      Business Name: ${businessName}
+      Industry: ${industry}
+      ${tagline ? `Tagline: ${tagline}` : ''}
+      ${brandStyles?.length ? `Brand Style: ${brandStyles.join(', ')}` : ''}
+
+
+      Generate a comprehensive brand identity including:
+      1. Vision statement (max 200 characters)
+      2. Mission statement (max 200 characters)
+      3. 3-5 typography pairings suitable for this brand
+      4. Color palette suggestions (hex codes)
+
+      Follow all guidelines strictly and return ONLY valid JSON as specified.
+          `.trim();
+
+    try {
+      const resp = await this.client.chat.completions.create({
+        model: 'gpt-4o-mini',
+        messages: [
+          { role: 'system', content: brandIdentityPrompt },
+          { role: 'user', content: userPrompt },
+        ],
+        temperature: 0.7,
+        response_format: { type: 'json_object' },
+      });
+
+      const raw = resp.choices?.[0]?.message?.content || '{}';
+      this.logger.debug('Brand Identity Raw Response:', raw);
+
+      const json = JSON.parse(raw);
+
+      // Validate response
+      if (json.errors && json.errors.length > 0) {
+        return { errors: json.errors };
+      }
+
+      // Validate vision and mission length
+      if (json.vision && json.vision.length > 200) {
+        json.vision = json.vision.substring(0, 197) + '...';
+      }
+
+      if (json.mission && json.mission.length > 200) {
+        json.mission = json.mission.substring(0, 197) + '...';
+      }
+
+      this.logger.log(`Successfully generated brand identity for: ${businessName}`);
+
+      return json as BrandIdentityResult;
+    } catch (err) {
+      this.logger.error('Brand identity generation failed:', err);
+      return {
+        errors: ['Failed to generate brand identity. Please try again.'],
+      };
+    }
   }
 
   /**

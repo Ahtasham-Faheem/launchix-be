@@ -16,18 +16,25 @@ export class QueueService {
   private readonly logger = new Logger(QueueService.name);
 
   constructor(
-    @InjectQueue(QUEUE_NAMES.COLOR_GENERATION) private colorQueue: Queue,
+    @InjectQueue(QUEUE_NAMES.IDENTITY_GENERATION) private colorQueue: Queue,
     @InjectQueue(QUEUE_NAMES.LOGO_GENERATION) private logoQueue: Queue,
     @InjectQueue(QUEUE_NAMES.WEBSITE_GENERATION) private websiteQueue: Queue,
     @InjectQueue(QUEUE_NAMES.MOCKUP_GENERATION) private mockupQueue: Queue,
     @InjectQueue(QUEUE_NAMES.ASSET_AGGREGATION) private assetQueue: Queue,
   ) {}
 
-  async addColorGenerationJob(brandId: Types.ObjectId, brandStyles: string[], priority: number = JOB_PRIORITIES.NORMAL) {
-    const jobData: ColorGenerationJobData = { brandId, brandStyles };
+  async addColorGenerationJob(
+    brandId: Types.ObjectId,
+    businessName: string,
+    tagline: string,
+    industry: string,
+    brandStyles: string[],
+    priority : number = JOB_PRIORITIES.NORMAL,
+  ) {
+    const jobData: ColorGenerationJobData = { brandId, businessName, industry, brandStyles, tagline, };
 
-    const job = await this.colorQueue.add(JOB_NAMES.GENERATE_COLORS, jobData, {
-      jobId: `color-${brandId}`,
+    const job = await this.colorQueue.add(JOB_NAMES.GENERATE_IDENTITY, jobData, {
+      jobId: `identity-${brandId}`,
       priority,
     });
 
@@ -134,7 +141,7 @@ export class QueueService {
     let queue: Queue;
 
     switch (queueName) {
-      case QUEUE_NAMES.COLOR_GENERATION:
+      case QUEUE_NAMES.IDENTITY_GENERATION:
         queue = this.colorQueue;
         break;
       case QUEUE_NAMES.LOGO_GENERATION:
@@ -170,7 +177,7 @@ export class QueueService {
 
   async getBrandJobStatuses(brandId: string) {
     const jobIds = [
-      `color-${brandId}`,
+      `identity-${brandId}`,
       `logo-primary-${brandId}`,
       `logo-secondary-${brandId}`,
       `logo-icon-${brandId}`,
@@ -196,7 +203,7 @@ export class QueueService {
   }
 
   private getQueueNameFromJobId(jobId: string): string | null {
-    if (jobId.startsWith('color-')) return QUEUE_NAMES.COLOR_GENERATION;
+    if (jobId.startsWith('identity-')) return QUEUE_NAMES.IDENTITY_GENERATION;
     if (jobId.startsWith('logo-')) return QUEUE_NAMES.LOGO_GENERATION;
     if (jobId.startsWith('website-')) return QUEUE_NAMES.WEBSITE_GENERATION;
     if (jobId.startsWith('mockup-')) return QUEUE_NAMES.MOCKUP_GENERATION;
@@ -208,7 +215,7 @@ export class QueueService {
     let queue: Queue;
 
     switch (queueName) {
-      case QUEUE_NAMES.COLOR_GENERATION:
+      case QUEUE_NAMES.IDENTITY_GENERATION:
         queue = this.colorQueue;
         break;
       case QUEUE_NAMES.LOGO_GENERATION:

@@ -1,6 +1,6 @@
 export const QUEUE_NAMES = {
   BRAND_CREATION: 'brand-creation',
-  COLOR_GENERATION: 'color-generation',
+  IDENTITY_GENERATION: 'identity-generation',
   LOGO_GENERATION: 'logo-generation',
   WEBSITE_GENERATION: 'website-generation',
   MOCKUP_GENERATION: 'mockup-generation',
@@ -9,7 +9,7 @@ export const QUEUE_NAMES = {
 
 export const JOB_NAMES = {
   CREATE_BRAND: 'create-brand',
-  GENERATE_COLORS: 'generate-colors',
+  GENERATE_IDENTITY: 'generate-identity',
   GENERATE_LOGO: 'generate-logo',
   GENERATE_WEBSITE: 'generate-website',
   GENERATE_MOCKUPS: 'generate-mockups',

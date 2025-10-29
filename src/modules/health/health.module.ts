@@ -6,7 +6,7 @@ import { QUEUE_NAMES } from '../queue/constants/queue.constants';
 @Module({
   imports: [
     BullModule.registerQueue(
-      { name: QUEUE_NAMES.COLOR_GENERATION },
+      { name: QUEUE_NAMES.IDENTITY_GENERATION },
       { name: QUEUE_NAMES.LOGO_GENERATION },
       { name: QUEUE_NAMES.WEBSITE_GENERATION },
       { name: QUEUE_NAMES.MOCKUP_GENERATION },
