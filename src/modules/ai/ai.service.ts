@@ -1,4 +1,5 @@
 import OpenAI from 'openai';
+import { Injectable, Logger } from '@nestjs/common';
 import { brandGenratePrompt } from './prompts/brandGenratePrompt';
 import { Brand } from '../brand/schemas/brand.schema';
 
@@ -8,23 +9,23 @@ export type BrandFields = {
   businessName: string;
   industry: string;
   tagline: string;
-  brandStyle: string[]; // array of 2–3 styles
+  brandStyle: string[];
   aiFlags: Record<string, boolean>;
-  errors?: string[]; // optional, empty on success
+  errors?: string[];
 };
 
-export type BrandExtractionResult =
-  | BrandFields // success
-  | { errors: string[] };
+export type BrandExtractionResult = BrandFields | { errors: string[] };
 
+@Injectable()
 export class AiService {
+  private readonly logger = new Logger(AiService.name);
   private client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
   async extractFromPrompt(prompt: string): Promise<BrandExtractionResult> {
     const resp = await this.client.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [
-        { role: 'system', content: brandGenratePrompt }, // your new AI instruction
+        { role: 'system', content: brandGenratePrompt },
         { role: 'user', content: prompt },
       ],
       temperature: 0.7,
@@ -32,40 +33,36 @@ export class AiService {
     });
 
     const raw = resp.choices?.[0]?.message?.content || '{}';
-    console.log('🧠 AI Raw Response:', raw);
+    this.logger.debug('AI Raw Response:', raw);
 
     let json: any;
     try {
       json = JSON.parse(raw);
     } catch (err) {
-      console.error('❌ JSON parse error:', err);
+      this.logger.error('JSON parse error:', err);
       return { errors: ['AI returned invalid JSON response. Please refine the prompt.'] };
     }
 
-    console.log('🧩 AI Parsed JSON:', json);
+    this.logger.debug('AI Parsed JSON:', json);
 
-    // ✅ If AI provided errors — trust them fully and stop here
     if (Array.isArray(json.errors) && json.errors.length > 0) {
       return { errors: json.errors };
     }
 
-    // ✅ Trust AI’s aiFlags — do not recompute
     const aiFlags =
       json.aiFlags && typeof json.aiFlags === 'object'
         ? json.aiFlags
         : {
-          businessName: false,
-          industry: false,
-          tagline: false,
-          brandStyle: false,
-        };
+            businessName: false,
+            industry: false,
+            tagline: false,
+            brandStyle: false,
+          };
 
-    // ✅ Ensure brandStyle is normalized as array
     const brandStyle = Array.isArray(json.brandStyle)
       ? json.brandStyle
       : [json.brandStyle].filter(Boolean);
 
-    // ✅ Return the AI’s structured fields, even if empty — let higher layer decide next steps
     return {
       businessName: json.businessName || '',
       industry: json.industry || '',
@@ -76,14 +73,16 @@ export class AiService {
     };
   }
 
-
-
-  async regenerate(fields: Partial<Record<'businessName' | 'industry' | 'tagline' | 'brandStyle', boolean>>, context: any) {
-    const needs = Object.keys(fields).filter(k => (fields as any)[k]);
+  async regenerate(
+    fields: Partial<Record<'businessName' | 'industry' | 'tagline' | 'brandStyle', boolean>>,
+    context: any,
+  ) {
+    const needs = Object.keys(fields).filter((k) => (fields as any)[k]);
     const prompt = `Regenerate the following brand fields for a company with context:
 ${JSON.stringify(context, null, 2)}
 Fields: ${needs.join(', ')}
 Return JSON with only those fields.`;
+
     const resp = await this.client.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [
@@ -93,6 +92,7 @@ Return JSON with only those fields.`;
       temperature: 0.8,
       response_format: { type: 'json_object' },
     });
+
     return JSON.parse(resp.choices[0].message.content || '{}');
   }
 
@@ -106,35 +106,63 @@ Return JSON with only those fields.`;
       Luxury: ['#1F2937', '#B45309', '#D1D5DB', '#F3F4F6', '#FFFFFF'],
     };
 
-    // 🧩 If no valid styles provided, default to Modern
     if (!brandStyles || brandStyles.length === 0) {
       return palettes['Modern'];
     }
 
-    // 🧠 Collect all unique colors from selected styles
     const colors = brandStyles.flatMap((style) => palettes[style] || []);
-
-    // 🧹 Remove duplicates while keeping order
     const uniqueColors = Array.from(new Set(colors));
 
-    // 🎨 If somehow empty (unknown styles), fallback
     return uniqueColors.length > 0 ? uniqueColors : palettes['Modern'];
   }
 
-  async generateLogos(brand: Brand, colors: string[]) {
+  /**
+   * Generate a single logo variant
+   */
+  async generateSingleLogo(prompt: string, type: string): Promise<{ type: string; url: string }> {
+    try {
+      this.logger.log(`Generating ${type} logo`);
+
+      const img = await this.client.images.generate({
+        model: 'dall-e-3',
+        prompt,
+        size: '1024x1024',
+        quality: 'standard',
+        n: 1,
+      });
+
+      const url = img.data?.[0]?.url;
+      if (!url) {
+        throw new Error('No URL returned from DALL-E');
+      }
+
+      this.logger.log(`Successfully generated ${type} logo`);
+
+      return { type, url };
+    } catch (err) {
+      this.logger.error(`Failed to generate ${type} logo:`, err.message);
+      throw err;
+    }
+  }
+
+  /**
+   * Legacy method - kept for backwards compatibility but not recommended for new code
+   * Use QueueService instead for better scalability
+   */
+  async generateLogos(brand: Brand, colors: string[]): Promise<{ type: string; url: string }[]> {
+    this.logger.warn('Using legacy generateLogos method. Consider using QueueService for better performance.');
+
     const brandName = brand.businessName || 'Your Brand';
     const tagline = brand.tagline ? ` — tagline: "${brand.tagline}"` : '';
     const styles = Array.isArray(brand.brandStyle)
       ? brand.brandStyle.join(', ')
       : brand.brandStyle || 'Modern';
 
-    // 🎨 Safely map brand colors
     const primary = colors[0] || '#4F46E5';
     const secondary = colors[1] || '#22D3EE';
     const background = colors[2] || '#F9FAFB';
     const accent = colors[3] || '#111827';
 
-    // 🧠 Build 4 variant-specific logo prompts
     const prompts = [
       {
         type: 'Primary Logo',
@@ -169,25 +197,17 @@ Return JSON with only those fields.`;
 
     const results: { type: string; url: string }[] = [];
 
-    // ⚙️ Generate each logo variant
     for (const { type, prompt } of prompts) {
       try {
-        const img = await this.client.images.generate({
-          model: 'dall-e-3',
-          prompt,
-          size: '1024x1024',
-          n: 1,
-        });
-        const url = img.data?.[0]?.url;
-        if (url) results.push({ type, url });
+        const logo = await this.generateSingleLogo(prompt, type);
+        results.push(logo);
       } catch (err) {
-        console.error(`❌ Failed to generate ${type}:`, err.message);
+        this.logger.error(`Failed to generate ${type}:`, err.message);
       }
     }
 
     return results;
   }
-
 
   async generateWebsiteJson(context: any, colors: string[]) {
     return {
@@ -198,28 +218,32 @@ Return JSON with only those fields.`;
           id: 'home',
           components: [
             {
-              type: 'section', attributes: { class: 'hero', style: { background: colors[0], color: '#fff' } },
+              type: 'section',
+              attributes: { class: 'hero', style: { background: colors[0], color: '#fff' } },
               components: [
                 { type: 'h1', content: context.businessName },
                 { type: 'p', content: context.tagline },
-                { type: 'button', content: 'Get Started' }
-              ]
+                { type: 'button', content: 'Get Started' },
+              ],
             },
             {
-              type: 'section', attributes: { class: 'features' }, components: [
+              type: 'section',
+              attributes: { class: 'features' },
+              components: [
                 { type: 'h2', content: 'Why Choose Us' },
                 {
-                  type: 'list', components: [
+                  type: 'list',
+                  components: [
                     { type: 'li', content: 'Quality' },
                     { type: 'li', content: 'Speed' },
                     { type: 'li', content: 'Style' },
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
     };
   }
 

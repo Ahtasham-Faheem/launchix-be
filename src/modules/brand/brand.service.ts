@@ -13,13 +13,18 @@ export class BrandService {
     @InjectModel(User.name) private userModel: Model<User>,
     @InjectModel(BrandAssets.name) private assetsModel: Model<BrandAssets>,
     private readonly ai: AiService,
-  ) { }
+  ) {}
 
-  async upsertUser(clerk: { userId: string; email?: string; firstName?: string; lastName?: string; }) {
+  async upsertUser(clerk: {
+    userId: string;
+    email?: string;
+    firstName?: string;
+    lastName?: string;
+  }) {
     const found = await this.userModel.findOneAndUpdate(
       { clerkId: clerk.userId },
       { $set: { email: clerk.email, firstName: clerk.firstName, lastName: clerk.lastName } },
-      { new: true, upsert: true }
+      { new: true, upsert: true },
     );
     return found;
   }
@@ -28,7 +33,6 @@ export class BrandService {
     const owner = await this.upsertUser(ownerClerk);
     const parsed = await this.ai.extractFromPrompt(prompt);
 
-    // 🧠 If AI detected issues or returned an error, stop here
     if ('errors' in parsed && parsed.errors.length > 0) {
       return {
         success: false,
@@ -37,7 +41,6 @@ export class BrandService {
       };
     }
 
-    // ✅ If prompt is valid, create brand
     if ('errors' in parsed && parsed.errors.length > 0) {
       throw new Error('Unexpected state: parsed contains errors');
     }
@@ -58,34 +61,72 @@ export class BrandService {
   async regenerate(brandId: string, fields: any) {
     const brand = await this.brandModel.findById(brandId);
     if (!brand) throw new NotFoundException('Brand not found');
+
     const regen = await this.ai.regenerate(fields, brand.toObject());
     Object.assign(brand, regen);
     await brand.save();
+
     return brand;
   }
 
+  /**
+   * Legacy buildAssets method - kept for backwards compatibility
+   * New implementations should use AssetOrchestrationService
+   */
   async buildAssets(brandId: string) {
     const brand = await this.brandModel.findById(brandId);
     if (!brand) throw new NotFoundException('Brand not found');
+
     const palette = this.ai.pickColors(brand.brandStyle);
-    
     const logos = await this.ai.generateLogos(brand as Brand, palette);
-    
-    
     const websiteJson = await this.ai.generateWebsiteJson(brand.toObject(), palette);
     const mockups = await this.ai.createMockups();
+
     const assets = await this.assetsModel.findOneAndUpdate(
       { brand: new Types.ObjectId(brandId) },
       { $set: { palette, logos, websiteJson, mockups } },
-      { new: true, upsert: true }
+      { new: true, upsert: true },
     );
+
     return assets;
   }
 
   async getBrand(brandId: string) {
     const brand = await this.brandModel.findById(brandId).populate('owner');
     if (!brand) throw new NotFoundException('Brand not found');
+
     const assets = await this.assetsModel.findOne({ brand: brand._id });
     return { brand, assets };
+  }
+
+  async getBrandById(brandId: string) {
+    const brand = await this.brandModel.findById(brandId);
+    if (!brand) throw new NotFoundException('Brand not found');
+    return brand;
+  }
+
+  async getBrandAssets(brandId: string) {
+    const assets = await this.assetsModel.findOne({ 
+      brand: new Types.ObjectId(brandId) 
+    });
+    return assets;
+  }
+
+  async updateBrandAssets(
+    brandId: string,
+    updates: {
+      palette?: string[];
+      logos?: { type: string; url: string }[];
+      websiteJson?: any;
+      mockups?: string[];
+    },
+  ) {
+    const assets = await this.assetsModel.findOneAndUpdate(
+      { brand: new Types.ObjectId(brandId) },
+      { $set: updates },
+      { new: true, upsert: true },
+    );
+
+    return assets;
   }
 }

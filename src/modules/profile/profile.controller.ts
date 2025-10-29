@@ -11,15 +11,6 @@ import { AuthGuard } from '../auth/auth.guard';
 @UseGuards(AuthGuard)
 @Controller('profile')
 export class ProfileController {
-  @Get('profile')
-  getUserProfile(@CurrentUser() user: any) {
-    // The user profile is now available on req.user
-    // thanks to the ClerkAuthMiddleware
-    return {
-      success: true,
-      user: {},
-    };
-  }
 
   @Get('me')
   getCurrentUser(@CurrentUser() user: any) {
