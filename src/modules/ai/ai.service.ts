@@ -248,6 +248,7 @@ export class AiService {
     tagline: string,
     vision: string,
     mission: string,
+    logoUrl: string,
   ): Promise<WebsiteResult> {
     this.logger.log(`Generating premium website for: ${businessName}`);
 
@@ -258,6 +259,7 @@ export class AiService {
       vision,
       mission,
       industry,
+      logoUrl
     });
 
     // User prompt to enforce requirements

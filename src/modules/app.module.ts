@@ -19,10 +19,8 @@ import { QueueModule } from './queue/queue.module';
     
     LoggerModule.forRoot({
       pinoHttp: {
-        // transport: process.env.NODE_ENV !== 'production' ? { target: 'pino-pretty' } : undefined,
-        // level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
-        quietReqLogger: true, // stops request spam
-        level: 'error',  
+        transport: process.env.NODE_ENV !== 'production' ? { target: 'pino-pretty' } : undefined,
+        level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
       },
     }),
     

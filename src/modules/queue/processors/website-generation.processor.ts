@@ -1,68 +1,140 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
 import { Job } from 'bullmq';
+import { Types, Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
 import { QUEUE_NAMES } from '../constants/queue.constants';
 import { WebsiteGenerationJobData, JobResult } from '../interfaces/job-data.interface';
 import { AiService } from '../../ai/ai.service';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
 import { BrandAssets } from 'src/modules/brand/schemas/assets.schema';
+import { QueueService } from '../services/queue.service';
 
-@Processor(QUEUE_NAMES.WEBSITE_GENERATION, {
-  concurrency: 5,
-})
+@Processor(QUEUE_NAMES.WEBSITE_GENERATION, { concurrency: 3 })
 export class WebsiteGenerationProcessor extends WorkerHost {
   private readonly logger = new Logger(WebsiteGenerationProcessor.name);
 
-  constructor(private readonly aiService: AiService,
+  constructor(
+    private readonly aiService: AiService,
     @InjectModel(BrandAssets.name)
     private readonly assetsModel: Model<BrandAssets>,
+    private readonly queueService: QueueService,
   ) {
     super();
   }
 
   async process(job: Job<WebsiteGenerationJobData>): Promise<JobResult> {
     const { brandId, businessName, tagline, industry, brandStyle } = job.data;
-
-    this.logger.log(`Generating website JSON for brand: ${brandId}`);
+    const brandObjectId = new Types.ObjectId(brandId);
+    this.logger.log(`🌐 [${brandId}] Starting Website Generation Job...`);
 
     try {
+      // STEP 1️⃣ — Wait for dependencies (identity + logo) to complete
+      const dependenciesReady = await this.waitForDependencies(brandId.toString(), 30, 5000); // 30 attempts, 5s interval
+      if (!dependenciesReady) {
+        this.logger.warn(
+          `⚠️ [${brandId}] Identity/Logo generation still pending after timeout. Job delayed.`,
+        );
 
+        // Requeue after 2 minutes
+        await job.moveToDelayed(Date.now() + 1000 * 60 * 2);
+        return { success: false, brandId, data: { reason: 'Dependencies not ready (delayed).' } };
+      }
 
-      const vision = `To be the leading provider of innovative solutions in the ${industry} industry, empowering businesses to achieve their full potential through cutting-edge technology and exceptional service.`;
-      const mission = `Our mission is to deliver high-quality, reliable, and user-friendly products that address the unique challenges faced by businesses in the ${industry} sector. We are committed to fostering long-term partnerships with our clients by providing exceptional customer support and continuously evolving our offerings to meet their changing needs.`;
-      const logoUrl = 'https://img.freepik.com/free-vector/squares-logo_1017-8755.jpg?semt=ais_hybrid&w=740&q=80'
-      const websiteJson = await this.aiService.generatePremiumWebsite(businessName, industry, tagline, vision, mission);
+      this.logger.log(`✅ [${brandId}] All dependencies ready. Proceeding with website generation.`);
 
-      const brandObjectId = new Types.ObjectId(brandId);
+      // STEP 2️⃣ — Fetch BrandAssets from Mongo
+      const brandAssets = await this.assetsModel.findOne({ brand: brandObjectId });
+      if (!brandAssets) {
+        throw new Error(`No BrandAssets found for brand ${brandId}`);
+      }
 
-      this.assetsModel.findOneAndUpdate(
+      const vision =
+        brandAssets?.vision ||
+        `To be a leading name in ${industry}, shaping innovation and trust.`;
+      const mission =
+        brandAssets?.mission ||
+        `Deliver reliable and transformative ${industry} experiences that empower people.`;
+      const logoUrl =
+        brandAssets?.logos?.find((l) => l.type === 'primary')?.url ||
+        'https://via.placeholder.com/200x60/4F46E5/FFFFFF?text=YourBrand';
+
+      // STEP 3️⃣ — Generate website JSON using AI
+      const websiteJson = await this.aiService.generatePremiumWebsite(
+        businessName,
+        industry,
+        tagline,
+        vision,
+        mission,
+        logoUrl,
+      );
+
+      if (!websiteJson || websiteJson.errors) {
+        throw new Error(
+          `Website generation failed: ${websiteJson?.errors?.[0] || 'Unknown AI error.'}`,
+        );
+      }
+
+      // STEP 4️⃣ — Save generated data
+      await this.assetsModel.findOneAndUpdate(
         { brand: brandObjectId },
         {
           $set: {
-            brand: brandObjectId,
-            websit: websiteJson,
+            website: websiteJson,
             updatedAt: new Date(),
           },
         },
         { upsert: true, new: true },
-      ).then(() => {
-        this.logger.log(`Website JSON saved to assets for brand: ${brandId}`);
-      }).catch((err) => {
-        this.logger.error(`Failed to save website JSON for brand: ${brandId}`, err);
-      });
+      );
 
-      this.logger.log(`Successfully generated website JSON for brand: ${brandId}`);
-
-      return {
-        success: true,
-        data: { website: websiteJson },
-        brandId,
-      };
+      this.logger.log(`💾 [${brandId}] Website successfully generated and saved.`);
+      return { success: true, brandId, data: { website: websiteJson } };
     } catch (error) {
-      console.log('Error generating website JSON:', error);
-      this.logger.error(`Website generation failed for brand ${brandId}:`, error.message);
+      this.logger.error(`❌ [${brandId}] Website generation failed: ${error.message}`);
       throw error;
     }
+  }
+
+  /**
+   * Waits until all dependency jobs (identity*, logo*) are completed.
+   * @param brandId The brand ID for which to check statuses.
+   * @param maxAttempts Number of attempts before timeout.
+   * @param intervalMs Delay between each poll.
+   * @returns boolean
+   */
+  private async waitForDependencies(
+    brandId: string,
+    maxAttempts = 30,
+    intervalMs = 5000,
+  ): Promise<boolean> {
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      const statuses = await this.queueService.getBrandJobStatuses(brandId);
+      if (!statuses) {
+        this.logger.warn(`⚙️ [${brandId}] No queue statuses found (attempt ${attempt}/${maxAttempts}).`);
+        await this.sleep(intervalMs);
+        continue;
+      }
+
+      const jobStatuses = Object.values(statuses) as any[];
+
+      const identityJobs = jobStatuses.filter((j) => j.id.startsWith('identity'));
+      const logoJobs = jobStatuses.filter((j) => j.id.startsWith('logo'));
+
+      const identityCompleted = identityJobs.every((j) => j.state === 'completed');
+      const logoCompleted = logoJobs.every((j) => j.state === 'completed');
+
+      if (identityCompleted && logoCompleted) return true;
+
+      this.logger.log(
+        `⏳ [${brandId}] Waiting for dependencies... (Attempt ${attempt}/${maxAttempts}) | identity: ${identityCompleted}, logo: ${logoCompleted}`,
+      );
+
+      await this.sleep(intervalMs);
+    }
+
+    return false;
+  }
+
+  private async sleep(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }

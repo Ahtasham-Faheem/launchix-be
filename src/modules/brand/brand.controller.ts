@@ -131,13 +131,6 @@ export class BrandController {
       return { error: 'Brand not found' };
     }
 
-    // Get colors from body or fetch existing colors
-    let colors = body.colors;
-    if (!colors) {
-      const assets = await this.service.getBrandAssets(id);
-      colors = assets?.palette || [];
-    }
-
     const job = await this.queueService.addWebsiteGenerationJob(
       brand._id,
       brand.businessName,
