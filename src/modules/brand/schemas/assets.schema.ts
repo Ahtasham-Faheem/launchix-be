@@ -32,7 +32,7 @@ export class BrandAssets {
   @Prop({ type: Object, default: null })
   websit: any;
 
-  @Prop({ type: [String], default: null })
+  @Prop({ type: [String], default: [] })
   mockups?: string[];
 }
 

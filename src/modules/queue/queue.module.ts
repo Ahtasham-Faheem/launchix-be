@@ -13,6 +13,7 @@ import { AssetOrchestrationService } from './services/asset-orchestration.servic
 import { AiModule } from '../ai/ai.module';
 import { Brand, BrandSchema } from '../brand/schemas/brand.schema';
 import { BrandAssets, BrandAssetsSchema } from '../brand/schemas/assets.schema';
+import { ImageOverlayService } from '../printify/printify.service';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { BrandAssets, BrandAssetsSchema } from '../brand/schemas/assets.schema';
     AssetAggregationProcessor,
     QueueService,
     AssetOrchestrationService,
+    ImageOverlayService,
   ],
   exports: [QueueService, AssetOrchestrationService],
 })
