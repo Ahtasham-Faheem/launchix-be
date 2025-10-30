@@ -2,64 +2,355 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>{{businessName}} – {{tagline}}</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{businessName}} - {{tagline}}</title>
+  <link href="style.css" rel="stylesheet" />
+  
 </head>
 <body>
-  <header class="hero">
-    <div class="overlay"></div>
-    <img src="{{heroImg}}" class="hero-bg" alt="hero background" />
-    <nav class="navbar">
-      <div class="brand">
-        <img src="{{logoUrl}}" class="logo" alt="logo" />
-        <h1>{{businessName}}</h1>
+  <div class="geometric-bg"></div>
+
+  <!-- Header -->
+  <header>
+    <nav>
+      <a href="#hero" class="logo">
+        <img src="{{logoUrl}}" alt="{{businessName}} logo" class="logo-img" />
+        <span class="logo-text">{{businessName}}</span>
+      </a>
+      <div class="menu-toggle" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
       </div>
+      <ul class="nav-links">
+        <li><a href="#hero" class="nav-link active">Home</a></li>
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#practices" class="nav-link">Practices</a></li>
+        <li><a href="#resources" class="nav-link">Resources</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
     </nav>
+  </header>
+
+  <!-- Hero -->
+  <section id="hero">
+    <div class="network-bg">
+      <div class="network-line"></div><div class="network-line"></div><div class="network-line"></div><div class="network-line"></div>
+      <div class="network-line"></div><div class="network-line"></div><div class="network-line"></div><div class="network-line"></div>
+      <div class="network-dot"></div><div class="network-dot"></div><div class="network-dot"></div><div class="network-dot"></div>
+      <div class="network-dot"></div><div class="network-dot"></div><div class="network-dot"></div><div class="network-dot"></div>
+      <div class="network-dot"></div><div class="network-dot"></div><div class="network-dot"></div><div class="network-dot"></div>
+    </div>
+    <div class="peace-bg">
+      <div class="breathing-circle"></div><div class="breathing-circle"></div><div class="breathing-circle"></div><div class="breathing-circle"></div>
+    </div>
+    <div class="floating-elements">
+      <div class="zen-stone"></div><div class="zen-stone"></div><div class="zen-stone"></div>
+    </div>
+    <div class="mandala-bg">
+      <div class="mandala-circle"></div><div class="mandala-circle"></div><div class="mandala-circle"></div>
+    </div>
+
     <div class="hero-content">
       <h1>{{heroTitle}}</h1>
       <p>{{heroSubtitle}}</p>
-      <a href="#contact" class="btn-primary">{{ctaText}}</a>
+      <a href="#about" class="cta-button">{{ctaText}}</a>
     </div>
-  </header>
+  </section>
 
-  <section id="about" class="about">
-    <div class="about-wrapper">
-      <img src="{{aboutImg}}" class="about-img" alt="about" />
-      <div class="about-text">
-        <h2>About Us</h2>
-        <p>{{aboutText}}</p>
+  <!-- About -->
+  <section id="about">
+    <h2 class="section-title">{{aboutTitle}}</h2>
+    <p class="section-subtitle">{{aboutSubtitle}}</p>
+
+    <div class="about-floating-cards">
+      <div class="floating-card">
+        <div class="card-icon"><div class="icon-wrapper">🧠</div></div>
+        <h3>{{aboutCard1Title}}</h3>
+        <p>{{aboutCard1Text}}</p>
+      </div>
+      <div class="floating-card">
+        <div class="card-icon"><div class="icon-wrapper">⚡</div></div>
+        <h3>{{aboutCard2Title}}</h3>
+        <p>{{aboutCard2Text}}</p>
+      </div>
+      <div class="floating-card">
+        <div class="card-icon"><div class="icon-wrapper">🎯</div></div>
+        <h3>{{aboutCard3Title}}</h3>
+        <p>{{aboutCard3Text}}</p>
+      </div>
+    </div>
+
+    <div class="stats-banner">
+      <div class="stat-block"><div class="stat-value">{{stat1Value}}</div><div class="stat-desc">{{stat1Label}}</div></div>
+      <div class="stat-block"><div class="stat-value">{{stat2Value}}</div><div class="stat-desc">{{stat2Label}}</div></div>
+      <div class="stat-block"><div class="stat-value">{{stat3Value}}</div><div class="stat-desc">{{stat3Label}}</div></div>
+      <div class="stat-block"><div class="stat-value">{{stat4Value}}</div><div class="stat-desc">{{stat4Label}}</div></div>
+    </div>
+
+    <div class="feature-showcase">
+      <div class="showcase-content">
+        <h3>{{featureTitle}}</h3>
+        <ul class="feature-list">
+          <li><span class="feature-check">✓</span><span>{{feature1}}</span></li>
+          <li><span class="feature-check">✓</span><span>{{feature2}}</span></li>
+          <li><span class="feature-check">✓</span><span>{{feature3}}</span></li>
+          <li><span class="feature-check">✓</span><span>{{feature4}}</span></li>
+          <li><span class="feature-check">✓</span><span>{{feature5}}</span></li>
+        </ul>
       </div>
     </div>
   </section>
 
-  <section id="services" class="services">
-    <h2>Our Services</h2>
-    <div class="grid">
-      <div class="card">
-        <img src="{{serviceImg}}" alt="service" />
-        <h3>{{service1}}</h3>
-        <p>{{desc1}}</p>
-      </div>
-      <div class="card">
-        <img src="{{serviceImg}}" alt="service" />
-        <h3>{{service2}}</h3>
-        <p>{{desc2}}</p>
-      </div>
-      <div class="card">
-        <img src="{{serviceImg}}" alt="service" />
-        <h3>{{service3}}</h3>
-        <p>{{desc3}}</p>
+  <!-- Practices -->
+  <section id="practices">
+    <div class="practices-container">
+      <h2 class="section-title">{{practicesTitle}}</h2>
+      <p class="section-subtitle">{{practicesSubtitle}}</p>
+
+      <div class="practice-layout">
+        <div class="timeline-track">
+          <div class="timeline-progress"></div>
+          <div class="timeline-points">
+            <div class="timeline-point active"><div class="futuristic-label"><span class="label-text">{{timeline1}}</span></div><div class="timeline-indicator"></div></div>
+            <div class="timeline-point"><div class="futuristic-label"><span class="label-text">{{timeline2}}</span></div><div class="timeline-indicator"></div></div>
+            <div class="timeline-point"><div class="futuristic-label"><span class="label-text">{{timeline3}}</span></div><div class="timeline-indicator"></div></div>
+            <div class="timeline-point"><div class="futuristic-label"><span class="label-text">{{timeline4}}</span></div><div class="timeline-indicator"></div></div>
+          </div>
+        </div>
+
+        <div class="practice-content-area">
+          {{#each practices}}
+          <div class="practice-card-new">
+            <div class="practice-header">
+              <div class="practice-icon-new">{{this.icon}}</div>
+              <div class="practice-info">
+                <h3>{{this.title}}</h3>
+                <span class="practice-duration">{{this.duration}}</span>
+              </div>
+            </div>
+            <p class="practice-description">{{this.description}}</p>
+            <div class="practice-benefits">
+              {{#each this.benefits}}
+              <a href="#" class="benefit-tag">{{this}}</a>
+              {{/each}}
+            </div>
+          </div>
+          {{/each}}
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="testimonial">
-    <blockquote>“{{testimonial}}”</blockquote>
+  <!-- Resources -->
+  <section id="resources">
+    <h2 class="section-title">{{resourcesTitle}}</h2>
+    <p class="section-subtitle">{{resourcesSubtitle}}</p>
+
+    <div class="resource-tabs">
+      <button class="tab-btn active" onclick="showTab('meditations')">{{tab1}}</button>
+      <button class="tab-btn" onclick="showTab('courses')">{{tab2}}</button>
+      <button class="tab-btn" onclick="showTab('tools')">{{tab3}}</button>
+    </div>
+
+    <div id="meditations" class="tab-content active">
+      <div class="resource-list">
+        {{#each meditations}}
+        <div class="resource-card">
+          <div class="resource-image"><img src="{{this.image}}" alt="{{this.title}}" class="resource-thumbnail" /></div>
+          <div class="resource-body"><h3>{{this.title}}</h3><p>{{this.description}}</p></div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+
+    <div id="courses" class="tab-content">
+      <div class="resource-list">
+        {{#each courses}}
+        <div class="resource-card">
+          <div class="resource-image"><img src="{{this.image}}" alt="{{this.title}}" class="resource-thumbnail" /></div>
+          <div class="resource-body"><h3>{{this.title}}</h3><p>{{this.description}}</p></div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+
+    <div id="tools" class="tab-content">
+      <div class="resource-list">
+        {{#each tools}}
+        <div class="resource-card">
+          <div class="resource-image"><img src="{{this.image}}" alt="{{this.title}}" class="resource-thumbnail" /></div>
+          <div class="resource-body"><h3>{{this.title}}</h3><p>{{this.description}}</p></div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
   </section>
 
-  <footer class="footer">
-    <p>© {{businessName}} – All Rights Reserved</p>
+  <!-- Contact -->
+  <section id="contact">
+    <div class="contact-container">
+      <h2 class="section-title">{{contactTitle}}</h2>
+      <div class="contact-wrapper">
+        <div class="contact-info">
+          <h3>{{contactHeading}}</h3>
+
+          <div class="info-item"><div class="info-icon">📍</div><div class="info-text"><h4>{{visitLabel}}</h4><p>{{address}}</p></div></div>
+          <div class="info-item"><div class="info-icon">📧</div><div class="info-text"><h4>{{emailLabel}}</h4><p>{{email}}</p></div></div>
+          <div class="info-item"><div class="info-icon">📞</div><div class="info-text"><h4>{{phoneLabel}}</h4><p>{{phone}}</p></div></div>
+          <div class="info-item"><div class="info-icon">💬</div><div class="info-text"><h4>{{chatLabel}}</h4><p>{{chatText}}</p></div></div>
+
+          <div class="social-links">
+            {{#each socialLinks}}
+            <a href="{{this.url}}" class="social-link">{{this.icon}}</a>
+            {{/each}}
+          </div>
+        </div>
+
+        <div class="contact-form">
+          <h3 style="color: var(--primary); font-size: 1.8rem; margin-bottom: 2rem;">{{formHeading}}</h3>
+          <form>
+            <div class="form-group"><label for="name">{{labelName}}</label><input type="text" id="name" name="name" required /></div>
+            <div class="form-group"><label for="email">{{labelEmail}}</label><input type="email" id="email" name="email" required /></div>
+            <div class="form-group"><label for="subject">{{labelSubject}}</label><input type="text" id="subject" name="subject" required /></div>
+            <div class="form-group"><label for="message">{{labelMessage}}</label><textarea id="message" name="message" rows="4" required></textarea></div>
+            <button type="submit" class="submit-btn">{{submitText}}</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="#privacy">{{privacyText}}</a>
+        <a href="#terms">{{termsText}}</a>
+        <a href="#support">{{supportText}}</a>
+      </div>
+      <div class="copyright">
+        <p>© {{currentYear}} {{businessName}}. {{footerTagline}} 
+        Designed by <a rel="nofollow noopener" href="https://www.tooplate.com" target="_blank" style="color: var(--accent); text-decoration: none;">Tooplate</a></p>
+      </div>
+    </div>
   </footer>
+  <script>
+    
+        function toggleMenu() {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            if (menuToggle && navLinks) {
+                menuToggle.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            }
+        }
+
+        // Close mobile menu when clicking a link
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    const menuToggle = document.querySelector('.menu-toggle');
+                    const navLinksContainer = document.querySelector('.nav-links');
+                    if (menuToggle && navLinksContainer) {
+                        menuToggle.classList.remove('active');
+                        navLinksContainer.classList.remove('active');
+                    }
+                });
+            });
+
+            // Active menu highlighting
+            const sections = document.querySelectorAll('section');
+            const menuLinks = document.querySelectorAll('.nav-link');
+
+            if (sections.length && menuLinks.length) {
+                window.addEventListener('scroll', () => {
+                    let current = '';
+                    sections.forEach(section => {
+                        const sectionTop = section.offsetTop;
+                        const sectionHeight = section.clientHeight;
+                        if (window.scrollY >= (sectionTop - 200)) {
+                            current = section.getAttribute('id');
+                        }
+                    });
+
+                    menuLinks.forEach(link => {
+                        link.classList.remove('active');
+                        const href = link.getAttribute('href');
+                        if (href && href.slice(1) === current) {
+                            link.classList.add('active');
+                        }
+                    });
+                });
+            }
+
+            // Smooth scrolling for anchor links
+            const anchorLinks = document.querySelectorAll('a[href^="#"]');
+            anchorLinks.forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    if (href && href !== '#') {
+                        e.preventDefault();
+                        const target = document.querySelector(href);
+                        if (target) {
+                            target.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }
+                    }
+                });
+            });
+
+            // Header scroll effect
+            const header = document.querySelector('header');
+            if (header) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 100) {
+                        header.style.background = 'rgba(255, 255, 255, 0.98)';
+                        header.style.boxShadow = '0 2px 30px rgba(0, 0, 0, 0.1)';
+                    } else {
+                        header.style.background = 'rgba(255, 255, 255, 0.95)';
+                        header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.05)';
+                    }
+                });
+            }
+
+            // Tab functionality
+            window.showTab = function(tabName) {
+                const tabs = document.querySelectorAll('.tab-content');
+                const buttons = document.querySelectorAll('.tab-btn');
+                
+                tabs.forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                
+                buttons.forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                const targetTab = document.getElementById(tabName);
+                if (targetTab) {
+                    targetTab.classList.add('active');
+                }
+                
+                // Find and activate the clicked button
+                buttons.forEach(btn => {
+                    if (btn.textContent.toLowerCase().includes(tabName.toLowerCase())) {
+                        btn.classList.add('active');
+                    }
+                });
+            };
+
+            // Form submission handler
+            const contactForm = document.querySelector('.contact-form form');
+            if (contactForm) {
+                contactForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    alert('Thank you for reaching out! We will get back to you soon.');
+                    e.target.reset();
+                });
+            }
+        });
+  </script>
 </body>
 </html>

@@ -22,44 +22,94 @@ interface WebsiteResult {
     };
 }
 
-const getUserPrompt = (businessName: string, industry: string, tagline: string, vision: string, mission: string) => {
-    return `
-Generate premium, human-like marketing content for a business website.
-Respond only in JSON format with the following keys:
+/**
+ * Dynamically builds a brand-specific AI prompt for website content generation.
+ * It uses the variablesRaw JSON to determine which placeholders (HTML + CSS)
+ * must be filled by the AI.
+ */
+
+export function getUserPrompt(
+    businessName: string,
+    industry: string,
+    tagline: string,
+    vision: string,
+    mission: string,
+    logoUrl: string,
+    variablesRaw: string,
+): string {
+    // 🧩 Parse the variables JSON
+    let vars: any = {};
+    try {
+        vars = JSON.parse(variablesRaw);
+    } catch (err) {
+        throw new Error('❌ Invalid variablesRaw JSON format');
+    }
+
+    // Flatten variable keys from both HTML + CSS
+    const htmlVars = vars.html ? Object.keys(vars.html) : [];
+    const cssVars = vars.css ? Object.keys(vars.css) : [];
+
+    // 🧱 Convert variable structure into readable schema for AI
+    const formattedHtmlVars = htmlVars
+        .map((v) => `  "${v}": "string",`)
+        .join('\n');
+
+    const formattedCssVars = cssVars
+        .map((v) => `  "${v}": "string",`)
+        .join('\n');
+
+    // 🧠 Dynamic AI Prompt
+    const prompt = `
+You are an expert AI content generator that specializes in building complete, brand-specific website data structures.
+You must output a single JSON object — no markdown, no comments, no text outside JSON.
+The output will be used directly to replace website placeholders, so every key must be filled.
+
+🎯 OBJECTIVE:
+Generate full website content and styling variables for the brand below.
+Every value must be directly related to this business — DO NOT create generic placeholders.
+
+Brand Context:
+- Business Name: "${businessName}"
+- Industry: "${industry}"
+- Tagline: "${tagline}"
+- Vision: "${vision}"
+- Mission: "${mission}"
+- Logo URL: "${logoUrl}"
+
+ FOR LOGO YOU MUST USE MY PROVIDED LOGO URL AND NOT MAKE UP ANYTHING.
+
+🏗️ REQUIRED OUTPUT STRUCTURE:
 {
-  "heroTitle": "Main hero headline (max 12 words)",
-  "heroSubtitle": "Short subheading below hero title (max 20 words)",
-  "aboutText": "1-2 sentence About section describing purpose, personality, and trustworthiness.",
-  "serviceTitles": ["3 short service titles"],
-  "serviceDescriptions": ["3 matching descriptions — 1-2 sentences each"],
-  "testimonial": "Customer testimonial or quote in quotes.",
-  "ctaText": "Short call-to-action (CTA) encouraging engagement."
+  "html": {
+${formattedHtmlVars}
+  },
+  "css": {
+${formattedCssVars}
+  }
 }
 
-### BUSINESS CONTEXT
-- Business Name: ${businessName}
-- Industry: ${industry}
-- Tagline: ${tagline}
-- Vision: ${vision}
-- Mission: ${mission}
+🧩 INSTRUCTIONS:
+- Return all values as human-written, premium, and brand-specific.
+- Make the tone consistent with the brand's industry (e.g., professional, calming, creative, luxury, etc.).
+- Use emotional, natural language for text (not robotic or templated).
+- Fill in ALL empty fields — never leave blank strings.
+- For any variable containing "image", "img", or "background":
+  → Return a descriptive image keyword (e.g., "modern fitness studio interior" or "luxury spa ambience").
+- For "color", "accent", or "gradient" variables:
+  → Return visually appealing hex codes or gradient CSS values based on brand tone.
+- For "socialLinks":
+  → Use realistic URLs like "https://facebook.com/${businessName.toLowerCase().replace(/\s+/g, '')}".
+- For "currentYear":
+  → Return the current year (e.g., 2025).
+- Ensure the final JSON is syntactically valid and does not include trailing commas.
+- Never output explanatory text, comments, or markdown fences.
 
-### WRITING INSTRUCTIONS
-1. Adapt tone, vocabulary, and emotion based on the industry:
-   - SaaS / Tech: clean, confident, forward-looking, problem-solving.
-   - Fitness / Wellness: motivational, energetic, personal.
-   - Restaurant / Food: sensory, emotional, welcoming.
-   - Real Estate: elegant, aspirational, trustworthy.
-   - Agency / Creative: bold, modern, expressive.
-2. Focus on clarity and credibility.
-3. Every section should sound like it belongs to a modern premium brand.
-4. Avoid filler, repetition, and generic statements.
-5. Include naturally persuasive language and emotional connection.
-6. Ensure the content reads like a finished website copy — no placeholders.
-7. Do not include any empty strings or null values.
-
-Return a **single valid JSON object** only — no explanations, markdown, or text outside the JSON.
+Your goal: produce a complete, ready-to-inject JSON that can fill every placeholder in the brand’s HTML and CSS template.
 `;
-};
+
+    return prompt.trim();
+}
+
 
 
 @Injectable()
@@ -90,9 +140,6 @@ export class WebsiteTemplateService {
         text: '#111827',
     };
 
-    /**
-     *  Main entry point
-     */
     async buildWebsite(
         businessName: string,
         industry: string,
@@ -105,51 +152,51 @@ export class WebsiteTemplateService {
         this.logger.log(`⚡ Building template website for ${businessName}`);
 
         const selected = this.selectTemplate(industry);
-        const [htmlRaw, cssRaw] = await this.loadTemplate(selected);
+        const [htmlRaw, cssRaw, variablesRaw] = await this.loadTemplate(selected);
 
-        // 🧠 Ask AI for section content
-        const prompt = getUserPrompt(businessName, industry, tagline, vision, mission)
-        const content = await this.aiService.extractContent(prompt);
-        const c: any = (content as any) || {};
+        // 🧠 Step 1: Generate brand-specific content via AI
+        const prompt = getUserPrompt(businessName, industry, tagline, vision, mission, logoUrl, variablesRaw);
+        const aiResponse = await this.aiService.extractContent(prompt);
+        const content = aiResponse || {};
 
-        // 🎨 Replace placeholders
-        const colors = colorScheme || this.defaultColors;
-        let html = htmlRaw
-            .replace(/{{businessName}}/g, businessName)
-            .replace(/{{tagline}}/g, tagline)
-            .replace(/{{heroTitle}}/g, c.heroTitle || businessName)
-            .replace(/{{heroSubtitle}}/g, c.heroSubtitle || tagline)
-            .replace(/{{aboutText}}/g, c.aboutText || vision)
-            .replace(/{{service1}}/g, c.serviceTitles?.[0] || 'Service One')
-            .replace(/{{service2}}/g, c.serviceTitles?.[1] || 'Service Two')
-            .replace(/{{service3}}/g, c.serviceTitles?.[2] || 'Service Three')
-            .replace(/{{desc1}}/g, c.serviceDescriptions?.[0] || 'Quality you can trust.')
-            .replace(/{{desc2}}/g, c.serviceDescriptions?.[1] || 'Professional results every time.')
-            .replace(/{{desc3}}/g, c.serviceDescriptions?.[2] || 'Built for growth.')
-            .replace(/{{testimonial}}/g, c.testimonial || 'Outstanding experience!')
-            .replace(/{{ctaText}}/g, c.ctaText || 'Get Started')
-            .replace(/{{logoUrl}}/g, logoUrl);
+        // 🎨 Step 2: Merge user-provided color scheme or use AI/CSS defaults
+        const colors = colorScheme || content.css || this.defaultColors;
+        const htmlVars = content.html || {};
 
-        // 🖼  Replace Unsplash keywords dynamically
-        html = html.replace(/{{heroImg}}/g, this.unsplash(industry, 1))
-            .replace(/{{aboutImg}}/g, this.unsplash(industry, 2))
-            .replace(/{{serviceImg}}/g, this.unsplash(industry, 3));
+        // 🪄 Step 3: Universal HTML replacement based on AI variables
+        let html = htmlRaw;
 
-        const css = cssRaw
-            .replace(/{{primary}}/g, colors.primary)
-            .replace(/{{secondary}}/g, colors.secondary)
-            .replace(/{{accent}}/g, colors.accent)
-            .replace(/{{background}}/g, colors.background)
-            .replace(/{{text}}/g, colors.text);
+        for (const [key, value] of Object.entries(htmlVars)) {
+            const pattern = new RegExp(`{{${key}}}`, 'g');
+            html = html.replace(pattern, String(value ?? ''));
+        }
 
+        // 🖼 Step 4: Replace missing image placeholders with Unsplash keywords
+        html = html.replace(/{{[^{}]*(image|img)[^{}]*}}/gi, (match) => {
+            return this.unsplash(industry, Math.floor(Math.random() * 10) + 1);
+        });
+
+        // 🎨 Step 5: Universal CSS replacement based on AI variables
+        let css = cssRaw;
+        for (const [key, value] of Object.entries(colors)) {
+            const pattern = new RegExp(`{{${key}}}`, 'g');
+            css = css.replace(pattern, String(value ?? ''));
+        }
+
+        // 🧩 Step 6: Return structured website result
         return {
-            grapesjs: { html, css, components: [], styles: [] },
+            grapesjs: {
+                html,
+                css,
+                components: [],
+                styles: [],
+            },
             metadata: {
                 businessName,
                 industry,
                 colorScheme: colors,
                 logoUrl,
-                sections: ['hero', 'about', 'services', 'testimonial', 'contact'],
+                sections: Object.keys(htmlVars),
             },
         };
     }
@@ -173,14 +220,16 @@ export class WebsiteTemplateService {
         throw new Error('Template folder missing — please ensure it’s copied to dist.');
     }
 
-    private async loadTemplate(folder: string): Promise<[string, string]> {
+    private async loadTemplate(folder: string): Promise<[string, string, string]> {
         const base = this.getTemplateBasePath();
         const htmlPath = path.join(base, folder, 'template.html');
         const cssPath = path.join(base, folder, 'style.css');
+        const variablesPath = path.join(base, folder, 'variables.json');
 
         const html = await fs.readFile(htmlPath, 'utf8');
         const css = await fs.readFile(cssPath, 'utf8');
-        return [html, css];
+        const variables = await fs.readFile(variablesPath, 'utf8');
+        return [html, css, variables];
     }
 
     private unsplash(keyword: string, sig = 1) {

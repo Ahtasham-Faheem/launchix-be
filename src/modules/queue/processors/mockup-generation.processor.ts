@@ -8,7 +8,7 @@ import { MockupGenerationJobData, JobResult } from '../interfaces/job-data.inter
 
 import { BrandAssets } from 'src/modules/brand/schemas/assets.schema';
 import { QueueService } from '../services/queue.service';
-import { ImageOverlayService } from 'src/modules/printify/printify.service';
+import { ImageOverlayService } from 'src/modules/imageOverlay/imageOverlay.service';
 
 @Processor(QUEUE_NAMES.MOCKUP_GENERATION, { concurrency: 5 })
 export class MockupGenerationProcessor extends WorkerHost {

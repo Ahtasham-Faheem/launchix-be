@@ -82,17 +82,22 @@ export class LogoGenerationProcessor extends WorkerHost {
         It should combine an icon or abstract mark with the brand text in a balanced layout. 
         Style: ${styles}. 
         Use ${primary} as the main color and ${secondary} as an accent. 
-        Keep it professional, vector-based, and suitable for both digital and print.`,
+        Keep it professional, vector-based, and suitable for both digital and print.
+        **IMPORTANT** Minimal flat logo for a modern tech startup, vector style, single abstract symbol, no box, no text, transparent background, white canvas.
+        `,
 
       secondary: `Create a **secondary simplified logo** for "${brandName}"${taglineText}. 
         This should be a flexible alternate version that works well in small sizes or dark backgrounds. 
         Style: ${styles}. 
-        Focus on ${secondary} and ${accent} tones for contrast.`,
+        Focus on ${secondary} and ${accent} tones for contrast.
+        `,
 
       icon: `Generate an **icon-only logo** (no text) for "${brandName}"${taglineText}. 
         It should represent the brand symbolically — think app icon or favicon.
         Style: ${styles}. 
-        Use ${primary} and ${background} in a flat vector design.`,
+        Use ${primary} and ${background} in a flat vector design.
+        **IMPORTANT** Minimal flat logo for a modern tech startup, vector style, single abstract symbol, no box, no text, transparent background, white canvas.
+        `,
 
       text: `Design a **text-only wordmark logo** for "${brandName}"${taglineText}. 
         Focus on typography — clean, modern, and minimal. 

@@ -13,7 +13,7 @@ import { AssetOrchestrationService } from './services/asset-orchestration.servic
 import { AiModule } from '../ai/ai.module';
 import { Brand, BrandSchema } from '../brand/schemas/brand.schema';
 import { BrandAssets, BrandAssetsSchema } from '../brand/schemas/assets.schema';
-import { ImageOverlayService } from '../printify/printify.service';
+import { ImageOverlayService } from '../imageOverlay/imageOverlay.service';
 import { WebsiteTemplateService } from '../website/website-template.service';
 
 @Module({

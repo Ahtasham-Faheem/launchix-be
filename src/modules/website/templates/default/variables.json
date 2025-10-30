@@ -1,0 +1,120 @@
+{
+    "html": {
+        "businessName": "",
+        "tagline": "",
+        "logoUrl": "",
+        "heroImage": "",
+        "primary": "",
+        "secondary": "",
+        "accent": "",
+        "background": "",
+        "text": "",
+        "heroTitle": "",
+        "heroSubtitle": "",
+        "ctaText": "",
+        "aboutTitle": "",
+        "aboutSubtitle": "",
+        "aboutCard1Title": "",
+        "aboutCard1Text": "",
+        "aboutCard2Title": "",
+        "aboutCard2Text": "",
+        "aboutCard3Title": "",
+        "aboutCard3Text": "",
+        "stat1Value": "",
+        "stat1Label": "",
+        "stat2Value": "",
+        "stat2Label": "",
+        "stat3Value": "",
+        "stat3Label": "",
+        "stat4Value": "",
+        "stat4Label": "",
+        "featureTitle": "",
+        "feature1": "",
+        "feature2": "",
+        "feature3": "",
+        "feature4": "",
+        "feature5": "",
+        "practicesTitle": "",
+        "practicesSubtitle": "",
+        "timeline1": "",
+        "timeline2": "",
+        "timeline3": "",
+        "timeline4": "",
+        "practices": [
+            {
+                "icon": "",
+                "title": "",
+                "duration": "",
+                "description": "",
+                "benefits": [
+                    "",
+                    "",
+                    "",
+                    ""
+                ]
+            }
+        ],
+        "resourcesTitle": "",
+        "resourcesSubtitle": "",
+        "tab1": "",
+        "tab2": "",
+        "tab3": "",
+        "meditations": [
+            {
+                "image": "",
+                "title": "",
+                "description": ""
+            }
+        ],
+        "courses": [
+            {
+                "image": "",
+                "title": "",
+                "description": ""
+            }
+        ],
+        "tools": [
+            {
+                "image": "",
+                "title": "",
+                "description": ""
+            }
+        ],
+        "contactTitle": "",
+        "contactHeading": "",
+        "visitLabel": "",
+        "address": "",
+        "emailLabel": "",
+        "email": "",
+        "phoneLabel": "",
+        "phone": "",
+        "chatLabel": "",
+        "chatText": "",
+        "formHeading": "",
+        "labelName": "",
+        "labelEmail": "",
+        "labelSubject": "",
+        "labelMessage": "",
+        "submitText": "",
+        "socialLinks": [
+            {
+                "icon": "",
+                "url": ""
+            }
+        ],
+        "privacyText": "",
+        "termsText": "",
+        "supportText": "",
+        "currentYear": "",
+        "footerTagline": ""
+    },
+    "css": {
+        "primary": "",
+        "secondary": "",
+        "accent": "",
+        "light": "",
+        "dark": "",
+        "gradient1": "",
+        "gradient2": ""
+    }
+}
