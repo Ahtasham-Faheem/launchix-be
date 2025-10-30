@@ -111,6 +111,7 @@ export class BrandController {
       brand.tagline,
       brand.brandStyle,
       colors,
+      brand.industry,
     );
 
     return {

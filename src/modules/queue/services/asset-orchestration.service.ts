@@ -55,6 +55,7 @@ export class AssetOrchestrationService {
         brand.tagline,
         brand.brandStyle,
         palette,
+        brand.industry,
         priority,
       ),
       this.queueService.addWebsiteGenerationJob(

@@ -48,6 +48,7 @@ export class QueueService {
     tagline: string | undefined,
     brandStyles: string[],
     colors: string[],
+    industry: string,
     priority : number = JOB_PRIORITIES.NORMAL,
   ) {
     const variants: Array<'primary' | 'secondary' | 'icon' | 'text'> = ['primary', 'icon'];
@@ -61,6 +62,7 @@ export class QueueService {
         brandStyles,
         colors,
         variant,
+        industry
       };
 
       const job = await this.logoQueue.add(JOB_NAMES.GENERATE_LOGO, jobData, {

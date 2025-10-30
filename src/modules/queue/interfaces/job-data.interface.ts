@@ -20,6 +20,7 @@ export interface LogoGenerationJobData {
   tagline?: string;
   brandStyles: string[];
   colors: string[];
+  industry: string;
   variant: 'primary' | 'secondary' | 'icon' | 'text';
 }
 

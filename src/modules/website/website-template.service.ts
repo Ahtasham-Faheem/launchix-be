@@ -151,8 +151,8 @@ export class WebsiteTemplateService {
     ): Promise<WebsiteResult> {
         this.logger.log(`⚡ Building template website for ${businessName}`);
 
-        const selected = this.selectTemplate(industry);
-        const [htmlRaw, cssRaw, variablesRaw] = await this.loadTemplate(selected);
+        // const selected = this.selectTemplate(industry);
+        const [htmlRaw, cssRaw, variablesRaw] = await this.loadTemplate('template2');
 
         // 🧠 Step 1: Generate brand-specific content via AI
         const prompt = getUserPrompt(businessName, industry, tagline, vision, mission, logoUrl, variablesRaw);
