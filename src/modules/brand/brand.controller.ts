@@ -8,6 +8,7 @@ import { Request } from 'express';
 import { AssetOrchestrationService } from '../queue/services/asset-orchestration.service';
 import { QueueService } from '../queue/services/queue.service';
 import { CurrentUser } from 'src/decorator/auth.decorator';
+import { BrandLimitGuard } from 'src/guards/limit-brand.guard';
 
 @ApiTags('brand')
 @ApiBearerAuth()
@@ -34,6 +35,7 @@ export class BrandController {
   }
 
   @Post('parse')
+  @UseGuards(BrandLimitGuard)
   @ApiOperation({ summary: 'Parse prompt and create brand' })
   @ApiResponse({ status: 201, description: 'Brand created successfully' })
   async parse(@Body() dto: ParsePromptDto, @Req() req: Request, @CurrentUser() user: any) {

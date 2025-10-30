@@ -27,7 +27,7 @@ import { ConfigService } from '@nestjs/config';
             count: 1000,
           },
           removeOnFail: {
-            age: 604800, // 7 days
+            age: 86400, // 1 day
           },
         },
       }),

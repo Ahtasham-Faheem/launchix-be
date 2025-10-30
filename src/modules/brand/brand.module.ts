@@ -7,6 +7,7 @@ import { User, UserSchema } from './schemas/user.schema';
 import { BrandAssets, BrandAssetsSchema } from './schemas/assets.schema';
 import { AiModule } from '../ai/ai.module';
 import { QueueModule } from '../queue/queue.module';
+import { BrandLimitGuard } from 'src/guards/limit-brand.guard';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { QueueModule } from '../queue/queue.module';
     QueueModule,
   ],
   controllers: [BrandController],
-  providers: [BrandService],
+  providers: [BrandService, BrandLimitGuard],
   exports: [BrandService],
 })
 export class BrandModule {}

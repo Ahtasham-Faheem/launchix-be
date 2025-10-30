@@ -11,6 +11,7 @@ export class User {
   @Prop() lastName?: string;
   @Prop() username?: string;
   @Prop() profileImage?: string;
+  @Prop({ default: false }) isAdmin: boolean;
 }
 export type UserDocument = HydratedDocument<User>;
 export const UserSchema = SchemaFactory.createForClass(User);
