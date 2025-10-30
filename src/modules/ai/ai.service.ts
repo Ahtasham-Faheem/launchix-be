@@ -267,11 +267,19 @@ export class AiService {
     try {
       this.logger.log(`Generating ${type} logo`);
 
+      // const img = await this.client.images.generate({
+      //   model: 'gpt-image-1',
+      //   prompt,
+      //   size: '1024x1024',
+      //   quality: 'medium',
+      //   n: 1,
+      // });
+
       const img = await this.client.images.generate({
-        model: 'gpt-image-1',
+        model: 'dall-e-3',
         prompt,
         size: '1024x1024',
-        quality: 'medium',
+        quality: 'standard',
         n: 1,
       });
 

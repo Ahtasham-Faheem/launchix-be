@@ -222,7 +222,7 @@ export class WebsiteTemplateService {
 
     private async loadTemplate(folder: string): Promise<[string, string, string]> {
         const base = this.getTemplateBasePath();
-        const htmlPath = path.join(base, folder, 'template.html');
+        const htmlPath = path.join(base, folder, 'index.html');
         const cssPath = path.join(base, folder, 'style.css');
         const variablesPath = path.join(base, folder, 'variables.json');
 

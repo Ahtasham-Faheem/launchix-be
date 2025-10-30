@@ -12,6 +12,7 @@ import { UploadModule } from './upload/upload.module';
 import { HealthModule } from './health/health.module';
 import { ProfileModule } from './profile/profile.module';
 import { QueueModule } from './queue/queue.module';
+import { HostingModule } from './hosting/hosting.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { QueueModule } from './queue/queue.module';
     QueueModule,
     UploadModule,
     HealthModule,
+    HostingModule
   ],
   providers: [
     {

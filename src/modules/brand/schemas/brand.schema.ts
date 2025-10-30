@@ -20,6 +20,12 @@ export class Brand {
 
   @Prop({ type: Object, default: {} })
   aiFlags: Record<string, boolean>;
+  
+  @Prop({ type: String, default: null })
+  subdomain?: string;
+
+  @Prop({ type: String, default: null })
+  publishedUrl?: string;
 }
 export type BrandDocument = HydratedDocument<Brand>;
 export const BrandSchema = SchemaFactory.createForClass(Brand);

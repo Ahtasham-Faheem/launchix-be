@@ -30,7 +30,7 @@ export class BrandAssets {
   logos: { type: string; url: string }[];
 
   @Prop({ type: Object, default: null })
-  websit: any;
+  website: any;
 
   @Prop({ type: [String], default: [] })
   mockups?: string[];

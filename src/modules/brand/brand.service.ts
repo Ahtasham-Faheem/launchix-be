@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Brand } from './schemas/brand.schema';
 import { User } from './schemas/user.schema';
 import { BrandAssets } from './schemas/assets.schema';
 import { AiService, BrandFields } from '../ai/ai.service';
+import { UpdateBrandDto } from './dto/update-brand.dto';
 
 @Injectable()
 export class BrandService {
@@ -13,7 +14,7 @@ export class BrandService {
     @InjectModel(User.name) private userModel: Model<User>,
     @InjectModel(BrandAssets.name) private assetsModel: Model<BrandAssets>,
     private readonly ai: AiService,
-  ) {}
+  ) { }
 
   async upsertUser(clerk: {
     userId: string;
@@ -84,27 +85,31 @@ export class BrandService {
   }
 
   async getBrandAssets(brandId: string) {
-    const assets = await this.assetsModel.findOne({ 
-      brand: new Types.ObjectId(brandId) 
+    const assets = await this.assetsModel.findOne({
+      brand: new Types.ObjectId(brandId)
     });
     return assets;
   }
 
-  async updateBrandAssets(
-    brandId: string,
-    updates: {
-      palette?: string[];
-      logos?: { type: string; url: string }[];
-      websiteJson?: any;
-      mockups?: string[];
-    },
-  ) {
-    const assets = await this.assetsModel.findOneAndUpdate(
-      { brand: new Types.ObjectId(brandId) },
-      { $set: updates },
-      { new: true, upsert: true },
+
+  /**
+  * ✅ Update a brand with partial or full data
+  */
+  async updateBrand(brandId: string, updateData: Partial<UpdateBrandDto>): Promise<Brand> {
+    if (!Types.ObjectId.isValid(brandId)) {
+      throw new BadRequestException('Invalid Brand ID');
+    }
+
+    const updatedBrand = await this.brandModel.findByIdAndUpdate(
+      brandId,
+      { $set: updateData },
+      { new: true },
     );
 
-    return assets;
+    if (!updatedBrand) {
+      throw new NotFoundException('Brand not found');
+    }
+
+    return updatedBrand;
   }
 }
