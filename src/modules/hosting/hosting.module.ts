@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { HostingService } from './hosting.service';
 import { HostingController } from './hosting.controller';
-import { AuthGuard } from '../auth/auth.guard'; // Import your guard
 import { BrandModule } from '../brand/brand.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
-    imports: [BrandModule],
+    imports: [BrandModule, AuthModule],
     controllers: [HostingController],
-    providers: [HostingService, AuthGuard],
+    providers: [HostingService, ],
     exports: [HostingService],
 })
 export class HostingModule { }

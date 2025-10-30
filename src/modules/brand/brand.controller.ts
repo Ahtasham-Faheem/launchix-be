@@ -7,6 +7,7 @@ import { AuthGuard } from '../auth/auth.guard';
 import { Request } from 'express';
 import { AssetOrchestrationService } from '../queue/services/asset-orchestration.service';
 import { QueueService } from '../queue/services/queue.service';
+import { CurrentUser } from 'src/decorator/auth.decorator';
 
 @ApiTags('brand')
 @ApiBearerAuth()
@@ -17,13 +18,25 @@ export class BrandController {
     private readonly service: BrandService,
     private readonly orchestrationService: AssetOrchestrationService,
     private readonly queueService: QueueService,
-  ) {}
+  ) { }
+
+  /**
+  * ✅ Get all brands for the currently authenticated user
+  */
+  @Get('my')
+  @ApiOperation({
+    summary: 'Get Current User Brands',
+    description:
+      'Fetches all brand records created by the currently authenticated user.',
+  })
+  async getMyBrands(@CurrentUser() user: any) {
+    return this.service.getUserBrands(user._id);
+  }
 
   @Post('parse')
   @ApiOperation({ summary: 'Parse prompt and create brand' })
   @ApiResponse({ status: 201, description: 'Brand created successfully' })
-  async parse(@Body() dto: ParsePromptDto, @Req() req: Request) {
-    const user = (req as any).user;
+  async parse(@Body() dto: ParsePromptDto, @Req() req: Request, @CurrentUser() user: any) {
     return this.service.createFromPrompt(user, dto.prompt);
   }
 
@@ -45,7 +58,7 @@ export class BrandController {
 
   @Post(':id/assets/initiate')
   @HttpCode(HttpStatus.ACCEPTED)
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Initiate complete asset generation (async)',
     description: 'Starts asset generation in background. Returns immediately with job status.'
   })

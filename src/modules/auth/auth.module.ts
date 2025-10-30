@@ -2,11 +2,15 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
+import { MongooseModule } from '@nestjs/mongoose';
+import { User, UserSchema } from '../brand/schemas/user.schema';
 
 @Module({
   imports: [
-    // ✅ Makes ConfigService available inside AuthService
     ConfigModule,
+    MongooseModule.forFeature([
+      { name: User.name, schema: UserSchema }
+    ])
   ],
   providers: [
     AuthService,
@@ -15,6 +19,7 @@ import { AuthGuard } from './auth.guard';
   exports: [
     AuthService,
     AuthGuard,
+    MongooseModule
   ],
 })
-export class AuthModule {}
+export class AuthModule { }

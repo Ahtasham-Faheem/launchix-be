@@ -10,7 +10,7 @@ import { AiModule } from './ai/ai.module';
 import { AuthModule } from './auth/auth.module';
 import { UploadModule } from './upload/upload.module';
 import { HealthModule } from './health/health.module';
-import { ProfileModule } from './profile/profile.module';
+import { UserModule } from './user/user.module';
 import { QueueModule } from './queue/queue.module';
 import { HostingModule } from './hosting/hosting.module';
 
@@ -38,7 +38,7 @@ import { HostingModule } from './hosting/hosting.module';
     QueueConfigModule,
     
     // Application modules
-    ProfileModule,
+    UserModule,
     AuthModule,
     BrandModule,
     AiModule,

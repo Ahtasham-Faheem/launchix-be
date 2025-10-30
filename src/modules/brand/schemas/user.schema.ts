@@ -9,6 +9,8 @@ export class User {
   @Prop() email?: string;
   @Prop() firstName?: string;
   @Prop() lastName?: string;
+  @Prop() username?: string;
+  @Prop() profileImage?: string;
 }
 export type UserDocument = HydratedDocument<User>;
 export const UserSchema = SchemaFactory.createForClass(User);

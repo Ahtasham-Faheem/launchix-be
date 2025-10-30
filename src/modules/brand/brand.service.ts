@@ -17,21 +17,39 @@ export class BrandService {
   ) { }
 
   async upsertUser(clerk: {
-    userId: string;
+    id: string;
     email?: string;
+    username?: string;
     firstName?: string;
     lastName?: string;
+    imageUrl?: string;
   }) {
+
     const found = await this.userModel.findOneAndUpdate(
-      { clerkId: clerk.userId },
-      { $set: { email: clerk.email, firstName: clerk.firstName, lastName: clerk.lastName } },
+      { clerkId: clerk.id },
+      {
+        $set: {
+          email: clerk.email,
+          firstName: clerk.firstName,
+          lastName: clerk.lastName,
+          username: clerk.username,
+          profileImage: clerk.imageUrl,
+        }
+      },
       { new: true, upsert: true },
     );
     return found;
   }
 
-  async createFromPrompt(ownerClerk: any, prompt: string) {
-    const owner = await this.upsertUser(ownerClerk);
+
+  async getUserBrands(owner: string) {
+    return this.brandModel
+      .find({ owner })
+      .sort({ createdAt: -1 })
+      .lean();
+  }
+
+  async createFromPrompt(user: any, prompt: string) {
     const parsed = await this.ai.extractFromPrompt(prompt);
 
     if ('errors' in parsed && parsed.errors.length > 0) {
@@ -48,7 +66,7 @@ export class BrandService {
 
     const data = { ...parsed } as BrandFields;
     const brand = await this.brandModel.create({
-      owner: owner._id,
+      owner: user._id,
       businessName: data.businessName,
       industry: data.industry,
       tagline: data.tagline,

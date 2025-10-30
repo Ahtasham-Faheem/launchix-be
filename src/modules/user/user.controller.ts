@@ -6,11 +6,11 @@ import { CurrentUser } from 'src/decorator/auth.decorator';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
 
-@ApiTags('Profile')
+@ApiTags('User')
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
-@Controller('profile')
-export class ProfileController {
+@Controller('user')
+export class UserController {
 
   @Get('me')
   getCurrentUser(@CurrentUser() user: any) {

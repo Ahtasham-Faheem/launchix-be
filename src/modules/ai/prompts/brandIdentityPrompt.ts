@@ -29,6 +29,7 @@ Generate the following elements:
    - Colors should match the brand's industry, style, and personality
    - Ensure good contrast ratios for accessibility
    - Consider color psychology and brand emotions
+   - JUST PROVIDE COLOR HEX NOT THE TEXT
 
 IMPORTANT RULES:
 - Vision and Mission must EACH be under 200 characters

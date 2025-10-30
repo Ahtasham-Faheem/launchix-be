@@ -1,8 +1,17 @@
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { clerkClient } from '@clerk/clerk-sdk-node';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { User } from '../brand/schemas/user.schema';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
+
+  constructor(
+    @InjectModel(User.name) private readonly userModel: Model<User>,
+  ) { }
+
+
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
 
@@ -16,6 +25,7 @@ export class AuthGuard implements CanActivate {
 
       const token = authHeader.substring(7);
 
+
       if (process.env.NODE_ENV === 'development') {
         const userId = process.env.CLERK_DEV_USER_ID || 'user_34hs3DWNE6AP4quAi3ykOeDQFkp';
 
@@ -24,17 +34,9 @@ export class AuthGuard implements CanActivate {
         // Fetch the full user profile from Clerk
         const user = await clerkClient.users.getUser(userId);
 
-        // Attach the user profile to the request object
-        request.user = {
-          id: user.id,
-          email: user.emailAddresses[0]?.emailAddress,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          username: user.username,
-          imageUrl: user.imageUrl,
-          fullProfile: user,
-        };
+        const localUser = await this.findOrCreateLocalUser(user);
 
+        request.user = localUser;
         return true;
       }
 
@@ -54,33 +56,40 @@ export class AuthGuard implements CanActivate {
       // Fetch the full user profile from Clerk
       const user = await clerkClient.users.getUser(userId);
 
+      const localUser = await this.findOrCreateLocalUser(user);
+
       // Attach the user profile to the request object
-      request.user = {
-        id: user.id,
-        email: user.emailAddresses[0]?.emailAddress,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        username: user.username,
-        imageUrl: user.imageUrl,
-        fullProfile: user,
-      };
+      request.user = localUser;
 
       return true;
     } catch (error) {
+      console.log('data', error)
       if (error instanceof UnauthorizedException) {
         throw error;
       }
       throw new UnauthorizedException('Token verification failed: ' + error.message);
     }
   }
-}
 
-// Usage example in a controller:
-// @Controller('protected')
-// @UseGuards(ClerkAuthGuard)
-// export class ProtectedController {
-//   @Get()
-//   getProtectedData(@Req() req: Request) {
-//     return { user: req.user };
-//   }
-// }
+
+  /**
+  * ✅ Finds the user in MongoDB or creates it if not found.
+  */
+  private async findOrCreateLocalUser(clerkUser: any): Promise<User> {
+    const email = clerkUser.emailAddresses?.[0]?.emailAddress;
+    const existingUser = await this.userModel.findOne({ clerkId: clerkUser.id });
+
+    if (existingUser) return existingUser;
+
+    const newUser = new this.userModel({
+      clerkId: clerkUser.id,
+      email,
+      firstName: clerkUser.firstName,
+      lastName: clerkUser.lastName,
+      profileImage: clerkUser.imageUrl,
+      username: clerkUser.username
+    });
+
+    return newUser.save();
+  }
+}
