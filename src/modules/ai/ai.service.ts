@@ -271,7 +271,7 @@ export class AiService {
         model: 'gpt-image-1',
         prompt,
         size: '1024x1024',
-        quality: 'standard',
+        quality: 'medium',
         n: 1,
       });
 
