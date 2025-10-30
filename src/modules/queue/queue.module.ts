@@ -14,6 +14,7 @@ import { AiModule } from '../ai/ai.module';
 import { Brand, BrandSchema } from '../brand/schemas/brand.schema';
 import { BrandAssets, BrandAssetsSchema } from '../brand/schemas/assets.schema';
 import { ImageOverlayService } from '../printify/printify.service';
+import { WebsiteTemplateService } from '../website/website-template.service';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { ImageOverlayService } from '../printify/printify.service';
     QueueService,
     AssetOrchestrationService,
     ImageOverlayService,
+    WebsiteTemplateService
   ],
   exports: [QueueService, AssetOrchestrationService],
 })

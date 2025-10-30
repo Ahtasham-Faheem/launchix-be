@@ -5,6 +5,7 @@ import { Brand } from '../brand/schemas/brand.schema';
 import { BrandIdentityResult } from '../brand/interfaces/brand-identity.interface';
 import { brandIdentityPrompt } from './prompts/brandIdentityPrompt';
 import { websitePrompt } from './prompts/websitePrompt';
+import { contenGeneratePropmt } from './prompts/contentGenratePrompt';
 
 export const BRAND_FIELDS = ['businessName', 'industry', 'tagline', 'brandStyle'] as const;
 
@@ -55,19 +56,19 @@ export class AiService {
   private client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
   async extractFromPrompt(prompt: string): Promise<BrandExtractionResult> {
-    // return {
-    //   businessName: 'FitLife',
-    //   industry: 'Health & Wellness',
-    //   tagline: 'Empowering Your Best Self',
-    //   brandStyle: ['Modern', 'Energetic'],
-    //   aiFlags: {
-    //     businessName: true,
-    //     industry: true,
-    //     tagline: true,
-    //     brandStyle: true,
-    //   },
-    //   errors: [],
-    // };
+    return {
+      businessName: 'FitLife',
+      industry: 'Health & Wellness',
+      tagline: 'Empowering Your Best Self',
+      brandStyle: ['Modern', 'Energetic'],
+      aiFlags: {
+        businessName: true,
+        industry: true,
+        tagline: true,
+        brandStyle: true,
+      },
+      errors: [],
+    };
     const resp = await this.client.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [
@@ -117,6 +118,42 @@ export class AiService {
       aiFlags,
       errors: [],
     };
+  }
+
+  async extractContent<T = any>(prompt: string): Promise<T> {
+    this.logger.log(`🧠 Generating structured content via AI...`);
+
+    try {
+      const resp = await this.client.chat.completions.create({
+        model: 'gpt-4o-mini',
+        messages: [
+          {
+            role: 'system',
+            content: contenGeneratePropmt,
+          },
+          { role: 'user', content: prompt },
+        ],
+        temperature: 0.8,
+        response_format: { type: 'json_object' },
+      });
+
+      const raw = resp.choices?.[0]?.message?.content?.trim() || '{}';
+      this.logger.debug('AI Raw Response:', raw);
+
+      let json: any;
+      try {
+        json = JSON.parse(raw);
+      } catch (err) {
+        this.logger.error('❌ JSON parse error:', err);
+        return {} as T;
+      }
+
+      this.logger.debug('✅ AI Parsed JSON:', json);
+      return json as T;
+    } catch (error) {
+      this.logger.error('❌ extractFromPrompt failed:', error);
+      return {} as T;
+    }
   }
 
   async regenerate(

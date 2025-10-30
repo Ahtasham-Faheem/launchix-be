@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>{{businessName}} – {{tagline}}</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="overlay"></div>
+    <img src="{{heroImg}}" class="hero-bg" alt="hero background" />
+    <nav class="navbar">
+      <div class="brand">
+        <img src="{{logoUrl}}" class="logo" alt="logo" />
+        <h1>{{businessName}}</h1>
+      </div>
+    </nav>
+    <div class="hero-content">
+      <h1>{{heroTitle}}</h1>
+      <p>{{heroSubtitle}}</p>
+      <a href="#contact" class="btn-primary">{{ctaText}}</a>
+    </div>
+  </header>
+
+  <section id="about" class="about">
+    <div class="about-wrapper">
+      <img src="{{aboutImg}}" class="about-img" alt="about" />
+      <div class="about-text">
+        <h2>About Us</h2>
+        <p>{{aboutText}}</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="services" class="services">
+    <h2>Our Services</h2>
+    <div class="grid">
+      <div class="card">
+        <img src="{{serviceImg}}" alt="service" />
+        <h3>{{service1}}</h3>
+        <p>{{desc1}}</p>
+      </div>
+      <div class="card">
+        <img src="{{serviceImg}}" alt="service" />
+        <h3>{{service2}}</h3>
+        <p>{{desc2}}</p>
+      </div>
+      <div class="card">
+        <img src="{{serviceImg}}" alt="service" />
+        <h3>{{service3}}</h3>
+        <p>{{desc3}}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonial">
+    <blockquote>“{{testimonial}}”</blockquote>
+  </section>
+
+  <footer class="footer">
+    <p>© {{businessName}} – All Rights Reserved</p>
+  </footer>
+</body>
+</html>

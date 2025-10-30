@@ -8,6 +8,7 @@ import { WebsiteGenerationJobData, JobResult } from '../interfaces/job-data.inte
 import { AiService } from '../../ai/ai.service';
 import { BrandAssets } from 'src/modules/brand/schemas/assets.schema';
 import { QueueService } from '../services/queue.service';
+import { WebsiteTemplateService } from 'src/modules/website/website-template.service';
 
 @Processor(QUEUE_NAMES.WEBSITE_GENERATION, { concurrency: 3 })
 export class WebsiteGenerationProcessor extends WorkerHost {
@@ -15,6 +16,7 @@ export class WebsiteGenerationProcessor extends WorkerHost {
 
   constructor(
     private readonly aiService: AiService,
+    private readonly webTemplateService: WebsiteTemplateService,
     @InjectModel(BrandAssets.name)
     private readonly assetsModel: Model<BrandAssets>,
     private readonly queueService: QueueService,
@@ -59,7 +61,7 @@ export class WebsiteGenerationProcessor extends WorkerHost {
         'https://via.placeholder.com/200x60/4F46E5/FFFFFF?text=YourBrand';
 
       // STEP 3️⃣ — Generate website JSON using AI
-      const websiteJson = await this.aiService.generatePremiumWebsite(
+      const websiteJson = await this.webTemplateService.buildWebsite(
         businessName,
         industry,
         tagline,
@@ -68,9 +70,9 @@ export class WebsiteGenerationProcessor extends WorkerHost {
         logoUrl,
       );
 
-      if (!websiteJson || websiteJson.errors) {
+      if (!websiteJson) {
         throw new Error(
-          `Website generation failed: ${websiteJson?.errors?.[0] || 'Unknown AI error.'}`,
+          `Website generation failed: 'Unknown AI error.'}`,
         );
       }
 
