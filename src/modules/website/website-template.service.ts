@@ -117,7 +117,7 @@ export class WebsiteTemplateService {
     private selectTemplate(): string {
         const templateList = ['template1', 'template2', 'template3'];
         const key = templateList[Math.floor(Math.random() * templateList.length)];
-        return 'template3'
+        // return 'template3'
         return this.templateMap[key || 'template2'] || 'template2';
     }
 
