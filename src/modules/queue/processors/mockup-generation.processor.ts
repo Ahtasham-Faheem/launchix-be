@@ -30,6 +30,7 @@ export class MockupGenerationProcessor extends WorkerHost {
     this.logger.log(`🧩 Starting Printify mockup generation for brand: ${brandId}`);
 
     try {
+      
       // 1️⃣ Wait until logo jobs are completed
       await this.waitForDependencies(brandId.toString(), 30, 5000); // 30 attempts, 5s interval
 
