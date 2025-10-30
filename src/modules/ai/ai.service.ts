@@ -56,19 +56,19 @@ export class AiService {
   private client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
   async extractFromPrompt(prompt: string): Promise<BrandExtractionResult> {
-    return {
-      businessName: 'FitLife',
-      industry: 'Health & Wellness',
-      tagline: 'Empowering Your Best Self',
-      brandStyle: ['Modern', 'Energetic'],
-      aiFlags: {
-        businessName: true,
-        industry: true,
-        tagline: true,
-        brandStyle: true,
-      },
-      errors: [],
-    };
+    // return {
+    //   businessName: 'FitLife',
+    //   industry: 'Health & Wellness',
+    //   tagline: 'Empowering Your Best Self',
+    //   brandStyle: ['Modern', 'Energetic'],
+    //   aiFlags: {
+    //     businessName: true,
+    //     industry: true,
+    //     tagline: true,
+    //     brandStyle: true,
+    //   },
+    //   errors: [],
+    // };
     const resp = await this.client.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [
