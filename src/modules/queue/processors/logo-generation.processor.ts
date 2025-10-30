@@ -35,7 +35,7 @@ export class LogoGenerationProcessor extends WorkerHost {
 
       this.logger.log(`Logo generation prompt: ${prompt}`);
 
-      const logos = await this.aiService.generateSingleLogo(prompt, variant);
+      const logos = await this.aiService.generateLogoAndUploadGPTImage(prompt, variant);
 
       const brandObjectId = new Types.ObjectId(brandId);
 
@@ -87,6 +87,7 @@ export class LogoGenerationProcessor extends WorkerHost {
         Use ${primary} as the main color and ${secondary} as an accent. 
         Keep it professional, vector-based, and suitable for both digital and print.
         **IMPORTANT** Minimal flat logo for a modern ${industry}, vector style, single abstract symbol, no box, no text, transparent background, white canvas.
+        **IMPORTANT** Always Provide PNG image formate with not background.
         `,
 
       secondary: `Create a **secondary simplified logo** for "${brandName}"${taglineText}. 
@@ -94,6 +95,7 @@ export class LogoGenerationProcessor extends WorkerHost {
         Style: ${styles}. 
         Focus on ${secondary} and ${accent} tones for contrast.
         **IMPORTANT** Minimal flat logo for a modern ${industry}, vector style, single abstract symbol, no box, no text, transparent background, white canvas.
+        **IMPORTANT** Always Provide PNG image formate with not background.
         `,
 
       icon: `Generate an **icon-only logo** (no text) for "${brandName}"${taglineText}. 
@@ -101,12 +103,16 @@ export class LogoGenerationProcessor extends WorkerHost {
         Style: ${styles}. 
         Use ${primary} and ${background} in a flat vector design.
         **IMPORTANT** Minimal flat logo for a modern ${industry}, vector style, single abstract symbol, no box, no text, transparent background, white canvas.
+        **IMPORTANT** Always Provide PNG image formate with not background.
         `,
 
       text: `Design a **text-only wordmark logo** for "${brandName}"${taglineText}. 
         Focus on typography — clean, modern, and minimal. 
         Style: ${styles}. 
-        Use ${accent} text color on a white or light background.`,
+        Use ${accent} text color on a white or light background.
+        **IMPORTANT** Always Provide PNG image formate with not background.
+        `
+        ,
     };
 
     return prompts[variant as keyof typeof prompts] || prompts.primary;

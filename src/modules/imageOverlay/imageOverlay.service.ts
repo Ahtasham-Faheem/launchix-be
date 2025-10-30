@@ -6,6 +6,13 @@ import * as sharp from 'sharp';
 
 @Injectable()
 export class ImageOverlayService {
+
+  mockUpTypes = {
+    shirt: 'https://res.cloudinary.com/dudpoehph/image/upload/shirt-base/hhtvfsnntf2sovp6fnty.jpg',
+    mug: 'https://res.cloudinary.com/dudpoehph/image/upload/d3f10d5e-0f04-4d96-b602-afad07a9b9e8.png',
+    cap: 'https://res.cloudinary.com/dudpoehph/image/upload/229afd3d-922b-43d1-82ce-01bff13e3a29.png',
+  }
+
   constructor(private configService: ConfigService) {
     // Configure Cloudinary
     cloudinary.config({
@@ -21,19 +28,21 @@ export class ImageOverlayService {
    * @param shirtUrl - URL of the shirt template (default provided)
    * @returns Object containing the Cloudinary URL of the final image
    */
-  async overlayImageOnShirt(
+  async overlayImageOnMochup(
     logoUrl: string,
-    shirtUrl: string = 'https://i4.cloudfable.net/styles/550x550/576.575/White/joan-arc-mens-t-shirt-back-20240203055102-cfghzcdp-s4.jpg',
+    type: 'shirt' | 'mug' | 'cap'  = 'shirt',
   ): Promise<{ imageUrl: string; publicId: string }> {
     try {
+
+      const typeUrl = this.mockUpTypes[type]
       // Download both images
-      const [shirtBuffer, logoBuffer] = await Promise.all([
-        this.downloadImage(shirtUrl),
+      const [typeBuffer, logoBuffer] = await Promise.all([
+        this.downloadImage(typeUrl),
         this.downloadImage(logoUrl),
       ]);
 
       // Process images and create overlay
-      const finalImage = await this.createOverlay(shirtBuffer, logoBuffer);
+      const finalImage = await this.createOverlay(typeBuffer, logoBuffer, );
 
       // Upload to Cloudinary
       const uploadResult = await this.uploadToCloudinary(finalImage);
@@ -71,6 +80,7 @@ export class ImageOverlayService {
   private async createOverlay(
     shirtBuffer: Buffer,
     logoBuffer: Buffer,
+    type: 'shirt' | 'mug' | 'cap' = 'shirt'
   ): Promise<Buffer> {
     try {
       // Get shirt dimensions

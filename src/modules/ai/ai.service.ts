@@ -6,6 +6,7 @@ import { BrandIdentityResult } from '../brand/interfaces/brand-identity.interfac
 import { brandIdentityPrompt } from './prompts/brandIdentityPrompt';
 import { websitePrompt } from './prompts/websitePrompt';
 import { contenGeneratePropmt } from './prompts/contentGenratePrompt';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 export const BRAND_FIELDS = ['businessName', 'industry', 'tagline', 'brandStyle'] as const;
 
@@ -54,6 +55,8 @@ interface WebsiteResult {
 export class AiService {
   private readonly logger = new Logger(AiService.name);
   private client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+  constructor(private readonly cloudinary: CloudinaryService) {}
 
   async extractFromPrompt(prompt: string): Promise<BrandExtractionResult> {
     // return {
@@ -260,20 +263,10 @@ export class AiService {
     }
   }
 
-  /**
-   * Generate a single logo variant
-   */
-  async generateSingleLogo(prompt: string, type: string): Promise<{ type: string; url: string }> {
+  
+  async generateSingleLogoDall_e_3(prompt: string, type: string): Promise<{ type: string; url: string }> {
     try {
       this.logger.log(`Generating ${type} logo`);
-
-      // const img = await this.client.images.generate({
-      //   model: 'gpt-image-1',
-      //   prompt,
-      //   size: '1024x1024',
-      //   quality: 'medium',
-      //   n: 1,
-      // });
 
       const img = await this.client.images.generate({
         model: 'dall-e-3',
@@ -282,6 +275,8 @@ export class AiService {
         quality: 'standard',
         n: 1,
       });
+
+      console.log('img', img)
 
       const url = img.data?.[0]?.url;
       if (!url) {
@@ -296,6 +291,30 @@ export class AiService {
       throw err;
     }
   }
+
+  async generateLogoAndUploadGPTImage(prompt: string, type: string): Promise<{ type: string; url: string }> {
+    try {
+      const img = await this.client.images.generate({
+        model: 'gpt-image-1',
+        prompt,
+        size: '1024x1024',
+        quality: 'low',
+        n: 1,
+      });
+
+      const base64 = img.data?.[0]?.b64_json;
+      if (!base64) throw new Error('No base64 data returned from OpenAI');
+
+      // ✅ Upload to Cloudinary
+      const url = await this.cloudinary.uploadBase64Image(base64, 'launchix_ai_logos');
+
+      return { type, url };
+    } catch (error) {
+      console.error('❌ AI Image Generation + Upload Failed:', error.message);
+      throw error;
+    }
+  }
+
 
   /**
    * Generate premium website with AI-generated colors, working images, and logo

@@ -43,26 +43,27 @@ export class MockupGenerationProcessor extends WorkerHost {
         brandAssets.logos.find((l) => l.type === 'primary')?.url ||
         brandAssets.logos[0]?.url;
 
-      // const primaryLogo = 'https://img.freepik.com/free-vector/gradient-logo-with-abstract-shape_23-2148216799.jpg';
-
       if (!primaryLogo) throw new Error('No primary logo URL available.');
+      
+      const { imageUrl: shirtUrl } = await this.printify.overlayImageOnMochup(primaryLogo, 'shirt');
+      const { imageUrl: mugUrl } = await this.printify.overlayImageOnMochup(primaryLogo, 'mug');
+      const { imageUrl: capUrl } = await this.printify.overlayImageOnMochup(primaryLogo, 'cap');
+      
 
-      const { publicId, imageUrl } = await this.printify.overlayImageOnShirt(primaryLogo);
-
-      console.log('Generated mockup publicId:', { publicId, imageUrl });
+      console.log('Generated mockup:', { shirtUrl, mugUrl, capUrl });
 
       await this.assetsModel.findOneAndUpdate(
         { brand: brandObjectId },
         {
           $set: { brand: brandObjectId, updatedAt: new Date() },
-          $push: { mockups: imageUrl },
+          $push: { mockups: [shirtUrl, mugUrl, capUrl] },
         },
         { upsert: true, new: true }
       );
 
       this.logger.log(`💾 [${brandId}] Saved  mockup sets successfully.`);
 
-      return { success: true, brandId, data: { mockups: [imageUrl] } };
+      return { success: true, brandId, data: { mockups: [shirtUrl, mugUrl, capUrl] } };
     } catch (error) {
       console.log('Mockup generation failed', error.response?.data || error.message);
       this.logger.error(`❌ [${brandId}] Mockup generation failed: ${error.message}`);
