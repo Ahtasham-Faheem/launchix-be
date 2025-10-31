@@ -6,7 +6,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { QUEUE_NAMES } from '../constants/queue.constants';
 import { WebsiteGenerationJobData, JobResult } from '../interfaces/job-data.interface';
 import { AiService } from '../../ai/ai.service';
-import { BrandAssets } from 'src/modules/brand/schemas/assets.schema';
+import { BrandAssets } from 'src/schemas/assets.schema';
 import { QueueService } from '../services/queue.service';
 import { WebsiteTemplateService } from 'src/modules/website/website-template.service';
 

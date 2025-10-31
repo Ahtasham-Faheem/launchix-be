@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthService } from './auth.service';
-import { AuthGuard } from './auth.guard';
+import { AuthGuard } from '../../guards/auth.guard';
 import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from '../brand/schemas/user.schema';
+import { User, UserSchema } from '../../schemas/user.schema';
 
 @Module({
   imports: [

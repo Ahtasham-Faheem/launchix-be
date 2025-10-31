@@ -1,7 +1,7 @@
 import OpenAI from 'openai';
 import { Injectable, Logger } from '@nestjs/common';
 import { brandGenratePrompt } from './prompts/brandGenratePrompt';
-import { Brand } from '../brand/schemas/brand.schema';
+import { Brand } from '../../schemas/brand.schema';
 import { BrandIdentityResult } from '../brand/interfaces/brand-identity.interface';
 import { brandIdentityPrompt } from './prompts/brandIdentityPrompt';
 import { websitePrompt } from './prompts/websitePrompt';

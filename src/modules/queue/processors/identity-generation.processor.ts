@@ -6,7 +6,7 @@ import { ColorGenerationJobData, JobResult } from '../interfaces/job-data.interf
 import { AiService } from '../../ai/ai.service';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { BrandAssets } from 'src/modules/brand/schemas/assets.schema';
+import { BrandAssets } from 'src/schemas/assets.schema';
 import { BrandIdentity } from 'src/modules/brand/interfaces/brand-identity.interface';
 
 @Processor(QUEUE_NAMES.IDENTITY_GENERATION, {

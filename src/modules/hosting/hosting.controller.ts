@@ -14,7 +14,7 @@ import {
     ApiBearerAuth,
 } from '@nestjs/swagger';
 import { HostingService } from './hosting.service';
-import { AuthGuard } from '../auth/auth.guard';
+import { AuthGuard } from '../../guards/auth.guard';
 import { PublishWebsiteResponse } from './dto/hosting.dto';
 import { BrandService } from '../brand/brand.service';
 

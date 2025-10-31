@@ -5,7 +5,7 @@ import { Model, Types } from 'mongoose';
 import { Job } from 'bullmq';
 import { QUEUE_NAMES } from '../constants/queue.constants';
 import { AssetAggregationJobData, JobResult } from '../interfaces/job-data.interface';
-import { BrandAssets } from '../../brand/schemas/assets.schema';
+import { BrandAssets } from '../../../schemas/assets.schema';
 
 @Processor(QUEUE_NAMES.ASSET_AGGREGATION, {
   concurrency: 10,

@@ -6,7 +6,7 @@ import { Model, Types } from 'mongoose';
 import { QUEUE_NAMES } from '../constants/queue.constants';
 import { MockupGenerationJobData, JobResult } from '../interfaces/job-data.interface';
 
-import { BrandAssets } from 'src/modules/brand/schemas/assets.schema';
+import { BrandAssets } from 'src/schemas/assets.schema';
 import { QueueService } from '../services/queue.service';
 import { ImageOverlayService } from 'src/modules/imageOverlay/imageOverlay.service';
 

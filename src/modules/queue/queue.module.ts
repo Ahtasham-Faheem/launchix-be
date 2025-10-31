@@ -11,8 +11,8 @@ import { AssetAggregationProcessor } from './processors/asset-aggregation.proces
 import { QueueService } from './services/queue.service';
 import { AssetOrchestrationService } from './services/asset-orchestration.service';
 import { AiModule } from '../ai/ai.module';
-import { Brand, BrandSchema } from '../brand/schemas/brand.schema';
-import { BrandAssets, BrandAssetsSchema } from '../brand/schemas/assets.schema';
+import { Brand, BrandSchema } from '../../schemas/brand.schema';
+import { BrandAssets, BrandAssetsSchema } from '../../schemas/assets.schema';
 import { ImageOverlayService } from '../imageOverlay/imageOverlay.service';
 import { WebsiteTemplateService } from '../website/website-template.service';
 

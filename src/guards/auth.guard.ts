@@ -2,7 +2,7 @@ import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from
 import { clerkClient } from '@clerk/clerk-sdk-node';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User } from '../brand/schemas/user.schema';
+import { User } from '../schemas/user.schema';
 
 @Injectable()
 export class AuthGuard implements CanActivate {

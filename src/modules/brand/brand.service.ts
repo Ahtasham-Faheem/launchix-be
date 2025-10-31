@@ -1,9 +1,9 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { Brand } from './schemas/brand.schema';
-import { User } from './schemas/user.schema';
-import { BrandAssets } from './schemas/assets.schema';
+import { Brand } from '../../schemas/brand.schema';
+import { User } from '../../schemas/user.schema';
+import { BrandAssets } from '../../schemas/assets.schema';
 import { AiService, BrandFields } from '../ai/ai.service';
 import { UpdateBrandDto } from './dto/update-brand.dto';
 

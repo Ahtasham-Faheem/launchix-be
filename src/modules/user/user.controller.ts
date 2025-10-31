@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 import { users } from '@clerk/clerk-sdk-node'; // keep this for user fetch
 import { CurrentUser } from 'src/decorator/auth.decorator';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from '../auth/auth.guard';
+import { AuthGuard } from '../../guards/auth.guard';
 
 @ApiTags('User')
 @ApiBearerAuth()

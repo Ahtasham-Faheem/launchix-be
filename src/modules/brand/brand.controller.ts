@@ -3,7 +3,7 @@ import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagg
 import { BrandService } from './brand.service';
 import { ParsePromptDto } from './dto/prompt.dto';
 import { RegenerateFieldsDto } from './dto/regenerate.dto';
-import { AuthGuard } from '../auth/auth.guard';
+import { AuthGuard } from '../../guards/auth.guard';
 import { Request } from 'express';
 import { AssetOrchestrationService } from '../queue/services/asset-orchestration.service';
 import { QueueService } from '../queue/services/queue.service';

@@ -6,7 +6,7 @@ import { LogoGenerationJobData, JobResult } from '../interfaces/job-data.interfa
 import { AiService } from '../../ai/ai.service';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { BrandAssets } from 'src/modules/brand/schemas/assets.schema';
+import { BrandAssets } from 'src/schemas/assets.schema';
 
 @Processor(QUEUE_NAMES.LOGO_GENERATION, {
   concurrency: 3, // Lower concurrency due to DALL-E rate limits

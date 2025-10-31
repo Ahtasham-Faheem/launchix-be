@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { Brand } from '../../brand/schemas/brand.schema';
+import { Brand } from '../../../schemas/brand.schema';
 import { QueueService } from './queue.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 

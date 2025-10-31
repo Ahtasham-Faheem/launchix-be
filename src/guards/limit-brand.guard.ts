@@ -6,8 +6,9 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Brand } from 'src/modules/brand/schemas/brand.schema';
-import { User } from 'src/modules/brand/schemas/user.schema';
+import { Brand } from 'src/schemas/brand.schema';
+import { User } from 'src/schemas/user.schema';
+
 
 
 @Injectable()
