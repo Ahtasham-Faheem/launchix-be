@@ -126,7 +126,7 @@ export class WebsiteTemplateService {
         ];
         const key = templateList[Math.floor(Math.random() * templateList.length)];
         // return 'template3'
-        return this.templateMap[key || 'template2'] || 'template2';
+        return templateList[key || 'template2'] || 'template2';
     }
 
     private getTemplateBasePath(): string {
