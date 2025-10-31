@@ -126,7 +126,7 @@ export class WebsiteTemplateService {
             'template7'
         ];
         const key = templateList[Math.floor(Math.random() * templateList.length)];
-        // return 'template3'
+        return 'template5'
         return key || 'template2';
     }
 
