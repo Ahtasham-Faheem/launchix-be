@@ -65,6 +65,7 @@ export class WebsiteTemplateService {
         this.logger.log(`⚡ Building template website for ${businessName}`);
 
         const selected = this.selectTemplate();
+        console.log('selected', selected)
         const [htmlRaw, cssRaw, variablesRaw] = await this.loadTemplate(selected);
 
         // 🧠 Step 1: Generate brand-specific content via AI
@@ -126,7 +127,7 @@ export class WebsiteTemplateService {
         ];
         const key = templateList[Math.floor(Math.random() * templateList.length)];
         // return 'template3'
-        return templateList[key || 'template2'] || 'template2';
+        return key || 'template2';
     }
 
     private getTemplateBasePath(): string {
