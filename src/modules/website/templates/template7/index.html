@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="{{html_lang}}">
+
+<head>
+  <meta charset="{{meta_charset}}" />
+  <meta name="viewport" content="{{meta_viewport}}" />
+  <meta name="description" content="{{meta_description}}" />
+  <title>{{page_title}}</title>
+  <link rel="stylesheet" href="{{styles_href}}" />
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="content-wrapper">
+      <div class="header-container">
+        <a href="{{brand_home_href}}" class="brand-logo">
+          <span class="logo-icon">✦</span>
+          {{brand_name}}
+        </a>
+
+        <div class="nav-toggle" id="navToggle">
+          <div class="hamburger-line"></div>
+          <div class="hamburger-line"></div>
+          <div class="hamburger-line"></div>
+        </div>
+
+        <ul class="nav-menu" id="navMenu">
+          <li class="nav-item"><a href="{{nav_home_href}}" class="nav-link">{{nav_home_label}}</a></li>
+          <li class="nav-item"><a href="{{nav_services_href}}" class="nav-link">{{nav_services_label}}</a></li>
+          <li class="nav-item"><a href="{{nav_portfolio_href}}" class="nav-link">{{nav_portfolio_label}}</a></li>
+          <li class="nav-item"><a href="{{nav_about_href}}" class="nav-link">{{nav_about_label}}</a></li>
+          <li class="nav-item"><a href="{{nav_team_href}}" class="nav-link">{{nav_team_label}}</a></li>
+          <li class="nav-item"><a href="{{nav_contact_href}}" class="nav-link">{{nav_contact_label}}</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="{{home_section_id}}" class="hero-section section-padding">
+    <div class="hero-background">
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="content-wrapper">
+      <div class="hero-content">
+        <span class="hero-badge">{{hero_badge}}</span>
+        <h1 class="hero-heading">{{hero_heading}}</h1>
+        <p class="hero-description">{{hero_description}}</p>
+        <div class="hero-actions">
+          <a href="{{hero_primary_cta_href}}" class="action-button button-primary">{{hero_primary_cta_label}}</a>
+          <a href="{{hero_secondary_cta_href}}" class="action-button button-secondary">{{hero_secondary_cta_label}}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section id="{{services_section_id}}" class="services-section section-padding">
+    <div class="content-wrapper">
+      <div class="section-header">
+        <span class="section-label">{{services_section_label}}</span>
+        <h2 class="section-heading">{{services_section_heading}}</h2>
+        <p class="section-description">{{services_section_description}}</p>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">🎨</div>
+          <h3 class="service-title">{{service_1_title}}</h3>
+          <p class="service-description">{{service_1_description}}</p>
+          <a href="{{service_1_link_href}}" class="service-link">{{service_1_link_label}}</a>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">💻</div>
+          <h3 class="service-title">{{service_2_title}}</h3>
+          <p class="service-description">{{service_2_description}}</p>
+          <a href="{{service_2_link_href}}" class="service-link">{{service_2_link_label}}</a>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">📱</div>
+          <h3 class="service-title">{{service_3_title}}</h3>
+          <p class="service-description">{{service_3_description}}</p>
+          <a href="{{service_3_link_href}}" class="service-link">{{service_3_link_label}}</a>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">📈</div>
+          <h3 class="service-title">{{service_4_title}}</h3>
+          <p class="service-description">{{service_4_description}}</p>
+          <a href="{{service_4_link_href}}" class="service-link">{{service_4_link_label}}</a>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">🎬</div>
+          <h3 class="service-title">{{service_5_title}}</h3>
+          <p class="service-description">{{service_5_description}}</p>
+          <a href="{{service_5_link_href}}" class="service-link">{{service_5_link_label}}</a>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">🔍</div>
+          <h3 class="service-title">{{service_6_title}}</h3>
+          <p class="service-description">{{service_6_description}}</p>
+          <a href="{{service_6_link_href}}" class="service-link">{{service_6_link_label}}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Portfolio Section -->
+  <section id="{{portfolio_section_id}}" class="portfolio-section section-padding">
+    <div class="content-wrapper">
+      <div class="section-header">
+        <span class="section-label">{{portfolio_section_label}}</span>
+        <h2 class="section-heading">{{portfolio_section_heading}}</h2>
+        <p class="section-description">{{portfolio_section_description}}</p>
+      </div>
+
+      <div class="portfolio-filter">
+        <button class="filter-button active"
+          data-filter="{{portfolio_filter_all_value}}">{{portfolio_filter_all_label}}</button>
+        <button class="filter-button"
+          data-filter="{{portfolio_filter_web_value}}">{{portfolio_filter_web_label}}</button>
+        <button class="filter-button"
+          data-filter="{{portfolio_filter_branding_value}}">{{portfolio_filter_branding_label}}</button>
+        <button class="filter-button"
+          data-filter="{{portfolio_filter_mobile_value}}">{{portfolio_filter_mobile_label}}</button>
+        <button class="filter-button"
+          data-filter="{{portfolio_filter_marketing_value}}">{{portfolio_filter_marketing_label}}</button>
+      </div>
+
+      <div class="portfolio-grid">
+        <div class="portfolio-item" data-category="{{portfolio_item_1_category_value}}">
+          <div class="portfolio-image" style="background: {{portfolio_item_1_bg}}"></div>
+          <div class="portfolio-overlay">
+            <span class="portfolio-category">{{portfolio_item_1_category_label}}</span>
+            <h3 class="portfolio-title">{{portfolio_item_1_title}}</h3>
+            <a href="{{portfolio_item_1_link_href}}" class="portfolio-link">{{portfolio_item_1_link_label}}</a>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="{{portfolio_item_2_category_value}}">
+          <div class="portfolio-image" style="background: {{portfolio_item_2_bg}}"></div>
+          <div class="portfolio-overlay">
+            <span class="portfolio-category">{{portfolio_item_2_category_label}}</span>
+            <h3 class="portfolio-title">{{portfolio_item_2_title}}</h3>
+            <a href="{{portfolio_item_2_link_href}}" class="portfolio-link">{{portfolio_item_2_link_label}}</a>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="{{portfolio_item_3_category_value}}">
+          <div class="portfolio-image" style="background: {{portfolio_item_3_bg}}"></div>
+          <div class="portfolio-overlay">
+            <span class="portfolio-category">{{portfolio_item_3_category_label}}</span>
+            <h3 class="portfolio-title">{{portfolio_item_3_title}}</h3>
+            <a href="{{portfolio_item_3_link_href}}" class="portfolio-link">{{portfolio_item_3_link_label}}</a>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="{{portfolio_item_4_category_value}}">
+          <div class="portfolio-image" style="background: {{portfolio_item_4_bg}}"></div>
+          <div class="portfolio-overlay">
+            <span class="portfolio-category">{{portfolio_item_4_category_label}}</span>
+            <h3 class="portfolio-title">{{portfolio_item_4_title}}</h3>
+            <a href="{{portfolio_item_4_link_href}}" class="portfolio-link">{{portfolio_item_4_link_label}}</a>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="{{portfolio_item_5_category_value}}">
+          <div class="portfolio-image" style="background: {{portfolio_item_5_bg}}"></div>
+          <div class="portfolio-overlay">
+            <span class="portfolio-category">{{portfolio_item_5_category_label}}</span>
+            <h3 class="portfolio-title">{{portfolio_item_5_title}}</h3>
+            <a href="{{portfolio_item_5_link_href}}" class="portfolio-link">{{portfolio_item_5_link_label}}</a>
+          </div>
+        </div>
+
+        <div class="portfolio-item" data-category="{{portfolio_item_6_category_value}}">
+          <div class="portfolio-image" style="background: {{portfolio_item_6_bg}}"></div>
+          <div class="portfolio-overlay">
+            <span class="portfolio-category">{{portfolio_item_6_category_label}}</span>
+            <h3 class="portfolio-title">{{portfolio_item_6_title}}</h3>
+            <a href="{{portfolio_item_6_link_href}}" class="portfolio-link">{{portfolio_item_6_link_label}}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section id="{{testimonials_section_id}}" class="testimonials-section section-padding">
+    <div class="content-wrapper">
+      <div class="section-header">
+        <span class="section-label">{{testimonials_section_label}}</span>
+        <h2 class="section-heading">{{testimonials_section_heading}}</h2>
+        <p class="section-description">{{testimonials_section_description}}</p>
+      </div>
+
+      <div class="testimonials-container">
+        <div class="testimonial-slide">
+          <p class="testimonial-quote">{{testimonial_1_quote}}</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">{{testimonial_1_initials}}</div>
+            <div class="author-info">
+              <h4>{{testimonial_1_name}}</h4>
+              <p>{{testimonial_1_title}}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- (Optional) more slides templated if needed -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Team Section -->
+  <section id="{{team_section_id}}" class="team-section section-padding">
+    <div class="content-wrapper">
+      <div class="section-header">
+        <span class="section-label">{{team_section_label}}</span>
+        <h2 class="section-heading">{{team_section_heading}}</h2>
+        <p class="section-description">{{team_section_description}}</p>
+      </div>
+
+      <div class="team-grid">
+        <div class="team-member">
+          <div class="member-photo">👨‍💼</div>
+          <h3 class="member-name">{{team_member_1_name}}</h3>
+          <p class="member-role">{{team_member_1_role}}</p>
+          <p class="member-description">{{team_member_1_bio}}</p>
+          <div class="member-social">
+            <a href="{{team_member_1_linkedin_href}}" class="social-link">in</a>
+            <a href="{{team_member_1_twitter_href}}" class="social-link">tw</a>
+            <a href="{{team_member_1_instagram_href}}" class="social-link">ig</a>
+          </div>
+        </div>
+
+        <div class="team-member">
+          <div class="member-photo">👩‍💻</div>
+          <h3 class="member-name">{{team_member_2_name}}</h3>
+          <p class="member-role">{{team_member_2_role}}</p>
+          <p class="member-description">{{team_member_2_bio}}</p>
+          <div class="member-social">
+            <a href="{{team_member_2_linkedin_href}}" class="social-link">in</a>
+            <a href="{{team_member_2_github_href}}" class="social-link">gh</a>
+            <a href="{{team_member_2_twitter_href}}" class="social-link">tw</a>
+          </div>
+        </div>
+
+        <div class="team-member">
+          <div class="member-photo">👨‍🎨</div>
+          <h3 class="member-name">{{team_member_3_name}}</h3>
+          <p class="member-role">{{team_member_3_role}}</p>
+          <p class="member-description">{{team_member_3_bio}}</p>
+          <div class="member-social">
+            <a href="{{team_member_3_linkedin_href}}" class="social-link">in</a>
+            <a href="{{team_member_3_behance_href}}" class="social-link">bh</a>
+            <a href="{{team_member_3_instagram_href}}" class="social-link">ig</a>
+          </div>
+        </div>
+
+        <div class="team-member">
+          <div class="member-photo">👩‍💼</div>
+          <h3 class="member-name">{{team_member_4_name}}</h3>
+          <p class="member-role">{{team_member_4_role}}</p>
+          <p class="member-description">{{team_member_4_bio}}</p>
+          <div class="member-social">
+            <a href="{{team_member_4_linkedin_href}}" class="social-link">in</a>
+            <a href="{{team_member_4_twitter_href}}" class="social-link">tw</a>
+            <a href="{{team_member_4_instagram_href}}" class="social-link">ig</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="{{contact_section_id}}" class="contact-section section-padding">
+    <div class="content-wrapper">
+      <div class="section-header">
+        <span class="section-label">{{contact_section_label}}</span>
+        <h2 class="section-heading">{{contact_section_heading}}</h2>
+        <p class="section-description">{{contact_section_description}}</p>
+      </div>
+
+      <div class="contact-container">
+        <div class="contact-info">
+          <h3>{{contact_info_heading}}</h3>
+          <p class="contact-description">{{contact_info_description}}</p>
+
+          <div class="contact-method">
+            <div class="contact-icon">📍</div>
+            <div class="contact-details">
+              <h4>{{contact_office_heading}}</h4>
+              <p>{{contact_office_address}}</p>
+            </div>
+          </div>
+
+          <div class="contact-method">
+            <div class="contact-icon">📞</div>
+            <div class="contact-details">
+              <h4>{{contact_phone_heading}}</h4>
+              <p>{{contact_phone_number}}</p>
+            </div>
+          </div>
+
+          <div class="contact-method">
+            <div class="contact-icon">📧</div>
+            <div class="contact-details">
+              <h4>{{contact_email_heading}}</h4>
+              <p>{{contact_email_address}}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-form">
+          <form>
+            <div class="form-group">
+              <input type="text" class="form-input" placeholder="{{contact_name_placeholder}}" required />
+            </div>
+
+            <div class="form-group">
+              <input type="email" class="form-input" placeholder="{{contact_email_placeholder}}" required />
+            </div>
+
+            <div class="form-group">
+              <input type="text" class="form-input" placeholder="{{contact_subject_placeholder}}" />
+            </div>
+
+            <div class="form-group">
+              <textarea class="form-textarea" placeholder="{{contact_message_placeholder}}" required></textarea>
+            </div>
+
+            <button type="submit" class="submit-button">{{contact_submit_label}}</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="content-wrapper">
+      <div class="footer-grid">
+        <div class="footer-column">
+          <a href="{{footer_brand_home_href}}" class="brand-logo">
+            <span class="logo-icon">✦</span>
+            {{footer_brand_name}}
+          </a>
+          <p class="footer-about">{{footer_about}}</p>
+        </div>
+
+        <div class="footer-column">
+          <h4 class="footer-heading">{{footer_quick_links_heading}}</h4>
+          <ul class="footer-links">
+            <li class="footer-link"><a href="{{footer_link_home_href}}">{{footer_link_home_label}}</a></li>
+            <li class="footer-link"><a href="{{footer_link_services_href}}">{{footer_link_services_label}}</a></li>
+            <li class="footer-link"><a href="{{footer_link_portfolio_href}}">{{footer_link_portfolio_label}}</a></li>
+            <li class="footer-link"><a href="{{footer_link_about_href}}">{{footer_link_about_label}}</a></li>
+            <li class="footer-link"><a href="{{footer_link_contact_href}}">{{footer_link_contact_label}}</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4 class="footer-heading">{{footer_services_heading}}</h4>
+          <ul class="footer-links">
+            <li class="footer-link"><a href="{{footer_service_branding_href}}">{{footer_service_branding_label}}</a>
+            </li>
+            <li class="footer-link"><a href="{{footer_service_web_href}}">{{footer_service_web_label}}</a></li>
+            <li class="footer-link"><a href="{{footer_service_mobile_href}}">{{footer_service_mobile_label}}</a></li>
+            <li class="footer-link"><a href="{{footer_service_marketing_href}}">{{footer_service_marketing_label}}</a>
+            </li>
+            <li class="footer-link"><a href="{{footer_service_seo_href}}">{{footer_service_seo_label}}</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4 class="footer-heading">{{footer_connect_heading}}</h4>
+          <ul class="footer-links">
+            <li class="footer-link"><a href="{{footer_social_facebook_href}}">{{footer_social_facebook_label}}</a></li>
+            <li class="footer-link"><a href="{{footer_social_twitter_href}}">{{footer_social_twitter_label}}</a></li>
+            <li class="footer-link"><a href="{{footer_social_instagram_href}}">{{footer_social_instagram_label}}</a>
+            </li>
+            <li class="footer-link"><a href="{{footer_social_linkedin_href}}">{{footer_social_linkedin_label}}</a></li>
+            <li class="footer-link"><a href="{{footer_social_dribbble_href}}">{{footer_social_dribbble_label}}</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="copyright">{{footer_copyright}}</p>
+        <div class="footer-socials">
+          <a href="{{footer_social_icon_fb_href}}" class="footer-social">{{footer_social_icon_fb_label}}</a>
+          <a href="{{footer_social_icon_tw_href}}" class="footer-social">{{footer_social_icon_tw_label}}</a>
+          <a href="{{footer_social_icon_in_href}}" class="footer-social">{{footer_social_icon_in_label}}</a>
+          <a href="{{footer_social_icon_ig_href}}" class="footer-social">{{footer_social_icon_ig_label}}</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile Navigation Toggle
+    const navToggle = document.getElementById("navToggle");
+    const navMenu = document.getElementById("navMenu");
+
+    if (navToggle && navMenu) {
+      navToggle.addEventListener("click", () => {
+        navMenu.classList.toggle("active");
+        navToggle.classList.toggle("active");
+      });
+    }
+
+    // Close mobile menu when clicking on a link
+    const navLinks = document.querySelectorAll(".nav-link");
+    navLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        navMenu.classList.remove("active");
+        navToggle.classList.remove("active");
+      });
+    });
+
+    // Portfolio Filtering
+    const filterButtons = document.querySelectorAll(".filter-button");
+    const portfolioItems = document.querySelectorAll(".portfolio-item");
+
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        filterButtons.forEach((btn) => btn.classList.remove("active"));
+        button.classList.add("active");
+
+        const filterValue = button.getAttribute("data-filter");
+
+        portfolioItems.forEach((item) => {
+          if (filterValue === "{{portfolio_filter_all_value}}" || item.getAttribute("data-category") === filterValue) {
+            item.style.display = "block";
+          } else {
+            item.style.display = "none";
+          }
+        });
+      });
+    });
+
+    // Header scroll effect
+    window.addEventListener("scroll", () => {
+      const header = document.querySelector(".site-header");
+      if (window.scrollY > 100) {
+        header.style.backgroundColor = "{{header_scroll_bg}}";
+        header.style.padding = "{{header_scroll_padding}}";
+      } else {
+        header.style.backgroundColor = "{{header_default_bg}}";
+        header.style.padding = "{{header_default_padding}}";
+      }
+    });
+  </script>
+</body>
+
+</html>

@@ -4,213 +4,524 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{page_description}}">
     <title>{{page_title}}</title>
-    <link href="style.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{stylesheet_url}}">
 </head>
 
 <body>
-    <!-- Navigation -->
-    <nav id="navbar">
-        <div class="nav-container">
-            <div class="logo">{{logo_text}}</div>
-            <ul class="nav-links">
-                <li><a href="#home">{{nav_home}}</a></li>
-                <li><a href="#about">{{nav_about}}</a></li>
-                <li><a href="#portfolio">{{nav_portfolio}}</a></li>
-                <li><a href="#contact">{{nav_contact}}</a></li>
+    <!-- Header Section -->
+    <header class="header">
+        <nav class="navbar">
+            <h1 class="logo">{{logo_text}}</h1>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#home" class="nav-link">{{nav_home}}</a></li>
+                <li class="nav-item"><a href="#about" class="nav-link">{{nav_about}}</a></li>
+                <li class="nav-item"><a href="#services" class="nav-link">{{nav_services}}</a></li>
+                <li class="nav-item"><a href="#portfolio" class="nav-link">{{nav_portfolio}}</a></li>
+                <li class="nav-item"><a href="#testimonials" class="nav-link">{{nav_testimonials}}</a></li>
+                <li class="nav-item"><a href="#team" class="nav-link">{{nav_team}}</a></li>
+                <li class="nav-item"><a href="#blog" class="nav-link">{{nav_blog}}</a></li>
+                <li class="nav-item"><a href="#contact" class="nav-link">{{nav_contact}}</a></li>
             </ul>
-            <div class="mobile-menu-toggle" id="mobileMenuToggle">
-                <div class="hamburger"></div>
-                <div class="hamburger"></div>
-                <div class="hamburger"></div>
+        </nav>
+    </header>
+
+    <!-- Hero/Home Section -->
+    <section id="home" class="hero-section">
+        <div class="hero-content">
+            <h2 class="hero-title">{{hero_title}}</h2>
+            <p class="hero-text">{{hero_text}}</p>
+            <div class="hero-buttons">
+                <a href="#contact" class="btn btn-primary">{{hero_btn_primary}}</a>
+                <a href="#services" class="btn btn-secondary">{{hero_btn_secondary}}</a>
             </div>
         </div>
-    </nav>
-
-    <!-- Mobile Menu -->
-    <div class="mobile-menu" id="mobileMenu">
-        <ul class="mobile-nav-links">
-            <li><a href="#home">{{mobile_home}}</a></li>
-            <li><a href="#about">{{mobile_about}}</a></li>
-            <li><a href="#portfolio">{{mobile_portfolio}}</a></li>
-            <li><a href="#contact">{{mobile_contact}}</a></li>
-        </ul>
-    </div>
-
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="floating-shapes">
-            <div class="shape shape-1"></div>
-            <div class="shape shape-2"></div>
-            <div class="shape shape-3"></div>
-            <div class="shape shape-4"></div>
-            <div class="shape shape-5"></div>
-            <div class="shape shape-6"></div>
-        </div>
-        <div class="hero-content">
-            <div class="hero-subtitle">{{hero_subtitle}}</div>
-            <h1>{{hero_title}}</h1>
-            <p class="subtitle">{{hero_description}}</p>
-            <a href="#portfolio" class="cta-button">{{hero_cta}}</a>
-        </div>
-        <div class="scroll-indicator" onclick="document.getElementById('about').scrollIntoView()"></div>
     </section>
 
     <!-- About Section -->
-    <section id="about" class="about">
+    <section id="about" class="about-section section">
         <div class="container">
-            <h2 class="section-title fade-in">{{about_title}}</h2>
-            <div class="about-content">
-                <div class="about-image slide-in-left" style="background-image:url('{{about_image_url}}')"></div>
-                <div class="about-text slide-in-right">
-                    <h3>{{about_heading}}</h3>
-                    <p>{{about_paragraph1}}</p>
-                    <p>{{about_paragraph2}}</p>
-                    <p>{{about_paragraph3}}</p>
-                    <div class="skills">
-                        <span class="skill-tag">{{skill1}}</span>
-                        <span class="skill-tag">{{skill2}}</span>
-                        <span class="skill-tag">{{skill3}}</span>
-                        <span class="skill-tag">{{skill4}}</span>
-                        <span class="skill-tag">{{skill5}}</span>
-                        <span class="skill-tag">{{skill6}}</span>
-                    </div>
-                </div>
+            <h2 class="section-title">{{about_title}}</h2>
+
+            <article class="about-card">
+                <h3 class="card-title">{{about_story_title}}</h3>
+                <p class="card-text">{{about_story_text1}}</p>
+                <p class="card-text">{{about_story_text2}}</p>
+            </article>
+
+            <article class="about-card">
+                <h3 class="card-title">{{about_mission_title}}</h3>
+                <p class="card-text">{{about_mission_text}}</p>
+            </article>
+
+            <article class="about-card">
+                <h3 class="card-title">{{about_vision_title}}</h3>
+                <p class="card-text">{{about_vision_text}}</p>
+            </article>
+
+            <article class="about-card">
+                <h3 class="card-title">{{about_values_title}}</h3>
+                <ul class="values-list">
+                    <li class="value-item"><strong>{{about_value1_label}}</strong> {{about_value1_text}}</li>
+                    <li class="value-item"><strong>{{about_value2_label}}</strong> {{about_value2_text}}</li>
+                    <li class="value-item"><strong>{{about_value3_label}}</strong> {{about_value3_text}}</li>
+                    <li class="value-item"><strong>{{about_value4_label}}</strong> {{about_value4_text}}</li>
+                </ul>
+            </article>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services-section section">
+        <div class="container">
+            <h2 class="section-title">{{services_title}}</h2>
+            <p class="section-subtitle">{{services_subtitle}}</p>
+
+            <div class="services-grid">
+                <article class="service-card">
+                    <h3 class="service-title">{{service1_title}}</h3>
+                    <p class="service-description">{{service1_description}}</p>
+                    <ul class="service-features">
+                        <li class="feature-item">{{service1_feature1}}</li>
+                        <li class="feature-item">{{service1_feature2}}</li>
+                        <li class="feature-item">{{service1_feature3}}</li>
+                        <li class="feature-item">{{service1_feature4}}</li>
+                    </ul>
+                </article>
+
+                <article class="service-card">
+                    <h3 class="service-title">{{service2_title}}</h3>
+                    <p class="service-description">{{service2_description}}</p>
+                    <ul class="service-features">
+                        <li class="feature-item">{{service2_feature1}}</li>
+                        <li class="feature-item">{{service2_feature2}}</li>
+                        <li class="feature-item">{{service2_feature3}}</li>
+                        <li class="feature-item">{{service2_feature4}}</li>
+                    </ul>
+                </article>
+
+                <article class="service-card">
+                    <h3 class="service-title">{{service3_title}}</h3>
+                    <p class="service-description">{{service3_description}}</p>
+                    <ul class="service-features">
+                        <li class="feature-item">{{service3_feature1}}</li>
+                        <li class="feature-item">{{service3_feature2}}</li>
+                        <li class="feature-item">{{service3_feature3}}</li>
+                        <li class="feature-item">{{service3_feature4}}</li>
+                    </ul>
+                </article>
+
+                <article class="service-card">
+                    <h3 class="service-title">{{service4_title}}</h3>
+                    <p class="service-description">{{service4_description}}</p>
+                    <ul class="service-features">
+                        <li class="feature-item">{{service4_feature1}}</li>
+                        <li class="feature-item">{{service4_feature2}}</li>
+                        <li class="feature-item">{{service4_feature3}}</li>
+                        <li class="feature-item">{{service4_feature4}}</li>
+                    </ul>
+                </article>
             </div>
         </div>
     </section>
 
     <!-- Portfolio Section -->
-    <section id="portfolio" class="portfolio">
+    <section id="portfolio" class="portfolio-section section">
         <div class="container">
-            <h2 class="section-title fade-in">{{portfolio_title}}</h2>
+            <h2 class="section-title">{{portfolio_title}}</h2>
+            <p class="section-subtitle">{{portfolio_subtitle}}</p>
+
             <div class="portfolio-grid">
-                <div class="portfolio-item">
-                    <div class="portfolio-image" style="background-image:url('{{portfolio1_image_url}}')"></div>
-                    <div class="portfolio-content">
-                        <h4>{{portfolio1_title}}</h4>
-                        <p>{{portfolio1_description}}</p>
-                        <div class="portfolio-tech">
-                            <span class="tech-tag">{{portfolio1_tech1}}</span>
-                            <span class="tech-tag">{{portfolio1_tech2}}</span>
-                            <span class="tech-tag">{{portfolio1_tech3}}</span>
-                            <span class="tech-tag">{{portfolio1_tech4}}</span>
-                        </div>
-                    </div>
-                </div>
+                <article class="portfolio-card">
+                    <h3 class="portfolio-title">{{portfolio1_title}}</h3>
+                    <p class="portfolio-meta"><strong>{{portfolio_client_label}}</strong> {{portfolio1_client}}</p>
+                    <p class="portfolio-meta"><strong>{{portfolio_year_label}}</strong> {{portfolio1_year}}</p>
+                    <p class="portfolio-description">{{portfolio1_description}}</p>
+                </article>
 
-                <div class="portfolio-item">
-                    <div class="portfolio-image" style="background-image:url('{{portfolio2_image_url}}')"></div>
-                    <div class="portfolio-content">
-                        <h4>{{portfolio2_title}}</h4>
-                        <p>{{portfolio2_description}}</p>
-                        <div class="portfolio-tech">
-                            <span class="tech-tag">{{portfolio2_tech1}}</span>
-                            <span class="tech-tag">{{portfolio2_tech2}}</span>
-                            <span class="tech-tag">{{portfolio2_tech3}}</span>
-                            <span class="tech-tag">{{portfolio2_tech4}}</span>
-                        </div>
-                    </div>
-                </div>
+                <article class="portfolio-card">
+                    <h3 class="portfolio-title">{{portfolio2_title}}</h3>
+                    <p class="portfolio-meta"><strong>{{portfolio_client_label}}</strong> {{portfolio2_client}}</p>
+                    <p class="portfolio-meta"><strong>{{portfolio_year_label}}</strong> {{portfolio2_year}}</p>
+                    <p class="portfolio-description">{{portfolio2_description}}</p>
+                </article>
 
-                <div class="portfolio-item">
-                    <div class="portfolio-image" style="background-image:url('{{portfolio3_image_url}}')"></div>
-                    <div class="portfolio-content">
-                        <h4>{{portfolio3_title}}</h4>
-                        <p>{{portfolio3_description}}</p>
-                        <div class="portfolio-tech">
-                            <span class="tech-tag">{{portfolio3_tech1}}</span>
-                            <span class="tech-tag">{{portfolio3_tech2}}</span>
-                            <span class="tech-tag">{{portfolio3_tech3}}</span>
-                            <span class="tech-tag">{{portfolio3_tech4}}</span>
-                        </div>
-                    </div>
-                </div>
+                <article class="portfolio-card">
+                    <h3 class="portfolio-title">{{portfolio3_title}}</h3>
+                    <p class="portfolio-meta"><strong>{{portfolio_client_label}}</strong> {{portfolio3_client}}</p>
+                    <p class="portfolio-meta"><strong>{{portfolio_year_label}}</strong> {{portfolio3_year}}</p>
+                    <p class="portfolio-description">{{portfolio3_description}}</p>
+                </article>
 
-                <div class="portfolio-item">
-                    <div class="portfolio-image" style="background-image:url('{{portfolio4_image_url}}')"></div>
-                    <div class="portfolio-content">
-                        <h4>{{portfolio4_title}}</h4>
-                        <p>{{portfolio4_description}}</p>
-                        <div class="portfolio-tech">
-                            <span class="tech-tag">{{portfolio4_tech1}}</span>
-                            <span class="tech-tag">{{portfolio4_tech2}}</span>
-                            <span class="tech-tag">{{portfolio4_tech3}}</span>
-                            <span class="tech-tag">{{portfolio4_tech4}}</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="portfolio-item">
-                    <div class="portfolio-image" style="background-image:url('{{portfolio5_image_url}}')"></div>
-                    <div class="portfolio-content">
-                        <h4>{{portfolio5_title}}</h4>
-                        <p>{{portfolio5_description}}</p>
-                        <div class="portfolio-tech">
-                            <span class="tech-tag">{{portfolio5_tech1}}</span>
-                            <span class="tech-tag">{{portfolio5_tech2}}</span>
-                            <span class="tech-tag">{{portfolio5_tech3}}</span>
-                            <span class="tech-tag">{{portfolio5_tech4}}</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="portfolio-item">
-                    <div class="portfolio-image" style="background-image:url('{{portfolio6_image_url}}')"></div>
-                    <div class="portfolio-content">
-                        <h4>{{portfolio6_title}}</h4>
-                        <p>{{portfolio6_description}}</p>
-                        <div class="portfolio-tech">
-                            <span class="tech-tag">{{portfolio6_tech1}}</span>
-                            <span class="tech-tag">{{portfolio6_tech2}}</span>
-                            <span class="tech-tag">{{portfolio6_tech3}}</span>
-                            <span class="tech-tag">{{portfolio6_tech4}}</span>
-                        </div>
-                    </div>
-                </div>
+                <article class="portfolio-card">
+                    <h3 class="portfolio-title">{{portfolio4_title}}</h3>
+                    <p class="portfolio-meta"><strong>{{portfolio_client_label}}</strong> {{portfolio4_client}}</p>
+                    <p class="portfolio-meta"><strong>{{portfolio_year_label}}</strong> {{portfolio4_year}}</p>
+                    <p class="portfolio-description">{{portfolio4_description}}</p>
+                </article>
             </div>
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="contact-floating-shapes">
-            <div class="contact-shape contact-shape-1"></div>
-            <div class="contact-shape contact-shape-2"></div>
-            <div class="contact-shape contact-shape-3"></div>
-            <div class="contact-shape contact-shape-4"></div>
-            <div class="contact-shape contact-shape-5"></div>
-            <div class="contact-shape contact-shape-6"></div>
-        </div>
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials-section section">
         <div class="container">
-            <div class="contact-content">
-                <h2 class="section-title fade-in">{{contact_title}}</h2>
-                <p class="fade-in">{{contact_description}}</p>
-                <form class="contact-form fade-in">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="name">{{contact_label_name}}</label>
-                            <input type="text" id="name" name="name" placeholder="{{contact_placeholder_name}}"
-                                required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">{{contact_label_email}}</label>
-                            <input type="email" id="email" name="email" placeholder="{{contact_placeholder_email}}"
-                                required>
-                        </div>
-                    </div>
+            <h2 class="section-title">{{testimonials_title}}</h2>
+
+            <div class="testimonials-grid">
+                <blockquote class="testimonial-card">
+                    <p class="testimonial-text">{{testimonial1_text}}</p>
+                    <footer class="testimonial-author">{{testimonial1_author}}</footer>
+                </blockquote>
+
+                <blockquote class="testimonial-card">
+                    <p class="testimonial-text">{{testimonial2_text}}</p>
+                    <footer class="testimonial-author">{{testimonial2_author}}</footer>
+                </blockquote>
+
+                <blockquote class="testimonial-card">
+                    <p class="testimonial-text">{{testimonial3_text}}</p>
+                    <footer class="testimonial-author">{{testimonial3_author}}</footer>
+                </blockquote>
+
+                <blockquote class="testimonial-card">
+                    <p class="testimonial-text">{{testimonial4_text}}</p>
+                    <footer class="testimonial-author">{{testimonial4_author}}</footer>
+                </blockquote>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" class="team-section section">
+        <div class="container">
+            <h2 class="section-title">{{team_title}}</h2>
+            <p class="section-subtitle">{{team_subtitle}}</p>
+
+            <div class="team-grid">
+                <article class="team-card">
+                    <h3 class="team-name">{{team1_name}}</h3>
+                    <p class="team-role">{{team1_role}}</p>
+                    <p class="team-bio">{{team1_bio}}</p>
+                </article>
+
+                <article class="team-card">
+                    <h3 class="team-name">{{team2_name}}</h3>
+                    <p class="team-role">{{team2_role}}</p>
+                    <p class="team-bio">{{team2_bio}}</p>
+                </article>
+
+                <article class="team-card">
+                    <h3 class="team-name">{{team3_name}}</h3>
+                    <p class="team-role">{{team3_role}}</p>
+                    <p class="team-bio">{{team3_bio}}</p>
+                </article>
+
+                <article class="team-card">
+                    <h3 class="team-name">{{team4_name}}</h3>
+                    <p class="team-role">{{team4_role}}</p>
+                    <p class="team-bio">{{team4_bio}}</p>
+                </article>
+
+                <article class="team-card">
+                    <h3 class="team-name">{{team5_name}}</h3>
+                    <p class="team-role">{{team5_role}}</p>
+                    <p class="team-bio">{{team5_bio}}</p>
+                </article>
+
+                <article class="team-card">
+                    <h3 class="team-name">{{team6_name}}</h3>
+                    <p class="team-role">{{team6_role}}</p>
+                    <p class="team-bio">{{team6_bio}}</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog" class="blog-section section">
+        <div class="container">
+            <h2 class="section-title">{{blog_title}}</h2>
+
+            <div class="blog-grid">
+                <article class="blog-card">
+                    <h3 class="blog-title">{{blog1_title}}</h3>
+                    <p class="blog-meta"><strong>{{blog_published_label}}</strong> {{blog1_published}} |
+                        <strong>{{blog_author_label}}</strong> {{blog1_author}}</p>
+                    <p class="blog-excerpt">{{blog1_excerpt}}</p>
+                    <a href="{{blog1_link_url}}" class="blog-link">{{blog_readmore_label}}</a>
+                </article>
+
+                <article class="blog-card">
+                    <h3 class="blog-title">{{blog2_title}}</h3>
+                    <p class="blog-meta"><strong>{{blog_published_label}}</strong> {{blog2_published}} |
+                        <strong>{{blog_author_label}}</strong> {{blog2_author}}</p>
+                    <p class="blog-excerpt">{{blog2_excerpt}}</p>
+                    <a href="{{blog2_link_url}}" class="blog-link">{{blog_readmore_label}}</a>
+                </article>
+
+                <article class="blog-card">
+                    <h3 class="blog-title">{{blog3_title}}</h3>
+                    <p class="blog-meta"><strong>{{blog_published_label}}</strong> {{blog3_published}} |
+                        <strong>{{blog_author_label}}</strong> {{blog3_author}}</p>
+                    <p class="blog-excerpt">{{blog3_excerpt}}</p>
+                    <a href="{{blog3_link_url}}" class="blog-link">{{blog_readmore_label}}</a>
+                </article>
+
+                <article class="blog-card">
+                    <h3 class="blog-title">{{blog4_title}}</h3>
+                    <p class="blog-meta"><strong>{{blog_published_label}}</strong> {{blog4_published}} |
+                        <strong>{{blog_author_label}}</strong> {{blog4_author}}</p>
+                    <p class="blog-excerpt">{{blog4_excerpt}}</p>
+                    <a href="{{blog4_link_url}}" class="blog-link">{{blog_readmore_label}}</a>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics/Facts Section -->
+    <section id="stats" class="stats-section section">
+        <div class="container">
+            <h2 class="section-title">{{stats_title}}</h2>
+            <dl class="stats-grid">
+                <div class="stat-card">
+                    <dt class="stat-label">{{stat1_label}}</dt>
+                    <dd class="stat-value">{{stat1_value}}</dd>
+                </div>
+
+                <div class="stat-card">
+                    <dt class="stat-label">{{stat2_label}}</dt>
+                    <dd class="stat-value">{{stat2_value}}</dd>
+                </div>
+
+                <div class="stat-card">
+                    <dt class="stat-label">{{stat3_label}}</dt>
+                    <dd class="stat-value">{{stat3_value}}</dd>
+                </div>
+
+                <div class="stat-card">
+                    <dt class="stat-label">{{stat4_label}}</dt>
+                    <dd class="stat-value">{{stat4_value}}</dd>
+                </div>
+
+                <div class="stat-card">
+                    <dt class="stat-label">{{stat5_label}}</dt>
+                    <dd class="stat-value">{{stat5_value}}</dd>
+                </div>
+
+                <div class="stat-card">
+                    <dt class="stat-label">{{stat6_label}}</dt>
+                    <dd class="stat-value">{{stat6_value}}</dd>
+                </div>
+            </dl>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section section">
+        <div class="container">
+            <h2 class="section-title">{{contact_title}}</h2>
+            <p class="section-subtitle">{{contact_subtitle}}</p>
+
+            <form action="{{contact_form_action}}" method="{{contact_form_method}}" class="contact-form">
+                <fieldset class="form-fieldset">
+                    <legend class="form-legend">{{contact_legend_info}}</legend>
+
                     <div class="form-group">
-                        <label for="subject">{{contact_label_subject}}</label>
-                        <input type="text" id="subject" name="subject" placeholder="{{contact_placeholder_subject}}"
-                            required>
+                        <label for="name" class="form-label">{{contact_label_name}}</label>
+                        <input type="text" id="name" name="name" class="form-input"
+                            placeholder="{{contact_placeholder_name}}" required>
                     </div>
+
                     <div class="form-group">
-                        <label for="message">{{contact_label_message}}</label>
-                        <textarea id="message" name="message" rows="6" placeholder="{{contact_placeholder_message}}"
-                            required></textarea>
+                        <label for="email" class="form-label">{{contact_label_email}}</label>
+                        <input type="email" id="email" name="email" class="form-input"
+                            placeholder="{{contact_placeholder_email}}" required>
                     </div>
-                    <button type="submit" class="submit-btn">{{contact_submit_btn}}</button>
-                </form>
+
+                    <div class="form-group">
+                        <label for="phone" class="form-label">{{contact_label_phone}}</label>
+                        <input type="tel" id="phone" name="phone" class="form-input"
+                            placeholder="{{contact_placeholder_phone}}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="company" class="form-label">{{contact_label_company}}</label>
+                        <input type="text" id="company" name="company" class="form-input"
+                            placeholder="{{contact_placeholder_company}}">
+                    </div>
+                </fieldset>
+
+                <fieldset class="form-fieldset">
+                    <legend class="form-legend">{{contact_legend_project}}</legend>
+
+                    <div class="form-group">
+                        <label for="service" class="form-label">{{contact_label_service}}</label>
+                        <select id="service" name="service" class="form-select">
+                            <option value="">{{contact_option_service_default}}</option>
+                            <option value="{{contact_option_service_web_value}}">{{contact_option_service_web_label}}
+                            </option>
+                            <option value="{{contact_option_service_mobile_value}}">
+                                {{contact_option_service_mobile_label}}</option>
+                            <option value="{{contact_option_service_marketing_value}}">
+                                {{contact_option_service_marketing_label}}</option>
+                            <option value="{{contact_option_service_design_value}}">
+                                {{contact_option_service_design_label}}</option>
+                            <option value="{{contact_option_service_other_value}}">
+                                {{contact_option_service_other_label}}</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="budget" class="form-label">{{contact_label_budget}}</label>
+                        <select id="budget" name="budget" class="form-select">
+                            <option value="">{{contact_option_budget_default}}</option>
+                            <option value="{{contact_option_budget_5k_value}}">{{contact_option_budget_5k_label}}
+                            </option>
+                            <option value="{{contact_option_budget_10k_value}}">{{contact_option_budget_10k_label}}
+                            </option>
+                            <option value="{{contact_option_budget_25k_value}}">{{contact_option_budget_25k_label}}
+                            </option>
+                            <option value="{{contact_option_budget_50k_value}}">{{contact_option_budget_50k_label}}
+                            </option>
+                            <option value="{{contact_option_budget_50kplus_value}}">
+                                {{contact_option_budget_50kplus_label}}</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="timeline" class="form-label">{{contact_label_timeline}}</label>
+                        <select id="timeline" name="timeline" class="form-select">
+                            <option value="">{{contact_option_timeline_default}}</option>
+                            <option value="{{contact_option_timeline_urgent_value}}">
+                                {{contact_option_timeline_urgent_label}}</option>
+                            <option value="{{contact_option_timeline_short_value}}">
+                                {{contact_option_timeline_short_label}}</option>
+                            <option value="{{contact_option_timeline_medium_value}}">
+                                {{contact_option_timeline_medium_label}}</option>
+                            <option value="{{contact_option_timeline_long_value}}">
+                                {{contact_option_timeline_long_label}}</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message" class="form-label">{{contact_label_message}}</label>
+                        <textarea id="message" name="message" rows="6" class="form-textarea"
+                            placeholder="{{contact_placeholder_message}}" required></textarea>
+                    </div>
+                </fieldset>
+
+                <fieldset class="form-fieldset">
+                    <legend class="form-legend">{{contact_legend_additional}}</legend>
+
+                    <div class="form-checkbox">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="newsletter" value="{{contact_newsletter_value}}"
+                                class="checkbox-input">
+                            {{contact_newsletter_label}}
+                        </label>
+                    </div>
+
+                    <div class="form-checkbox">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="terms" value="{{contact_terms_value}}" class="checkbox-input"
+                                required>
+                            {{contact_terms_label}}
+                        </label>
+                    </div>
+                </fieldset>
+
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-primary">{{contact_btn_submit}}</button>
+                    <button type="reset" class="btn btn-secondary">{{contact_btn_reset}}</button>
+                </div>
+            </form>
+
+            <article class="contact-info">
+                <h3 class="contact-info-title">{{contact_info_title}}</h3>
+
+                <div class="contact-details">
+                    <h4 class="contact-subtitle">{{contact_address_title}}</h4>
+                    <address class="contact-address">
+                        {{contact_address_line1}}<br>
+                        {{contact_address_line2}}<br>
+                        {{contact_address_city_state_zip}}<br>
+                        {{contact_address_country}}
+                    </address>
+
+                    <h4 class="contact-subtitle">{{contact_details_title}}</h4>
+                    <p class="contact-item"><strong>{{contact_phone_label}}</strong> <a href="{{contact_phone_href}}"
+                            class="contact-link">{{contact_phone_text}}</a></p>
+                    <p class="contact-item"><strong>{{contact_email_label}}</strong> <a href="{{contact_email_href}}"
+                            class="contact-link">{{contact_email_text}}</a></p>
+                    <p class="contact-item"><strong>{{contact_support_label}}</strong> <a
+                            href="{{contact_support_href}}" class="contact-link">{{contact_support_text}}</a></p>
+
+                    <h4 class="contact-subtitle">{{contact_hours_title}}</h4>
+                    <table class="hours-table">
+                        <tr class="hours-row">
+                            <td class="hours-day">{{hours1_day}}</td>
+                            <td class="hours-time">{{hours1_time}}</td>
+                        </tr>
+                        <tr class="hours-row">
+                            <td class="hours-day">{{hours2_day}}</td>
+                            <td class="hours-time">{{hours2_time}}</td>
+                        </tr>
+                        <tr class="hours-row">
+                            <td class="hours-day">{{hours3_day}}</td>
+                            <td class="hours-time">{{hours3_time}}</td>
+                        </tr>
+                    </table>
+
+                    <h4 class="contact-subtitle">{{contact_follow_title}}</h4>
+                    <ul class="social-links">
+                        <li class="social-item"><a href="{{social_facebook_url}}"
+                                class="social-link">{{social_facebook_label}}</a></li>
+                        <li class="social-item"><a href="{{social_twitter_url}}"
+                                class="social-link">{{social_twitter_label}}</a></li>
+                        <li class="social-item"><a href="{{social_linkedin_url}}"
+                                class="social-link">{{social_linkedin_label}}</a></li>
+                        <li class="social-item"><a href="{{social_instagram_url}}"
+                                class="social-link">{{social_instagram_label}}</a></li>
+                        <li class="social-item"><a href="{{social_youtube_url}}"
+                                class="social-link">{{social_youtube_label}}</a></li>
+                    </ul>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="faq-section section">
+        <div class="container">
+            <h2 class="section-title">{{faq_title}}</h2>
+
+            <div class="faq-list">
+                <article class="faq-item">
+                    <h3 class="faq-question">{{faq1_question}}</h3>
+                    <p class="faq-answer">{{faq1_answer}}</p>
+                </article>
+
+                <article class="faq-item">
+                    <h3 class="faq-question">{{faq2_question}}</h3>
+                    <p class="faq-answer">{{faq2_answer}}</p>
+                </article>
+
+                <article class="faq-item">
+                    <h3 class="faq-question">{{faq3_question}}</h3>
+                    <p class="faq-answer">{{faq3_answer}}</p>
+                </article>
+
+                <article class="faq-item">
+                    <h3 class="faq-question">{{faq4_question}}</h3>
+                    <p class="faq-answer">{{faq4_answer}}</p>
+                </article>
+
+                <article class="faq-item">
+                    <h3 class="faq-question">{{faq5_question}}</h3>
+                    <p class="faq-answer">{{faq5_answer}}</p>
+                </article>
             </div>
         </div>
     </section>
@@ -219,192 +530,59 @@
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-left">
-                    <p>{{footer_copyright}}</p>
-                </div>
-                <div class="footer-right">
-                    <a href="#privacy">{{footer_privacy}}</a>
-                    <a href="#terms">{{footer_terms}}</a>
-                    <a href="#sitemap">{{footer_sitemap}}</a>
-                    <a href="{{footer_credit_url}}" target="_blank" rel="noopener nofollow">{{footer_credit_text}}</a>
-                </div>
+                <section class="footer-section">
+                    <h3 class="footer-title">{{footer_about_title}}</h3>
+                    <p class="footer-text">{{footer_about_text}}</p>
+                </section>
+
+                <section class="footer-section">
+                    <h3 class="footer-title">{{footer_links_title}}</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link-item"><a href="#home" class="footer-link">{{footer_link_home}}</a></li>
+                        <li class="footer-link-item"><a href="#about" class="footer-link">{{footer_link_about}}</a></li>
+                        <li class="footer-link-item"><a href="#services"
+                                class="footer-link">{{footer_link_services}}</a></li>
+                        <li class="footer-link-item"><a href="#portfolio"
+                                class="footer-link">{{footer_link_portfolio}}</a></li>
+                        <li class="footer-link-item"><a href="#contact" class="footer-link">{{footer_link_contact}}</a>
+                        </li>
+                    </ul>
+                </section>
+
+                <section class="footer-section">
+                    <h3 class="footer-title">{{footer_services_title}}</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link-item"><a href="#services"
+                                class="footer-link">{{footer_service_link1}}</a></li>
+                        <li class="footer-link-item"><a href="#services"
+                                class="footer-link">{{footer_service_link2}}</a></li>
+                        <li class="footer-link-item"><a href="#services"
+                                class="footer-link">{{footer_service_link3}}</a></li>
+                        <li class="footer-link-item"><a href="#services"
+                                class="footer-link">{{footer_service_link4}}</a></li>
+                    </ul>
+                </section>
+
+                <section class="footer-section">
+                    <h3 class="footer-title">{{footer_legal_title}}</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link-item"><a href="{{footer_privacy_url}}"
+                                class="footer-link">{{footer_privacy_label}}</a></li>
+                        <li class="footer-link-item"><a href="{{footer_terms_url}}"
+                                class="footer-link">{{footer_terms_label}}</a></li>
+                        <li class="footer-link-item"><a href="{{footer_cookies_url}}"
+                                class="footer-link">{{footer_cookies_label}}</a></li>
+                        <li class="footer-link-item"><a href="{{footer_disclaimer_url}}"
+                                class="footer-link">{{footer_disclaimer_label}}</a></li>
+                    </ul>
+                </section>
             </div>
+
+            <hr class="footer-divider">
+
+            <p class="footer-copyright">{{footer_copyright}}</p>
         </div>
     </footer>
-
-    <script>
-        /*
-    
-    TemplateMo 593 personal shape
-    
-    https://templatemo.com/tm-593-personal-shape
-    
-    */
-
-        // JavaScript Document
-
-        // Mobile menu functionality
-        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-        const mobileMenu = document.getElementById('mobileMenu');
-        const mobileNavLinks = document.querySelectorAll('.mobile-nav-links a');
-
-        mobileMenuToggle.addEventListener('click', () => {
-            mobileMenuToggle.classList.toggle('active');
-            mobileMenu.classList.toggle('active');
-            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : 'auto';
-        });
-
-        // Close mobile menu when clicking on links
-        mobileNavLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenuToggle.classList.remove('active');
-                mobileMenu.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            });
-        });
-
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!mobileMenuToggle.contains(e.target) && !mobileMenu.contains(e.target)) {
-                mobileMenuToggle.classList.remove('active');
-                mobileMenu.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            }
-        });
-
-        // Navbar scroll effect
-        window.addEventListener('scroll', () => {
-            const navbar = document.getElementById('navbar');
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-
-        // Enhanced Intersection Observer for scroll animations
-        const observerOptions = {
-            threshold: 0.15,
-            rootMargin: '0px 0px -80px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate');
-                }
-            });
-        }, observerOptions);
-
-        // Staggered animation for portfolio items
-        const portfolioObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const items = entry.target.querySelectorAll('.portfolio-item');
-                    items.forEach((item, index) => {
-                        setTimeout(() => {
-                            item.classList.add('animate');
-                        }, index * 150);
-                    });
-                }
-            });
-        }, { threshold: 0.1 });
-
-        // Observe all animation elements
-        document.addEventListener('DOMContentLoaded', () => {
-            const animatedElements = document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right');
-            animatedElements.forEach(el => observer.observe(el));
-
-            const portfolioSection = document.querySelector('.portfolio-grid');
-            if (portfolioSection) {
-                portfolioObserver.observe(portfolioSection);
-            }
-        });
-
-        // Enhanced smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    const offsetTop = target.offsetTop - 80;
-                    window.scrollTo({
-                        top: offsetTop,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-
-        // Enhanced form submission with better UX
-        document.querySelector('.contact-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const submitBtn = document.querySelector('.submit-btn');
-            const originalText = submitBtn.textContent;
-
-            // Add loading state
-            submitBtn.textContent = 'Sending...';
-            submitBtn.disabled = true;
-            submitBtn.style.background = 'linear-gradient(135deg, #94a3b8, #64748b)';
-
-            // Simulate form submission with better feedback
-            setTimeout(() => {
-                submitBtn.textContent = 'Message Sent! ✓';
-                submitBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
-
-                // Show success animation
-                submitBtn.style.transform = 'scale(1.05)';
-                setTimeout(() => {
-                    submitBtn.style.transform = 'scale(1)';
-                }, 200);
-
-                setTimeout(() => {
-                    submitBtn.textContent = originalText;
-                    submitBtn.disabled = false;
-                    submitBtn.style.background = '';
-                    document.querySelector('.contact-form').reset();
-                }, 3000);
-            }, 2000);
-        });
-
-        // Enhanced parallax effect for hero background
-        let ticking = false;
-
-        function updateParallax() {
-            const scrolled = window.pageYOffset;
-            const hero = document.querySelector('.hero');
-            const rate = scrolled * -0.3;
-            hero.style.transform = `translateY(${rate}px)`;
-            ticking = false;
-        }
-
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                requestAnimationFrame(updateParallax);
-                ticking = true;
-            }
-        });
-
-        // Add subtle hover effects to skill tags
-        document.querySelectorAll('.skill-tag').forEach(tag => {
-            tag.addEventListener('mouseenter', () => {
-                tag.style.transform = 'translateY(-2px) scale(1.05)';
-            });
-
-            tag.addEventListener('mouseleave', () => {
-                tag.style.transform = 'translateY(0) scale(1)';
-            });
-        });
-
-        // Keyboard navigation for accessibility
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
-                mobileMenuToggle.classList.remove('active');
-                mobileMenu.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            }
-        });
-    </script>
 </body>
 
 </html>

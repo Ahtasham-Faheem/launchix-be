@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{meta_description}}">
+    <title>{{meta_title}}</title>
+    <link rel="stylesheet" href="{{stylesheet_href}}">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navigation">
+        <div class="nav-wrapper">
+            <div class="brand">
+                <span class="brand-icon">⚡</span>
+                <span class="brand-name">{{brand_name}}</span>
+            </div>
+            <div class="menu-toggle">
+                <span class="hamburger"></span>
+            </div>
+            <ul class="menu-list">
+                <li class="menu-item"><a href="#home" class="menu-link active">{{nav_home}}</a></li>
+                <li class="menu-item"><a href="#features" class="menu-link">{{nav_features}}</a></li>
+                <li class="menu-item"><a href="#solutions" class="menu-link">{{nav_solutions}}</a></li>
+                <li class="menu-item"><a href="#projects" class="menu-link">{{nav_projects}}</a></li>
+                <li class="menu-item"><a href="#testimonials" class="menu-link">{{nav_reviews}}</a></li>
+                <li class="menu-item"><a href="#pricing" class="menu-link">{{nav_pricing}}</a></li>
+                <li class="menu-item"><a href="#team" class="menu-link">{{nav_team}}</a></li>
+                <li class="menu-item"><a href="#contact" class="menu-link">{{nav_contact}}</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Banner -->
+    <section id="home" class="banner">
+        <div class="banner-container">
+            <div class="banner-content">
+                <span class="badge">{{banner_badge}}</span>
+                <h1 class="banner-heading">{{banner_heading}}</h1>
+                <p class="banner-description">{{banner_description}}</p>
+                <div class="banner-actions">
+                    <a href="#contact" class="action-btn action-primary">{{banner_cta_primary}}</a>
+                    <a href="#solutions" class="action-btn action-outline">{{banner_cta_secondary}}</a>
+                </div>
+            </div>
+            <div class="banner-visual">
+                <div class="visual-box box-1" aria-hidden="true"></div>
+                <div class="visual-box box-2" aria-hidden="true"></div>
+                <div class="visual-box box-3" aria-hidden="true"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-area">
+        <div class="content-wrapper">
+            <div class="section-header">
+                <span class="section-label">{{features_label}}</span>
+                <h2 class="section-heading">{{features_heading}}</h2>
+                <p class="section-description">{{features_description}}</p>
+            </div>
+            
+            <div class="features-container">
+                <div class="feature-box">
+                    <div class="feature-icon">🚀</div>
+                    <h3 class="feature-heading">{{feature1_heading}}</h3>
+                    <p class="feature-text">{{feature1_text}}</p>
+                </div>
+
+                <div class="feature-box">
+                    <div class="feature-icon">🔒</div>
+                    <h3 class="feature-heading">{{feature2_heading}}</h3>
+                    <p class="feature-text">{{feature2_text}}</p>
+                </div>
+
+                <div class="feature-box">
+                    <div class="feature-icon">📱</div>
+                    <h3 class="feature-heading">{{feature3_heading}}</h3>
+                    <p class="feature-text">{{feature3_text}}</p>
+                </div>
+
+                <div class="feature-box">
+                    <div class="feature-icon">⚙️</div>
+                    <h3 class="feature-heading">{{feature4_heading}}</h3>
+                    <p class="feature-text">{{feature4_text}}</p>
+                </div>
+
+                <div class="feature-box">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-heading">{{feature5_heading}}</h3>
+                    <p class="feature-text">{{feature5_text}}</p>
+                </div>
+
+                <div class="feature-box">
+                    <div class="feature-icon">💬</div>
+                    <h3 class="feature-heading">{{feature6_heading}}</h3>
+                    <p class="feature-text">{{feature6_text}}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solutions Section -->
+    <section id="solutions" class="solutions-area">
+        <div class="content-wrapper">
+            <div class="section-header">
+                <span class="section-label">{{solutions_label}}</span>
+                <h2 class="section-heading">{{solutions_heading}}</h2>
+            </div>
+
+            <div class="solutions-layout">
+                <article class="solution-item">
+                    <div class="solution-image">
+                        <div class="image-placeholder">💻</div>
+                    </div>
+                    <div class="solution-details">
+                        <h3 class="solution-title">{{solution1_title}}</h3>
+                        <p class="solution-summary">{{solution1_summary}}</p>
+                        <ul class="solution-points">
+                            <li class="point-item">{{solution1_point1}}</li>
+                            <li class="point-item">{{solution1_point2}}</li>
+                            <li class="point-item">{{solution1_point3}}</li>
+                            <li class="point-item">{{solution1_point4}}</li>
+                        </ul>
+                        <a href="#contact" class="solution-cta">{{solution1_cta}}</a>
+                    </div>
+                </article>
+
+                <article class="solution-item reverse">
+                    <div class="solution-image">
+                        <div class="image-placeholder">🎨</div>
+                    </div>
+                    <div class="solution-details">
+                        <h3 class="solution-title">{{solution2_title}}</h3>
+                        <p class="solution-summary">{{solution2_summary}}</p>
+                        <ul class="solution-points">
+                            <li class="point-item">{{solution2_point1}}</li>
+                            <li class="point-item">{{solution2_point2}}</li>
+                            <li class="point-item">{{solution2_point3}}</li>
+                            <li class="point-item">{{solution2_point4}}</li>
+                        </ul>
+                        <a href="#contact" class="solution-cta">{{solution2_cta}}</a>
+                    </div>
+                </article>
+
+                <article class="solution-item">
+                    <div class="solution-image">
+                        <div class="image-placeholder">☁️</div>
+                    </div>
+                    <div class="solution-details">
+                        <h3 class="solution-title">{{solution3_title}}</h3>
+                        <p class="solution-summary">{{solution3_summary}}</p>
+                        <ul class="solution-points">
+                            <li class="point-item">{{solution3_point1}}</li>
+                            <li class="point-item">{{solution3_point2}}</li>
+                            <li class="point-item">{{solution3_point3}}</li>
+                            <li class="point-item">{{solution3_point4}}</li>
+                        </ul>
+                        <a href="#contact" class="solution-cta">{{solution3_cta}}</a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Showcase -->
+    <section id="projects" class="projects-showcase">
+        <div class="content-wrapper">
+            <div class="section-header">
+                <span class="section-label">{{projects_label}}</span>
+                <h2 class="section-heading">{{projects_heading}}</h2>
+            </div>
+
+            <div class="projects-masonry">
+                <div class="project-tile large">
+                    <div class="tile-overlay">
+                        <span class="project-category">{{project1_category}}</span>
+                        <h3 class="project-name">{{project1_name}}</h3>
+                        <p class="project-brief">{{project1_brief}}</p>
+                        <div class="project-tags">
+                            <span class="tag">{{project1_tag1}}</span>
+                            <span class="tag">{{project1_tag2}}</span>
+                            <span class="tag">{{project1_tag3}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-tile">
+                    <div class="tile-overlay">
+                        <span class="project-category">{{project2_category}}</span>
+                        <h3 class="project-name">{{project2_name}}</h3>
+                        <p class="project-brief">{{project2_brief}}</p>
+                        <div class="project-tags">
+                            <span class="tag">{{project2_tag1}}</span>
+                            <span class="tag">{{project2_tag2}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-tile">
+                    <div class="tile-overlay">
+                        <span class="project-category">{{project3_category}}</span>
+                        <h3 class="project-name">{{project3_name}}</h3>
+                        <p class="project-brief">{{project3_brief}}</p>
+                        <div class="project-tags">
+                            <span class="tag">{{project3_tag1}}</span>
+                            <span class="tag">{{project3_tag2}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-tile large">
+                    <div class="tile-overlay">
+                        <span class="project-category">{{project4_category}}</span>
+                        <h3 class="project-name">{{project4_name}}</h3>
+                        <p class="project-brief">{{project4_brief}}</p>
+                        <div class="project-tags">
+                            <span class="tag">{{project4_tag1}}</span>
+                            <span class="tag">{{project4_tag2}}</span>
+                            <span class="tag">{{project4_tag3}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-tile">
+                    <div class="tile-overlay">
+                        <span class="project-category">{{project5_category}}</span>
+                        <h3 class="project-name">{{project5_name}}</h3>
+                        <p class="project-brief">{{project5_brief}}</p>
+                        <div class="project-tags">
+                            <span class="tag">{{project5_tag1}}</span>
+                            <span class="tag">{{project5_tag2}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-tile">
+                    <div class="tile-overlay">
+                        <span class="project-category">{{project6_category}}</span>
+                        <h3 class="project-name">{{project6_name}}</h3>
+                        <p class="project-brief">{{project6_brief}}</p>
+                        <div class="project-tags">
+                            <span class="tag">{{project6_tag1}}</span>
+                            <span class="tag">{{project6_tag2}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="testimonials-showcase">
+        <div class="content-wrapper">
+            <div class="section-header">
+                <span class="section-label">{{testimonials_label}}</span>
+                <h2 class="section-heading">{{testimonials_heading}}</h2>
+            </div>
+
+            <div class="testimonials-slider">
+                <div class="testimonial-block">
+                    <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-quote">{{testimonial1_quote}}</p>
+                    <div class="testimonial-profile">
+                        <div class="profile-avatar">{{testimonial1_avatar_initials}}</div>
+                        <div class="profile-info">
+                            <h4 class="profile-name">{{testimonial1_name}}</h4>
+                            <p class="profile-position">{{testimonial1_position}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-block">
+                    <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-quote">{{testimonial2_quote}}</p>
+                    <div class="testimonial-profile">
+                        <div class="profile-avatar">{{testimonial2_avatar_initials}}</div>
+                        <div class="profile-info">
+                            <h4 class="profile-name">{{testimonial2_name}}</h4>
+                            <p class="profile-position">{{testimonial2_position}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-block">
+                    <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-quote">{{testimonial3_quote}}</p>
+                    <div class="testimonial-profile">
+                        <div class="profile-avatar">{{testimonial3_avatar_initials}}</div>
+                        <div class="profile-info">
+                            <h4 class="profile-name">{{testimonial3_name}}</h4>
+                            <p class="profile-position">{{testimonial3_position}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Plans -->
+    <section id="pricing" class="pricing-section">
+        <div class="content-wrapper">
+            <div class="section-header">
+                <span class="section-label">{{pricing_label}}</span>
+                <h2 class="section-heading">{{pricing_heading}}</h2>
+                <p class="section-description">{{pricing_description}}</p>
+            </div>
+
+            <div class="pricing-cards">
+                <div class="price-card">
+                    <div class="plan-header">
+                        <h3 class="plan-name">{{plan1_name}}</h3>
+                        <p class="plan-subtitle">{{plan1_subtitle}}</p>
+                    </div>
+                    <div class="plan-price">
+                        <span class="currency">{{plan1_currency}}</span>
+                        <span class="amount">{{plan1_amount}}</span>
+                        <span class="period">{{plan1_period}}</span>
+                    </div>
+                    <ul class="plan-features">
+                        <li class="plan-feature included">{{plan1_feat1}}</li>
+                        <li class="plan-feature included">{{plan1_feat2}}</li>
+                        <li class="plan-feature included">{{plan1_feat3}}</li>
+                        <li class="plan-feature included">{{plan1_feat4}}</li>
+                        <li class="plan-feature excluded">{{plan1_feat5}}</li>
+                        <li class="plan-feature excluded">{{plan1_feat6}}</li>
+                        <li class="plan-feature excluded">{{plan1_feat7}}</li>
+                    </ul>
+                    <a href="#contact" class="plan-button">{{plan1_button}}</a>
+                </div>
+
+                <div class="price-card featured">
+                    <div class="popular-badge">{{plan2_badge}}</div>
+                    <div class="plan-header">
+                        <h3 class="plan-name">{{plan2_name}}</h3>
+                        <p class="plan-subtitle">{{plan2_subtitle}}</p>
+                    </div>
+                    <div class="plan-price">
+                        <span class="currency">{{plan2_currency}}</span>
+                        <span class="amount">{{plan2_amount}}</span>
+                        <span class="period">{{plan2_period}}</span>
+                    </div>
+                    <ul class="plan-features">
+                        <li class="plan-feature included">{{plan2_feat1}}</li>
+                        <li class="plan-feature included">{{plan2_feat2}}</li>
+                        <li class="plan-feature included">{{plan2_feat3}}</li>
+                        <li class="plan-feature included">{{plan2_feat4}}</li>
+                        <li class="plan-feature included">{{plan2_feat5}}</li>
+                        <li class="plan-feature included">{{plan2_feat6}}</li>
+                        <li class="plan-feature excluded">{{plan2_feat7}}</li>
+                    </ul>
+                    <a href="#contact" class="plan-button">{{plan2_button}}</a>
+                </div>
+
+                <div class="price-card">
+                    <div class="plan-header">
+                        <h3 class="plan-name">{{plan3_name}}</h3>
+                        <p class="plan-subtitle">{{plan3_subtitle}}</p>
+                    </div>
+                    <div class="plan-price">
+                        <span class="currency">{{plan3_currency}}</span>
+                        <span class="amount">{{plan3_amount}}</span>
+                        <span class="period">{{plan3_period}}</span>
+                    </div>
+                    <ul class="plan-features">
+                        <li class="plan-feature included">{{plan3_feat1}}</li>
+                        <li class="plan-feature included">{{plan3_feat2}}</li>
+                        <li class="plan-feature included">{{plan3_feat3}}</li>
+                        <li class="plan-feature included">{{plan3_feat4}}</li>
+                        <li class="plan-feature included">{{plan3_feat5}}</li>
+                        <li class="plan-feature included">{{plan3_feat6}}</li>
+                        <li class="plan-feature included">{{plan3_feat7}}</li>
+                    </ul>
+                    <a href="#contact" class="plan-button">{{plan3_button}}</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Members -->
+    <section id="team" class="team-showcase">
+        <div class="content-wrapper">
+            <div class="section-header">
+                <span class="section-label">{{team_label}}</span>
+                <h2 class="section-heading">{{team_heading}}</h2>
+            </div>
+
+            <div class="team-layout">
+                <div class="member-profile">
+                    <div class="member-photo">
+                        <div class="photo-placeholder">👨‍💼</div>
+                    </div>
+                    <div class="member-details">
+                        <h3 class="member-name">{{member1_name}}</h3>
+                        <p class="member-title">{{member1_title}}</p>
+                        <p class="member-description">{{member1_description}}</p>
+                        <div class="member-social">
+                            <a href="{{member1_social_in}}" class="social-icon">in</a>
+                            <a href="{{member1_social_tw}}" class="social-icon">tw</a>
+                            <a href="{{member1_social_gh}}" class="social-icon">gh</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="member-profile">
+                    <div class="member-photo">
+                        <div class="photo-placeholder">👩‍💻</div>
+                    </div>
+                    <div class="member-details">
+                        <h3 class="member-name">{{member2_name}}</h3>
+                        <p class="member-title">{{member2_title}}</p>
+                        <p class="member-description">{{member2_description}}</p>
+                        <div class="member-social">
+                            <a href="{{member2_social_in}}" class="social-icon">in</a>
+                            <a href="{{member2_social_tw}}" class="social-icon">tw</a>
+                            <a href="{{member2_social_gh}}" class="social-icon">gh</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="member-profile">
+                    <div class="member-photo">
+                        <div class="photo-placeholder">👨‍🎨</div>
+                    </div>
+                    <div class="member-details">
+                        <h3 class="member-name">{{member3_name}}</h3>
+                        <p class="member-title">{{member3_title}}</p>
+                        <p class="member-description">{{member3_description}}</p>
+                        <div class="member-social">
+                            <a href="{{member3_social_in}}" class="social-icon">in</a>
+                            <a href="{{member3_social_tw}}" class="social-icon">tw</a>
+                            <a href="{{member3_social_gh}}" class="social-icon">gh</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="member-profile">
+                    <div class="member-photo">
+                        <div class="photo-placeholder">👩‍🔬</div>
+                    </div>
+                    <div class="member-details">
+                        <h3 class="member-name">{{member4_name}}</h3>
+                        <p class="member-title">{{member4_title}}</p>
+                        <p class="member-description">{{member4_description}}</p>
+                        <div class="member-social">
+                            <a href="{{member4_social_in}}" class="social-icon">in</a>
+                            <a href="{{member4_social_tw}}" class="social-icon">tw</a>
+                            <a href="{{member4_social_gh}}" class="social-icon">gh</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="member-profile">
+                    <div class="member-photo">
+                        <div class="photo-placeholder">👨‍💼</div>
+                    </div>
+                    <div class="member-details">
+                        <h3 class="member-name">{{member5_name}}</h3>
+                        <p class="member-title">{{member5_title}}</p>
+                        <p class="member-description">{{member5_description}}</p>
+                        <div class="member-social">
+                            <a href="{{member5_social_in}}" class="social-icon">in</a>
+                            <a href="{{member5_social_tw}}" class="social-icon">tw</a>
+                            <a href="{{member5_social_gh}}" class="social-icon">gh</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="member-profile">
+                    <div class="member-photo">
+                        <div class="photo-placeholder">👩‍💼</div>
+                    </div>
+                    <div class="member-details">
+                        <h3 class="member-name">{{member6_name}}</h3>
+                        <p class="member-title">{{member6_title}}</p>
+                        <p class="member-description">{{member6_description}}</p>
+                        <div class="member-social">
+                            <a href="{{member6_social_in}}" class="social-icon">in</a>
+                            <a href="{{member6_social_tw}}" class="social-icon">tw</a>
+                            <a href="{{member6_social_gh}}" class="social-icon">gh</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form -->
+    <section id="contact" class="contact-area">
+        <div class="content-wrapper">
+            <div class="contact-layout">
+                <div class="contact-information">
+                    <h2 class="contact-heading">{{contact_heading}}</h2>
+                    <p class="contact-intro">{{contact_intro}}</p>
+                    
+                    <div class="info-blocks">
+                        <div class="info-block">
+                            <div class="info-icon">📍</div>
+                            <div class="info-content">
+                                <h4 class="info-title">{{contact_visit_title}}</h4>
+                                <p class="info-text">{{contact_visit_text}}</p>
+                            </div>
+                        </div>
+
+                        <div class="info-block">
+                            <div class="info-icon">📧</div>
+                            <div class="info-content">
+                                <h4 class="info-title">{{contact_email_title}}</h4>
+                                <p class="info-text">{{contact_email_text}}</p>
+                            </div>
+                        </div>
+
+                        <div class="info-block">
+                            <div class="info-icon">📞</div>
+                            <div class="info-content">
+                                <h4 class="info-title">{{contact_call_title}}</h4>
+                                <p class="info-text">{{contact_call_text}}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="connect-section">
+                        <h4 class="connect-title">{{connect_title}}</h4>
+                        <div class="social-buttons">
+                            <a href="{{connect_facebook_url}}" class="social-btn">{{connect_facebook_label}}</a>
+                            <a href="{{connect_twitter_url}}" class="social-btn">{{connect_twitter_label}}</a>
+                            <a href="{{connect_linkedin_url}}" class="social-btn">{{connect_linkedin_label}}</a>
+                            <a href="{{connect_instagram_url}}" class="social-btn">{{connect_instagram_label}}</a>
+                            <a href="{{connect_github_url}}" class="social-btn">{{connect_github_label}}</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-form-wrapper">
+                    <form class="inquiry-form" action="{{contact_form_action}}" method="{{contact_form_method}}">
+                        <div class="form-row">
+                            <div class="input-wrapper">
+                                <label for="firstName" class="input-label">{{form_label_first_name}}</label>
+                                <input type="text" id="firstName" name="firstName" class="input-field" placeholder="{{form_placeholder_first_name}}" required>
+                            </div>
+                            <div class="input-wrapper">
+                                <label for="lastName" class="input-label">{{form_label_last_name}}</label>
+                                <input type="text" id="lastName" name="lastName" class="input-field" placeholder="{{form_placeholder_last_name}}" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="input-wrapper">
+                                <label for="emailAddress" class="input-label">{{form_label_email}}</label>
+                                <input type="email" id="emailAddress" name="emailAddress" class="input-field" placeholder="{{form_placeholder_email}}" required>
+                            </div>
+                            <div class="input-wrapper">
+                                <label for="phoneNumber" class="input-label">{{form_label_phone}}</label>
+                                <input type="tel" id="phoneNumber" name="phoneNumber" class="input-field" placeholder="{{form_placeholder_phone}}">
+                            </div>
+                        </div>
+
+                        <div class="input-wrapper">
+                            <label for="companyName" class="input-label">{{form_label_company}}</label>
+                            <input type="text" id="companyName" name="companyName" class="input-field" placeholder="{{form_placeholder_company}}">
+                        </div>
+
+                        <div class="input-wrapper">
+                            <label for="serviceType" class="input-label">{{form_label_service}}</label>
+                            <select id="serviceType" name="serviceType" class="input-field">
+                                <option value="">{{form_option_service_default}}</option>
+                                <option value="{{form_option_service_software_value}}">{{form_option_service_software_label}}</option>
+                                <option value="{{form_option_service_design_value}}">{{form_option_service_design_label}}</option>
+                                <option value="{{form_option_service_cloud_value}}">{{form_option_service_cloud_label}}</option>
+                                <option value="{{form_option_service_consulting_value}}">{{form_option_service_consulting_label}}</option>
+                                <option value="{{form_option_service_other_value}}">{{form_option_service_other_label}}</option>
+                            </select>
+                        </div>
+
+                        <div class="input-wrapper">
+                            <label for="projectDetails" class="input-label">{{form_label_project}}</label>
+                            <textarea id="projectDetails" name="projectDetails" class="input-field textarea-field" rows="5" placeholder="{{form_placeholder_project}}" required></textarea>
+                        </div>
+
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="updates" name="updates" class="checkbox-field" value="{{form_updates_value}}">
+                            <label for="updates" class="checkbox-label">{{form_updates_label}}</label>
+                        </div>
+
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="agree" name="agree" class="checkbox-field" value="{{form_agree_value}}" required>
+                            <label for="agree" class="checkbox-label">{{form_agree_label}}</label>
+                        </div>
+
+                        <button type="submit" class="submit-button">{{form_submit_label}}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter-section">
+        <div class="content-wrapper">
+            <div class="newsletter-content">
+                <h2 class="newsletter-heading">{{newsletter_heading}}</h2>
+                <p class="newsletter-text">{{newsletter_text}}</p>
+                <form class="newsletter-form" action="{{newsletter_action}}" method="{{newsletter_method}}">
+                    <input type="email" placeholder="{{newsletter_placeholder}}" class="newsletter-input" required>
+                    <button type="submit" class="newsletter-button">{{newsletter_button}}</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="content-wrapper">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3 class="footer-heading">
+                        <span class="brand-icon">⚡</span>
+                        {{footer_brand}}
+                    </h3>
+                    <p class="footer-about">{{footer_about}}</p>
+                </div>
+
+                <div class="footer-column">
+                    <h4 class="column-title">{{footer_company_title}}</h4>
+                    <ul class="footer-menu">
+                        <li class="menu-option"><a href="#features" class="footer-anchor">{{footer_company_link1}}</a></li>
+                        <li class="menu-option"><a href="#solutions" class="footer-anchor">{{footer_company_link2}}</a></li>
+                        <li class="menu-option"><a href="#projects" class="footer-anchor">{{footer_company_link3}}</a></li>
+                        <li class="menu-option"><a href="#team" class="footer-anchor">{{footer_company_link4}}</a></li>
+                        <li class="menu-option"><a href="{{footer_company_careers_url}}" class="footer-anchor">{{footer_company_careers_label}}</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4 class="column-title">{{footer_resources_title}}</h4>
+                    <ul class="footer-menu">
+                        <li class="menu-option"><a href="{{footer_resources_blog_url}}" class="footer-anchor">{{footer_resources_blog_label}}</a></li>
+                        <li class="menu-option"><a href="{{footer_resources_cases_url}}" class="footer-anchor">{{footer_resources_cases_label}}</a></li>
+                        <li class="menu-option"><a href="{{footer_resources_docs_url}}" class="footer-anchor">{{footer_resources_docs_label}}</a></li>
+                        <li class="menu-option"><a href="{{footer_resources_help_url}}" class="footer-anchor">{{footer_resources_help_label}}</a></li>
+                        <li class="menu-option"><a href="{{footer_resources_community_url}}" class="footer-anchor">{{footer_resources_community_label}}</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4 class="column-title">{{footer_legal_title}}</h4>
+                    <ul class="footer-menu">
+                        <li class="menu-option"><a href="{{footer_privacy_url}}" class="footer-anchor">{{footer_privacy_label}}</a></li>
+                        <li class="menu-option"><a href="{{footer_terms_url}}" class="footer-anchor">{{footer_terms_label}}</a></li>
+                        <li class="menu-option"><a href="{{footer_cookies_url}}" class="footer-anchor">{{footer_cookies_label}}</a></li>
+                        <li class="menu-option"><a href="{{footer_security_url}}" class="footer-anchor">{{footer_security_label}}</a></li>
+                        <li class="menu-option"><a href="{{footer_compliance_url}}" class="footer-anchor">{{footer_compliance_label}}</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-divider"></div>
+
+            <div class="footer-bottom">
+                <p class="copyright-text">{{footer_copyright}}</p>
+                <div class="footer-socials">
+                    <a href="{{footer_fb_url}}" class="footer-social-link">{{footer_fb_label}}</a>
+                    <a href="{{footer_tw_url}}" class="footer-social-link">{{footer_tw_label}}</a>
+                    <a href="{{footer_li_url}}" class="footer-social_link">{{footer_li_label}}</a>
+                    <a href="{{footer_ig_url}}" class="footer-social-link">{{footer_ig_label}}</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
