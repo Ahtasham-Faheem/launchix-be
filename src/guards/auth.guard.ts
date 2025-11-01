@@ -27,7 +27,8 @@ export class AuthGuard implements CanActivate {
 
 
       if (process.env.NODE_ENV === 'development') {
-        const userId = process.env.CLERK_DEV_USER_ID || 'user_34hs3DWNE6AP4quAi3ykOeDQFkp';;
+        // const userId = process.env.CLERK_DEV_USER_ID || 'user_34hs3DWNE6AP4quAi3ykOeDQFkp';
+        const userId = 'user_34o3xJA5drfWQUrisAVMbTRkfhg';
 
         // Fetch the full user profile from Clerk
         const user = await clerkClient.users.getUser(userId);

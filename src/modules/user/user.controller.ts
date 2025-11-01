@@ -1,20 +1,30 @@
-// src/profile/profile.controller.ts
-import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
-import { Request, Response } from 'express';
-import { users } from '@clerk/clerk-sdk-node'; // keep this for user fetch
+// src/user/user.controller.ts
+import { Controller, Get, Delete, Param, UseGuards, HttpCode } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CurrentUser } from 'src/decorator/auth.decorator';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../../guards/auth.guard';
+import { UserService } from './user.service';
 
 @ApiTags('User')
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
 @Controller('user')
 export class UserController {
+  constructor(private readonly userService: UserService) {}
 
   @Get('me')
+  @ApiOperation({ summary: 'Get currently authenticated user' })
   getCurrentUser(@CurrentUser() user: any) {
-    // You can also access it in any protected route
     return user;
   }
+
+  /** 🗑️ Soft Delete Current User */
+  @Delete('me')
+  @HttpCode(200)
+  @ApiOperation({ summary: 'Soft delete current user (Clerk + Mongo)' })
+  @ApiResponse({ status: 200, description: 'User soft deleted successfully' })
+  async softDeleteCurrentUser(@CurrentUser() user: any) {
+    return await this.userService.softDeleteUser(user.id);
+  }
+
 }
