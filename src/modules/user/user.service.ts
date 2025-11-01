@@ -42,7 +42,7 @@ export class UserService {
             await user.save();
 
             this.logger.warn(`Soft deleted user ${user.email} (${user.clerkId})`);
-            return { message: 'User soft deleted successfully', user };
+            return { message: 'User deleted successfully', user };
         } catch (err) {
             this.logger.error(`Failed to soft delete user ${user.clerkId}: ${err.message}`);
             throw err;
