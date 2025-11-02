@@ -20,6 +20,7 @@ interface WebsiteResult {
         colorScheme: Record<string, string>;
         logoUrl: string;
         sections: string[];
+        websiteTemplate: string;
     };
 }
 
@@ -111,6 +112,7 @@ export class WebsiteTemplateService {
                 colorScheme: colors,
                 logoUrl,
                 sections: Object.keys(htmlVars),
+                websiteTemplate:  selected,
             },
         };
     }
