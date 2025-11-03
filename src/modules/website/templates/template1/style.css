@@ -106,6 +106,20 @@ nav {
 	background-clip: text;
 }
 
+/* Logo Image */
+.logo-img {
+	width: 48px;         /* Adjust to your desired size */
+	height: auto;        /* Keeps the correct aspect ratio */
+	object-fit: contain; /* Ensures it doesn’t stretch */
+	display: block;
+}
+
+@media (max-width: 768px) {
+	.logo-img {
+		width: 36px;     /* Smaller for mobile */
+	}
+}
+
 .nav-links {
 	display: flex;
 	list-style: none;

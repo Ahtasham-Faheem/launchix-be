@@ -1,18 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="{{meta_description}}" />
   <title>{{meta_title}}</title>
   <link href="style.css" rel="stylesheet" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png"
+    href="https://res.cloudinary.com/dudpoehph/image/upload/v1762181222/White_app_Icon_3x_d8xx6q.png" />
+  <link rel="shortcut icon" type="image/png"
+    href="https://res.cloudinary.com/dudpoehph/image/upload/v1762181222/White_app_Icon_3x_d8xx6q.png" />
+
+  <!-- Launchix Meta Tags -->
+  <meta name="description"
+    content="Launchix.ai helps entrepreneurs instantly create logos, websites, and e-commerce stores powered by AI. Build your brand in minutes and launch your business with confidence." />
+  <meta property="og:title" content="{{businessName}} - {{tagline}}" />
+  <meta property="og:description"
+    content="Launchix.ai empowers you to launch your business fast with AI-powered branding, website creation, and store setup." />
+  <meta property="og:image"
+    content="https://res.cloudinary.com/dudpoehph/image/upload/v1762181222/White_app_Icon_3x_d8xx6q.png" />
+  <meta property="og:url" content="https://launchix.ai" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{businessName}} - {{tagline}}" />
+  <meta name="twitter:description"
+    content="AI-powered business builder by Launchix — instantly create your logo, website, and store." />
+  <meta name="twitter:image"
+    content="https://res.cloudinary.com/dudpoehph/image/upload/v1762181222/White_app_Icon_3x_d8xx6q.png" />
 </head>
+
 <body>
   <!-- Top Notice / Slim Bar -->
   <div class="newsletter-section" aria-label="Announcement">
     <div class="content-wrapper">
       <div class="newsletter-content">
-        <p class="newsletter-text">{{top_notice_text}} <a class="newsletter-button" href="#contact">{{top_notice_cta}}</a></p>
+        <p class="newsletter-text">{{top_notice_text}} <a class="newsletter-button"
+            href="#contact">{{top_notice_cta}}</a></p>
       </div>
     </div>
   </div>
@@ -28,11 +53,15 @@
         <span class="hamburger"></span>
       </div>
       <ul class="menu-list" role="menubar">
-        <li class="menu-item" role="none"><a role="menuitem" href="#home" class="menu-link active">{{nav_overview}}</a></li>
-        <li class="menu-item" role="none"><a role="menuitem" href="#features" class="menu-link">{{nav_capabilities}}</a></li>
-        <li class="menu-item" role="none"><a role="menuitem" href="#solutions" class="menu-link">{{nav_use_cases}}</a></li>
+        <li class="menu-item" role="none"><a role="menuitem" href="#home" class="menu-link active">{{nav_overview}}</a>
+        </li>
+        <li class="menu-item" role="none"><a role="menuitem" href="#features" class="menu-link">{{nav_capabilities}}</a>
+        </li>
+        <li class="menu-item" role="none"><a role="menuitem" href="#solutions" class="menu-link">{{nav_use_cases}}</a>
+        </li>
         <li class="menu-item" role="none"><a role="menuitem" href="#projects" class="menu-link">{{nav_work}}</a></li>
-        <li class="menu-item" role="none"><a role="menuitem" href="#testimonials" class="menu-link">{{nav_clients}}</a></li>
+        <li class="menu-item" role="none"><a role="menuitem" href="#testimonials" class="menu-link">{{nav_clients}}</a>
+        </li>
         <li class="menu-item" role="none"><a role="menuitem" href="#pricing" class="menu-link">{{nav_plans}}</a></li>
         <li class="menu-item" role="none"><a role="menuitem" href="#team" class="menu-link">{{nav_people}}</a></li>
         <li class="menu-item" role="none"><a role="menuitem" href="#contact" class="menu-link">{{nav_talk}}</a></li>
@@ -512,7 +541,8 @@
             <div class="form-row">
               <div class="input-wrapper">
                 <label class="input-label" for="fullname">{{form_fullname_label}}</label>
-                <input class="input-field" id="fullname" type="text" placeholder="{{form_fullname_placeholder}}" required />
+                <input class="input-field" id="fullname" type="text" placeholder="{{form_fullname_placeholder}}"
+                  required />
               </div>
               <div class="input-wrapper">
                 <label class="input-label" for="company">{{form_company_label}}</label>
@@ -538,7 +568,8 @@
 
             <div class="input-wrapper">
               <label class="input-label" for="details">{{form_details_label}}</label>
-              <textarea class="input-field textarea-field" id="details" rows="5" placeholder="{{form_details_placeholder}}" required></textarea>
+              <textarea class="input-field textarea-field" id="details" rows="5"
+                placeholder="{{form_details_placeholder}}" required></textarea>
             </div>
 
             <div class="checkbox-wrapper">
@@ -594,20 +625,28 @@
         <div class="footer-column">
           <h4 class="column-title">{{footer_resources_title}}</h4>
           <ul class="footer-menu">
-            <li class="menu-option"><a class="footer-anchor" href="{{footer_resources_link1_href}}">{{footer_resources_link1_text}}</a></li>
-            <li class="menu-option"><a class="footer-anchor" href="{{footer_resources_link2_href}}">{{footer_resources_link2_text}}</a></li>
-            <li class="menu-option"><a class="footer-anchor" href="{{footer_resources_link3_href}}">{{footer_resources_link3_text}}</a></li>
-            <li class="menu-option"><a class="footer-anchor" href="{{footer_resources_link4_href}}">{{footer_resources_link4_text}}</a></li>
+            <li class="menu-option"><a class="footer-anchor"
+                href="{{footer_resources_link1_href}}">{{footer_resources_link1_text}}</a></li>
+            <li class="menu-option"><a class="footer-anchor"
+                href="{{footer_resources_link2_href}}">{{footer_resources_link2_text}}</a></li>
+            <li class="menu-option"><a class="footer-anchor"
+                href="{{footer_resources_link3_href}}">{{footer_resources_link3_text}}</a></li>
+            <li class="menu-option"><a class="footer-anchor"
+                href="{{footer_resources_link4_href}}">{{footer_resources_link4_text}}</a></li>
           </ul>
         </div>
 
         <div class="footer-column">
           <h4 class="column-title">{{footer_legal_title}}</h4>
           <ul class="footer-menu">
-            <li class="menu-option"><a class="footer-anchor" href="{{footer_legal_link1_href}}">{{footer_legal_link1_text}}</a></li>
-            <li class="menu-option"><a class="footer-anchor" href="{{footer_legal_link2_href}}">{{footer_legal_link2_text}}</a></li>
-            <li class="menu-option"><a class="footer-anchor" href="{{footer_legal_link3_href}}">{{footer_legal_link3_text}}</a></li>
-            <li class="menu-option"><a class="footer-anchor" href="{{footer_legal_link4_href}}">{{footer_legal_link4_text}}</a></li>
+            <li class="menu-option"><a class="footer-anchor"
+                href="{{footer_legal_link1_href}}">{{footer_legal_link1_text}}</a></li>
+            <li class="menu-option"><a class="footer-anchor"
+                href="{{footer_legal_link2_href}}">{{footer_legal_link2_text}}</a></li>
+            <li class="menu-option"><a class="footer-anchor"
+                href="{{footer_legal_link3_href}}">{{footer_legal_link3_text}}</a></li>
+            <li class="menu-option"><a class="footer-anchor"
+                href="{{footer_legal_link4_href}}">{{footer_legal_link4_text}}</a></li>
           </ul>
         </div>
       </div>
@@ -654,4 +693,5 @@
     })();
   </script>
 </body>
+
 </html>

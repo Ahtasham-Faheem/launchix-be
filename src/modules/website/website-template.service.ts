@@ -21,6 +21,7 @@ interface WebsiteResult {
         logoUrl: string;
         sections: string[];
         websiteTemplate: string;
+        content: any;
     };
 }
 
@@ -32,19 +33,6 @@ export class WebsiteTemplateService {
     private readonly basePath = path.join(__dirname, 'templates');
 
     constructor(private readonly aiService: AiService) { }
-
-    // Mapping of industries → template folder
-    private templateMap: Record<string, string> = {
-        technology: 'saas',
-        software: 'saas',
-        startup: 'saas',
-        restaurant: 'restaurant',
-        food: 'restaurant',
-        fitness: 'fitness',
-        gym: 'fitness',
-        realestate: 'realestate',
-        property: 'realestate',
-    };
 
     private defaultColors = {
         primary: '#4F46E5',
@@ -66,16 +54,15 @@ export class WebsiteTemplateService {
         this.logger.log(`⚡ Building template website for ${businessName}`);
 
         const selected = this.selectTemplate();
-        console.log('selected', selected)
         const [htmlRaw, cssRaw, variablesRaw] = await this.loadTemplate(selected);
 
         // 🧠 Step 1: Generate brand-specific content via AI
-        const prompt = getUserPrompt(businessName, industry, tagline, vision, mission, logoUrl, variablesRaw);
-        const aiResponse = await this.aiService.extractContent(prompt);
+        const prompt = getUserPrompt(businessName, industry, tagline, vision, mission, logoUrl, variablesRaw, colorScheme);
+        const aiResponse = await this.aiService.extractContent(prompt, { htmlRaw, cssRaw });
         const content = aiResponse || {};
 
         // 🎨 Step 2: Merge user-provided color scheme or use AI/CSS defaults
-        const colors = colorScheme || content.css || this.defaultColors;
+        const colors = content.css || this.defaultColors;
         const htmlVars = content.html || {};
 
         // 🪄 Step 3: Universal HTML replacement based on AI variables
@@ -112,7 +99,8 @@ export class WebsiteTemplateService {
                 colorScheme: colors,
                 logoUrl,
                 sections: Object.keys(htmlVars),
-                websiteTemplate:  selected,
+                websiteTemplate: selected,
+                content
             },
         };
     }
@@ -128,8 +116,9 @@ export class WebsiteTemplateService {
             'template7'
         ];
         const key = templateList[Math.floor(Math.random() * templateList.length)];
-        return key
-        return key || 'template2';
+        return key || 'template2'
+        
+        return 'template5'
     }
 
     private getTemplateBasePath(): string {

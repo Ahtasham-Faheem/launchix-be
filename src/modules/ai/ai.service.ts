@@ -5,7 +5,7 @@ import { Brand } from '../../schemas/brand.schema';
 import { BrandIdentityResult } from '../brand/interfaces/brand-identity.interface';
 import { brandIdentityPrompt } from './prompts/brandIdentityPrompt';
 import { websitePrompt } from './prompts/websitePrompt';
-import { contenGeneratePropmt } from './prompts/contentGenratePrompt';
+import { contentGeneratePrompt } from './prompts/contentGenratePrompt';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 export const BRAND_FIELDS = ['businessName', 'industry', 'tagline', 'brandStyle'] as const;
@@ -123,7 +123,7 @@ export class AiService {
     };
   }
 
-  async extractContent<T = any>(prompt: string): Promise<T> {
+  async extractContent<T = any>(prompt: string, context): Promise<T> {
     this.logger.log(`🧠 Generating structured content via AI...`);
 
     try {
@@ -132,7 +132,7 @@ export class AiService {
         messages: [
           {
             role: 'system',
-            content: contenGeneratePropmt,
+            content: contentGeneratePrompt(context),
           },
           { role: 'user', content: prompt },
         ],

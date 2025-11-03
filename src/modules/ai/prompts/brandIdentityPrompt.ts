@@ -24,12 +24,33 @@ Generate the following elements:
      * Google Fonts links
 
 4. **Color Palette**:
-   - Provide a cohesive color palette (5-10 colors in hex format)
-   - Include primary, secondary, accent, neutral, and background colors
-   - Colors should match the brand's industry, style, and personality
-   - Ensure good contrast ratios for accessibility
-   - Consider color psychology and brand emotions
-   - JUST PROVIDE COLOR HEX NOT THE TEXT
+   - Provide a cohesive color palette as a flat array of exactly 5 colors (index 0 to 4).
+   - Each index corresponds to:
+       [0] = Primary color  
+       [1] = Secondary color  
+       [2] = Accent color  
+       [3] = Background color  
+       [4] = Text color
+   - Return **only color HEX values** (e.g., "#3B82F6"), not color names or descriptions.
+   - Colors must match the brand’s industry, tone, and visual personality.
+   - Ensure excellent contrast ratios for readability and accessibility (WCAG compliant).
+   - Apply color psychology principles to fit the brand’s emotional intent:
+       • Tech / SaaS → Blue, Indigo, Neutral Grays (trust, innovation)  
+       • Fitness / Wellness → Green, Orange, White (energy, vitality)  
+       • Luxury / Real Estate → Black, Gold, Deep Blue (premium, confidence)  
+       • Food / Hospitality → Red, Yellow, Cream (warmth, appetite)  
+       • Creative / Agency → Purple, Pink, Cyan (bold, expressive)
+   - Example output format:
+     ["#3B82F6", "#06B6D4", "#9333EA", "#F8FAFC", "#0F172A"]
+
+
+     defaultColors = {
+        primary: '#4F46E5',
+        secondary: '#22D3EE',
+        accent: '#0EA5E9',
+        background: '#FFFFFF',
+        text: '#111827',
+    };
 
 IMPORTANT RULES:
 - Vision and Mission must EACH be under 200 characters

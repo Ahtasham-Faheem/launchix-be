@@ -24,6 +24,36 @@ export class WebsiteGenerationProcessor extends WorkerHost {
     super();
   }
 
+   sampleData = { "businessName": "AquaLift Pumps", "industry": "Water Pump Manufacturing", "tagline": "Powering Your Water Solutions", "vision": "To be the leading provider of innovative water pumping solutions, empowering communities with sustainable and efficient water management systems.", "mission": "We manufacture high-quality water pumps that enhance efficiency and reliability, ensuring optimal water solutions for every need.", "logoUrl": "https://res.cloudinary.com/dudpoehph/image/upload/v1762169569/launchix_ai_logos/jaonuioucodeni4jfo8o.png", "colorScheme": { "primary": "#0077B3", "secondary": "#00A3E0", "accent": "#0095D9", "background": "#E7F6FF", "text": "#002B36" } }
+
+  private buildColorScheme(colors?: {
+    primary?: string;
+    secondary?: string;
+    accent?: string;
+    background?: string;
+    text?: string;
+  }) {
+    if (
+      !colors ||
+      !colors.primary ||
+      !colors.secondary ||
+      !colors.accent ||
+      !colors.background ||
+      !colors.text
+    ) {
+      return undefined;
+    }
+
+    return {
+      primary: colors.primary,
+      secondary: colors.secondary,
+      accent: colors.accent,
+      background: colors.background,
+      text: colors.text,
+    };
+  }
+
+
   async process(job: Job<WebsiteGenerationJobData>): Promise<JobResult> {
     const { brandId, businessName, tagline, industry, brandStyle } = job.data;
     const brandObjectId = new Types.ObjectId(brandId);
@@ -57,8 +87,24 @@ export class WebsiteGenerationProcessor extends WorkerHost {
         brandAssets?.mission ||
         `Deliver reliable and transformative ${industry} experiences that empower people.`;
       const logoUrl =
-        brandAssets?.logos?.find((l) => l.type === 'primary')?.url ||
+        brandAssets?.logos?.find((l) => l.type === 'icon')?.url ||
         'https://via.placeholder.com/200x60/4F46E5/FFFFFF?text=YourBrand';
+
+      const [
+        primary,
+        secondary,
+        accent,
+        background,
+        text
+      ] = brandAssets.palette || []
+
+      let colorScheme = this.buildColorScheme({
+        primary,
+        secondary,
+        accent,
+        background,
+        text
+      })
 
       // STEP 3️⃣ — Generate website JSON using AI
       const websiteJson = await this.webTemplateService.buildWebsite(
@@ -68,7 +114,20 @@ export class WebsiteGenerationProcessor extends WorkerHost {
         vision,
         mission,
         logoUrl,
+        colorScheme
       );
+     
+     
+      // // STEP 3️⃣ — Generate website JSON using AI
+      // const websiteJson = await this.webTemplateService.buildWebsite(
+      //   this.sampleData.businessName,
+      //   this.sampleData.industry,
+      //   this.sampleData.tagline,
+      //   this.sampleData.vision,
+      //   this.sampleData.mission,
+      //   this.sampleData.logoUrl,
+      //   this.sampleData.colorScheme
+      // );
 
       if (!websiteJson) {
         throw new Error(

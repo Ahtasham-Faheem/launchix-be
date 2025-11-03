@@ -1,12 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{{meta_description}}">
     <title>{{meta_title}}</title>
     <link href="style.css" rel="stylesheet" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png"
+        href="https://res.cloudinary.com/dudpoehph/image/upload/v1762181222/White_app_Icon_3x_d8xx6q.png" />
+    <link rel="shortcut icon" type="image/png"
+        href="https://res.cloudinary.com/dudpoehph/image/upload/v1762181222/White_app_Icon_3x_d8xx6q.png" />
+
+    <!-- Launchix Meta Tags -->
+    <meta name="description"
+        content="Launchix.ai helps entrepreneurs instantly create logos, websites, and e-commerce stores powered by AI. Build your brand in minutes and launch your business with confidence." />
+    <meta property="og:title" content="{{businessName}} - {{tagline}}" />
+    <meta property="og:description"
+        content="Launchix.ai empowers you to launch your business fast with AI-powered branding, website creation, and store setup." />
+    <meta property="og:image"
+        content="https://res.cloudinary.com/dudpoehph/image/upload/v1762181222/White_app_Icon_3x_d8xx6q.png" />
+    <meta property="og:url" content="https://launchix.ai" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{businessName}} - {{tagline}}" />
+    <meta name="twitter:description"
+        content="AI-powered business builder by Launchix — instantly create your logo, website, and store." />
+    <meta name="twitter:image"
+        content="https://res.cloudinary.com/dudpoehph/image/upload/v1762181222/White_app_Icon_3x_d8xx6q.png" />
 </head>
+
 <body>
     <!-- Navigation Bar -->
     <nav class="navigation">
@@ -59,7 +82,7 @@
                 <h2 class="section-heading">{{features_heading}}</h2>
                 <p class="section-description">{{features_description}}</p>
             </div>
-            
+
             <div class="features-container">
                 <div class="feature-box">
                     <div class="feature-icon">🚀</div>
@@ -492,7 +515,7 @@
                 <div class="contact-information">
                     <h2 class="contact-heading">{{contact_heading}}</h2>
                     <p class="contact-intro">{{contact_intro}}</p>
-                    
+
                     <div class="info-blocks">
                         <div class="info-block">
                             <div class="info-icon">📍</div>
@@ -536,54 +559,67 @@
                         <div class="form-row">
                             <div class="input-wrapper">
                                 <label for="firstName" class="input-label">{{form_label_first_name}}</label>
-                                <input type="text" id="firstName" name="firstName" class="input-field" placeholder="{{form_placeholder_first_name}}" required>
+                                <input type="text" id="firstName" name="firstName" class="input-field"
+                                    placeholder="{{form_placeholder_first_name}}" required>
                             </div>
                             <div class="input-wrapper">
                                 <label for="lastName" class="input-label">{{form_label_last_name}}</label>
-                                <input type="text" id="lastName" name="lastName" class="input-field" placeholder="{{form_placeholder_last_name}}" required>
+                                <input type="text" id="lastName" name="lastName" class="input-field"
+                                    placeholder="{{form_placeholder_last_name}}" required>
                             </div>
                         </div>
 
                         <div class="form-row">
                             <div class="input-wrapper">
                                 <label for="emailAddress" class="input-label">{{form_label_email}}</label>
-                                <input type="email" id="emailAddress" name="emailAddress" class="input-field" placeholder="{{form_placeholder_email}}" required>
+                                <input type="email" id="emailAddress" name="emailAddress" class="input-field"
+                                    placeholder="{{form_placeholder_email}}" required>
                             </div>
                             <div class="input-wrapper">
                                 <label for="phoneNumber" class="input-label">{{form_label_phone}}</label>
-                                <input type="tel" id="phoneNumber" name="phoneNumber" class="input-field" placeholder="{{form_placeholder_phone}}">
+                                <input type="tel" id="phoneNumber" name="phoneNumber" class="input-field"
+                                    placeholder="{{form_placeholder_phone}}">
                             </div>
                         </div>
 
                         <div class="input-wrapper">
                             <label for="companyName" class="input-label">{{form_label_company}}</label>
-                            <input type="text" id="companyName" name="companyName" class="input-field" placeholder="{{form_placeholder_company}}">
+                            <input type="text" id="companyName" name="companyName" class="input-field"
+                                placeholder="{{form_placeholder_company}}">
                         </div>
 
                         <div class="input-wrapper">
                             <label for="serviceType" class="input-label">{{form_label_service}}</label>
                             <select id="serviceType" name="serviceType" class="input-field">
                                 <option value="">{{form_option_service_default}}</option>
-                                <option value="{{form_option_service_software_value}}">{{form_option_service_software_label}}</option>
-                                <option value="{{form_option_service_design_value}}">{{form_option_service_design_label}}</option>
-                                <option value="{{form_option_service_cloud_value}}">{{form_option_service_cloud_label}}</option>
-                                <option value="{{form_option_service_consulting_value}}">{{form_option_service_consulting_label}}</option>
-                                <option value="{{form_option_service_other_value}}">{{form_option_service_other_label}}</option>
+                                <option value="{{form_option_service_software_value}}">
+                                    {{form_option_service_software_label}}</option>
+                                <option value="{{form_option_service_design_value}}">
+                                    {{form_option_service_design_label}}</option>
+                                <option value="{{form_option_service_cloud_value}}">{{form_option_service_cloud_label}}
+                                </option>
+                                <option value="{{form_option_service_consulting_value}}">
+                                    {{form_option_service_consulting_label}}</option>
+                                <option value="{{form_option_service_other_value}}">{{form_option_service_other_label}}
+                                </option>
                             </select>
                         </div>
 
                         <div class="input-wrapper">
                             <label for="projectDetails" class="input-label">{{form_label_project}}</label>
-                            <textarea id="projectDetails" name="projectDetails" class="input-field textarea-field" rows="5" placeholder="{{form_placeholder_project}}" required></textarea>
+                            <textarea id="projectDetails" name="projectDetails" class="input-field textarea-field"
+                                rows="5" placeholder="{{form_placeholder_project}}" required></textarea>
                         </div>
 
                         <div class="checkbox-wrapper">
-                            <input type="checkbox" id="updates" name="updates" class="checkbox-field" value="{{form_updates_value}}">
+                            <input type="checkbox" id="updates" name="updates" class="checkbox-field"
+                                value="{{form_updates_value}}">
                             <label for="updates" class="checkbox-label">{{form_updates_label}}</label>
                         </div>
 
                         <div class="checkbox-wrapper">
-                            <input type="checkbox" id="agree" name="agree" class="checkbox-field" value="{{form_agree_value}}" required>
+                            <input type="checkbox" id="agree" name="agree" class="checkbox-field"
+                                value="{{form_agree_value}}" required>
                             <label for="agree" class="checkbox-label">{{form_agree_label}}</label>
                         </div>
 
@@ -623,33 +659,47 @@
                 <div class="footer-column">
                     <h4 class="column-title">{{footer_company_title}}</h4>
                     <ul class="footer-menu">
-                        <li class="menu-option"><a href="#features" class="footer-anchor">{{footer_company_link1}}</a></li>
-                        <li class="menu-option"><a href="#solutions" class="footer-anchor">{{footer_company_link2}}</a></li>
-                        <li class="menu-option"><a href="#projects" class="footer-anchor">{{footer_company_link3}}</a></li>
+                        <li class="menu-option"><a href="#features" class="footer-anchor">{{footer_company_link1}}</a>
+                        </li>
+                        <li class="menu-option"><a href="#solutions" class="footer-anchor">{{footer_company_link2}}</a>
+                        </li>
+                        <li class="menu-option"><a href="#projects" class="footer-anchor">{{footer_company_link3}}</a>
+                        </li>
                         <li class="menu-option"><a href="#team" class="footer-anchor">{{footer_company_link4}}</a></li>
-                        <li class="menu-option"><a href="{{footer_company_careers_url}}" class="footer-anchor">{{footer_company_careers_label}}</a></li>
+                        <li class="menu-option"><a href="{{footer_company_careers_url}}"
+                                class="footer-anchor">{{footer_company_careers_label}}</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-column">
                     <h4 class="column-title">{{footer_resources_title}}</h4>
                     <ul class="footer-menu">
-                        <li class="menu-option"><a href="{{footer_resources_blog_url}}" class="footer-anchor">{{footer_resources_blog_label}}</a></li>
-                        <li class="menu-option"><a href="{{footer_resources_cases_url}}" class="footer-anchor">{{footer_resources_cases_label}}</a></li>
-                        <li class="menu-option"><a href="{{footer_resources_docs_url}}" class="footer-anchor">{{footer_resources_docs_label}}</a></li>
-                        <li class="menu-option"><a href="{{footer_resources_help_url}}" class="footer-anchor">{{footer_resources_help_label}}</a></li>
-                        <li class="menu-option"><a href="{{footer_resources_community_url}}" class="footer-anchor">{{footer_resources_community_label}}</a></li>
+                        <li class="menu-option"><a href="{{footer_resources_blog_url}}"
+                                class="footer-anchor">{{footer_resources_blog_label}}</a></li>
+                        <li class="menu-option"><a href="{{footer_resources_cases_url}}"
+                                class="footer-anchor">{{footer_resources_cases_label}}</a></li>
+                        <li class="menu-option"><a href="{{footer_resources_docs_url}}"
+                                class="footer-anchor">{{footer_resources_docs_label}}</a></li>
+                        <li class="menu-option"><a href="{{footer_resources_help_url}}"
+                                class="footer-anchor">{{footer_resources_help_label}}</a></li>
+                        <li class="menu-option"><a href="{{footer_resources_community_url}}"
+                                class="footer-anchor">{{footer_resources_community_label}}</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-column">
                     <h4 class="column-title">{{footer_legal_title}}</h4>
                     <ul class="footer-menu">
-                        <li class="menu-option"><a href="{{footer_privacy_url}}" class="footer-anchor">{{footer_privacy_label}}</a></li>
-                        <li class="menu-option"><a href="{{footer_terms_url}}" class="footer-anchor">{{footer_terms_label}}</a></li>
-                        <li class="menu-option"><a href="{{footer_cookies_url}}" class="footer-anchor">{{footer_cookies_label}}</a></li>
-                        <li class="menu-option"><a href="{{footer_security_url}}" class="footer-anchor">{{footer_security_label}}</a></li>
-                        <li class="menu-option"><a href="{{footer_compliance_url}}" class="footer-anchor">{{footer_compliance_label}}</a></li>
+                        <li class="menu-option"><a href="{{footer_privacy_url}}"
+                                class="footer-anchor">{{footer_privacy_label}}</a></li>
+                        <li class="menu-option"><a href="{{footer_terms_url}}"
+                                class="footer-anchor">{{footer_terms_label}}</a></li>
+                        <li class="menu-option"><a href="{{footer_cookies_url}}"
+                                class="footer-anchor">{{footer_cookies_label}}</a></li>
+                        <li class="menu-option"><a href="{{footer_security_url}}"
+                                class="footer-anchor">{{footer_security_label}}</a></li>
+                        <li class="menu-option"><a href="{{footer_compliance_url}}"
+                                class="footer-anchor">{{footer_compliance_label}}</a></li>
                     </ul>
                 </div>
             </div>
@@ -668,4 +718,5 @@
         </div>
     </footer>
 </body>
+
 </html>
