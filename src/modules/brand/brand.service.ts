@@ -130,4 +130,40 @@ export class BrandService {
 
     return updatedBrand;
   }
+
+
+  /**
+   * ✅ Delete Brand and its linked Assets
+   */
+  async deleteBrandAndAssets(brandId: string, ownerId: string) {
+    const brand = await this.brandModel.findOne({ _id: brandId, owner: ownerId });
+    if (!brand) throw new NotFoundException('Brand not found or not owned by this user');
+
+    // Delete assets associated with the brand
+    await this.assetsModel.deleteOne({ brand: brand._id });
+
+    // Delete brand itself
+    await this.brandModel.deleteOne({ _id: brand._id });
+
+    return {
+      success: true,
+      message: 'Brand and associated assets deleted successfully',
+      brandId,
+    };
+  }
+
+  /**
+   * ✅ Check Brand Limit
+   */
+  async checkBrandLimit(ownerId: string, maxLimit: number) {
+    const count = await this.brandModel.countDocuments({ owner: ownerId });
+    const remaining = Math.max(0, maxLimit - count);
+
+    return {
+      limit: maxLimit,
+      used: count,
+      remaining,
+      canCreateMore: remaining > 0,
+    };
+  }
 }

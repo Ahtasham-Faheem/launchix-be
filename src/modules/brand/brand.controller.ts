@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UseGuards, Req, HttpCode, HttpStatus } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards, Req, HttpCode, HttpStatus, Delete } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { BrandService } from './brand.service';
 import { ParsePromptDto } from './dto/prompt.dto';
@@ -181,5 +181,45 @@ export class BrandController {
       status: 'queued',
       message: 'Mockup generation job queued',
     };
+  }
+
+  /**
+   * ✅ Delete Brand & All Related Assets
+   */
+  @Delete(':id')
+  @ApiOperation({
+    summary: 'Delete brand and its related assets',
+    description:
+      'Deletes a brand by ID along with all linked BrandAssets records. Useful for cleanup or brand removal.',
+  })
+  @ApiResponse({ status: 200, description: 'Brand and assets deleted successfully' })
+  @ApiResponse({ status: 404, description: 'Brand not found' })
+  async deleteBrand(@Param('id') id: string, @CurrentUser() user: any) {
+    return this.service.deleteBrandAndAssets(id, user._id);
+  }
+
+  /**
+   * ✅ Check Brand Limit
+   */
+  @Get('limit/check')
+  @ApiOperation({
+    summary: 'Check brand creation limit',
+    description:
+      'Checks how many brands the current user has created and how many more they can create (limit = 2).',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Brand limit status retrieved successfully',
+    schema: {
+      example: {
+        limit: 2,
+        used: 1,
+        remaining: 1,
+        canCreateMore: true,
+      },
+    },
+  })
+  async checkBrandLimit(@CurrentUser() user: any) {
+    return this.service.checkBrandLimit(user._id, 2);
   }
 }
