@@ -18,13 +18,14 @@ export class UserController {
     return user;
   }
 
-  /** 🗑️ Soft Delete Current User */
+  /** 🗑️ Hard Delete Current User */
   @Delete('me')
   @HttpCode(200)
-  @ApiOperation({ summary: 'Soft delete current user (Clerk + Mongo)' })
+  @ApiOperation({ summary: 'hard delete current user (Clerk + Mongo)' })
   @ApiResponse({ status: 200, description: 'User soft deleted successfully' })
   async softDeleteCurrentUser(@CurrentUser() user: any) {
-    return await this.userService.softDeleteUser(user.id);
+    return await this.userService.softDeleteUser(user._id);
+    return await this.userService.softDeleteUser('6908adbed25378e05810429a');
   }
 
 }
