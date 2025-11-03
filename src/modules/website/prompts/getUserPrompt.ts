@@ -127,27 +127,36 @@ ${formattedCssVars}
    - Maintain proper capitalization and punctuation.
    - Avoid overly long sentences — focus on clarity and impact.
 
-8. **Update Color Scheme**:
-   - You are given a pre-generated brand color palette (primary, secondary, accent, background, text).
-   - Use these colors intelligently across the CSS and visual theme.
-   - If a provided color clearly fits the layout, typography, or design tone, use it directly.
-   - If any color visually clashes or reduces readability, adjust or substitute it using your judgment while keeping the overall design premium, balanced, and accessible.
-   - The final color usage must prioritize harmony, contrast, and legibility:
-       • Major elements (buttons, highlights, CTAs) → primarily use primary and secondary colors.  
-       • Accents (icons, hover states, subtle highlights) → may use accent color.  
-       • Backgrounds and surfaces → use background color or a subtle gradient derived from it.  
-       • Text and headings → ensure sufficient contrast with background using the text color or an automatically darkened/lightened variant.
-   - When applying colors:
-       • Never output new palette arrays — modify only CSS color assignments.  
-       • Do not rename variables; only replace color values.  
-       • All HEX or CSS color updates must reflect the provided palette or intelligent tonal adjustments based on it.
-   - Example color binding logic:
-       primary → brand elements, CTA buttons, active states  
-       secondary → navigation links, highlights  
-       accent → borders, hover effects  
-       background → section and page backgrounds  
-       text → all text, ensuring contrast
-   - Maintain a clean, premium aesthetic that feels intentional and aligned with the brand identity.
+8. 8. **Update Color Scheme**:
+- You are given a pre-generated brand color palette (primary, secondary, accent, background, text).
+- Use these colors intelligently across the CSS and visual theme.
+- If a provided color clearly fits the layout, typography, or design tone, use it directly.
+- If any color visually clashes or reduces readability, adjust or substitute it using your judgment while keeping the overall design premium, balanced, and accessible.
+- The final color usage must prioritize harmony, contrast, and legibility:
+    • Major elements (buttons, highlights, CTAs) → primarily use primary and secondary colors.  
+    • Accents (icons, hover states, subtle highlights) → may use accent color.  
+    • Backgrounds and surfaces → use background color or a subtle gradient derived from it.  
+    • Text and headings → must have a **minimum 4.5:1 contrast ratio** against their background color (adjust automatically if needed).
++ - Always ensure **clear visibility and contrast** between text and its background.
++ - Never place light text on light backgrounds or dark text on dark backgrounds.
++ - If primary or secondary colors are too light or dark, automatically adjust (lighten or darken) them for accessible contrast.
++ - For backgrounds: prefer subtle gradients (e.g. primary → secondary or primary → accent) to improve visual depth.
++ - For text colors: auto-select white (#FFFFFF) for dark backgrounds or dark gray (#111827) for light backgrounds.
++ - When applying gradients or overlays, ensure that foreground elements remain perfectly legible.
++ - Always verify that CTAs and headings are visually dominant and easy to read.
+
+- When applying colors:
+    • Never output new palette arrays — modify only CSS color assignments.  
+    • Do not rename variables; only replace color values.  
+    • All HEX or CSS color updates must reflect the provided palette or intelligent tonal adjustments based on it.
+- Example color binding logic:
+    primary → brand elements, CTA buttons, active states  
+    secondary → navigation links, highlights  
+    accent → borders, hover effects  
+    background → section and page backgrounds  
+    text → all text, ensuring contrast
+- Maintain a clean, premium aesthetic that feels intentional and aligned with the brand identity.
+
 
 
 ---

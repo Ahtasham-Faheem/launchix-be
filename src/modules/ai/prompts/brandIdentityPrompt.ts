@@ -24,33 +24,41 @@ Generate the following elements:
      * Google Fonts links
 
 4. **Color Palette**:
-   - Provide a cohesive color palette as a flat array of exactly 5 colors (index 0 to 4).
-   - Each index corresponds to:
-       [0] = Primary color  
-       [1] = Secondary color  
-       [2] = Accent color  
-       [3] = Background color  
-       [4] = Text color
-   - Return **only color HEX values** (e.g., "#3B82F6"), not color names or descriptions.
-   - Colors must match the brand’s industry, tone, and visual personality.
-   - Ensure excellent contrast ratios for readability and accessibility (WCAG compliant).
-   - Apply color psychology principles to fit the brand’s emotional intent:
-       • Tech / SaaS → Blue, Indigo, Neutral Grays (trust, innovation)  
-       • Fitness / Wellness → Green, Orange, White (energy, vitality)  
-       • Luxury / Real Estate → Black, Gold, Deep Blue (premium, confidence)  
-       • Food / Hospitality → Red, Yellow, Cream (warmth, appetite)  
-       • Creative / Agency → Purple, Pink, Cyan (bold, expressive)
-   - Example output format:
+- Provide a cohesive color palette as a flat array of exactly 5 colors (index 0 to 4).
+- Each index corresponds to:
+     [0] = Primary color  
+     [1] = Secondary color  
+     [2] = Accent color  
+     [3] = Background color  
+     [4] = Text color
+- Return **only color HEX values** (e.g., "#3B82F6"), not color names or descriptions.
+- Colors must match the brand’s industry, tone, and visual personality.
+- Ensure excellent contrast ratios for readability and accessibility (WCAG compliant).
+- Apply color psychology principles to fit the brand’s emotional intent:
+     • Tech / SaaS → Blue, Indigo, Neutral Grays (trust, innovation)  
+     • Fitness / Wellness → Green, Orange, White (energy, vitality)  
+     • Luxury / Real Estate → Black, Gold, Deep Blue (premium, confidence)  
+     • Food / Hospitality → Red, Yellow, Cream (warmth, appetite)  
+     • Creative / Agency → Purple, Pink, Cyan (bold, expressive)
+- Example output format:
      ["#3B82F6", "#06B6D4", "#9333EA", "#F8FAFC", "#0F172A"]
 
++ ⚠️ **Critical Contrast & Visibility Rules:**
++ - Always ensure high visual contrast between text and background colors (minimum WCAG 4.5:1 ratio).
++ - If background is light → automatically select a dark text color (#111827 or similar).
++ - If background is dark → automatically select a light text color (#FFFFFF or close).
++ - Avoid using low-contrast or near-tone colors together (e.g., light gray text on light background).
++ - Prefer soft gradients or tonal transitions (e.g., primary → secondary) for large areas, but keep all text perfectly legible.
++ - Automatically adjust overly bright or dark colors by ±10–20% brightness for optimal harmony.
++ - Ensure CTAs (primary & secondary) stand out clearly against their surroundings.
++ - Use the color palette intelligently across design layers:
++     • Primary → Buttons, active elements, highlights  
++     • Secondary → Navigation, accents, hover states  
++     • Accent → Icons, highlights, badges  
++     • Background → Page or section background  
++     • Text → Body, headings, labels (always readable)
++ - The final palette must feel modern, premium, and balanced — never washed-out or oversaturated.
 
-     defaultColors = {
-        primary: '#4F46E5',
-        secondary: '#22D3EE',
-        accent: '#0EA5E9',
-        background: '#FFFFFF',
-        text: '#111827',
-    };
 
 IMPORTANT RULES:
 - Vision and Mission must EACH be under 200 characters
