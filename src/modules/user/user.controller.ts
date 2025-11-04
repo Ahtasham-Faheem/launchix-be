@@ -24,7 +24,7 @@ export class UserController {
   @ApiOperation({ summary: 'hard delete current user (Clerk + Mongo)' })
   @ApiResponse({ status: 200, description: 'User soft deleted successfully' })
   async softDeleteCurrentUser(@CurrentUser() user: any) {
-    return await this.userService.softDeleteUser(user._id);
+    return await this.userService.hardDeleteUser(user._id);
     return await this.userService.softDeleteUser('6908adbed25378e05810429a');
   }
 
