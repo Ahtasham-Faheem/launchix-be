@@ -14,7 +14,7 @@ export class User {
   @Prop() profileImage?: string;
 
   @Prop({ default: false }) isAdmin: boolean;
-  @Prop({ default: 'user' }) role: boolean;
+  @Prop({ default: 'user' }) role: string;
   
   @Prop({ type: Object, default: {} })
   metadata: any;
