@@ -14,6 +14,10 @@ export class User {
   @Prop() profileImage?: string;
 
   @Prop({ default: false }) isAdmin: boolean;
+  @Prop({ default: 'user' }) role: boolean;
+  
+  @Prop({ type: Object, default: {} })
+  metadata: any;
 
   /** ✅ Soft delete fields */
   @Prop({ default: false }) isDeleted: boolean;

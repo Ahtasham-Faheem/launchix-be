@@ -32,6 +32,8 @@ export class AuthGuard implements CanActivate {
         // Fetch the full user profile from Clerk
         const user = await clerkClient.users.getUser(userId);
 
+        console.log('user', user)
+
         const localUser = await this.findOrCreateLocalUser(user);
 
         request.user = localUser;
@@ -85,7 +87,9 @@ export class AuthGuard implements CanActivate {
       firstName: clerkUser.firstName,
       lastName: clerkUser.lastName,
       profileImage: clerkUser.imageUrl,
-      username: clerkUser.username
+      username: clerkUser.username,
+      metadata: clerkUser.publicMetadata,
+      role: clerkUser?.publicMetadata?.role || 'user'
     });
 
     return newUser.save();
