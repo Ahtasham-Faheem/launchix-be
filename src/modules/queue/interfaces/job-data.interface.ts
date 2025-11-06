@@ -29,6 +29,7 @@ export interface WebsiteGenerationJobData {
   businessName: string;
   tagline: string;
   industry: string;
+  typeOfWebsite: string;
   brandStyle: string[];
 }
 

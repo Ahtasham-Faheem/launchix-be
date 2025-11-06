@@ -9,6 +9,8 @@ import { AiService } from '../../ai/ai.service';
 import { BrandAssets } from 'src/schemas/assets.schema';
 import { QueueService } from '../services/queue.service';
 import { WebsiteTemplateService } from 'src/modules/website/website-template.service';
+import { WebsiteType } from 'src/shared/types';
+import { Brand } from 'src/schemas/brand.schema';
 
 @Processor(QUEUE_NAMES.WEBSITE_GENERATION, { concurrency: 3 })
 export class WebsiteGenerationProcessor extends WorkerHost {
@@ -19,12 +21,23 @@ export class WebsiteGenerationProcessor extends WorkerHost {
     private readonly webTemplateService: WebsiteTemplateService,
     @InjectModel(BrandAssets.name)
     private readonly assetsModel: Model<BrandAssets>,
+    @InjectModel(Brand.name)
+    private readonly brandModel: Model<Brand>,
     private readonly queueService: QueueService,
   ) {
     super();
   }
 
-   sampleData = { "businessName": "AquaLift Pumps", "industry": "Water Pump Manufacturing", "tagline": "Powering Your Water Solutions", "vision": "To be the leading provider of innovative water pumping solutions, empowering communities with sustainable and efficient water management systems.", "mission": "We manufacture high-quality water pumps that enhance efficiency and reliability, ensuring optimal water solutions for every need.", "logoUrl": "https://res.cloudinary.com/dudpoehph/image/upload/v1762169569/launchix_ai_logos/jaonuioucodeni4jfo8o.png", "colorScheme": { "primary": "#0077B3", "secondary": "#00A3E0", "accent": "#0095D9", "background": "#E7F6FF", "text": "#002B36" } }
+  sampleData = {
+    "businessName": "AquaLift Pumps",
+    "typeOfWebsite": WebsiteType.ECOMMERCE,
+    "industry": "Water Pump Manufacturing",
+    "tagline": "Powering Your Water Solutions",
+    "vision": "To be the leading provider of innovative water pumping solutions, empowering communities with sustainable and efficient water management systems.",
+    "mission": "We manufacture high-quality water pumps that enhance efficiency and reliability, ensuring optimal water solutions for every need.",
+    "logoUrl": "https://res.cloudinary.com/dudpoehph/image/upload/v1762169569/launchix_ai_logos/jaonuioucodeni4jfo8o.png",
+    "colorScheme": { "primary": "#0077B3", "secondary": "#00A3E0", "accent": "#0095D9", "background": "#E7F6FF", "text": "#002B36" }
+  }
 
   private buildColorScheme(colors?: {
     primary?: string;
@@ -55,11 +68,12 @@ export class WebsiteGenerationProcessor extends WorkerHost {
 
 
   async process(job: Job<WebsiteGenerationJobData>): Promise<JobResult> {
-    const { brandId, businessName, tagline, industry, brandStyle } = job.data;
+    const { brandId, businessName, tagline, industry, typeOfWebsite } = job.data;
     const brandObjectId = new Types.ObjectId(brandId);
     this.logger.log(`🌐 [${brandId}] Starting Website Generation Job...`);
 
     try {
+
       // STEP 1️⃣ — Wait for dependencies (identity + logo) to complete
       const dependenciesReady = await this.waitForDependencies(brandId.toString(), 30, 5000); // 30 attempts, 5s interval
       if (!dependenciesReady) {
@@ -90,22 +104,6 @@ export class WebsiteGenerationProcessor extends WorkerHost {
         brandAssets?.logos?.find((l) => l.type === 'icon')?.url ||
         'https://via.placeholder.com/200x60/4F46E5/FFFFFF?text=YourBrand';
 
-      const [
-        primary,
-        secondary,
-        accent,
-        background,
-        text
-      ] = brandAssets.palette || []
-
-      let colorScheme = this.buildColorScheme({
-        primary,
-        secondary,
-        accent,
-        background,
-        text
-      })
-
       // STEP 3️⃣ — Generate website JSON using AI
       const websiteJson = await this.webTemplateService.buildWebsite(
         businessName,
@@ -114,10 +112,11 @@ export class WebsiteGenerationProcessor extends WorkerHost {
         vision,
         mission,
         logoUrl,
-        colorScheme
+        typeOfWebsite,
+        // colorScheme,
       );
-     
-     
+
+
       // // STEP 3️⃣ — Generate website JSON using AI
       // const websiteJson = await this.webTemplateService.buildWebsite(
       //   this.sampleData.businessName,
@@ -126,6 +125,7 @@ export class WebsiteGenerationProcessor extends WorkerHost {
       //   this.sampleData.vision,
       //   this.sampleData.mission,
       //   this.sampleData.logoUrl,
+      //   this.sampleData.typeOfWebsite,
       //   this.sampleData.colorScheme
       // );
 
@@ -136,16 +136,28 @@ export class WebsiteGenerationProcessor extends WorkerHost {
       }
 
       // STEP 4️⃣ — Save generated data
-      await this.assetsModel.findOneAndUpdate(
-        { brand: brandObjectId },
-        {
-          $set: {
-            website: websiteJson,
-            updatedAt: new Date(),
+      await Promise.all([
+        this.assetsModel.findOneAndUpdate(
+          { brand: brandObjectId },
+          {
+            $set: {
+              website: websiteJson,
+              updatedAt: new Date(),
+            },
           },
-        },
-        { upsert: true, new: true },
-      );
+          { upsert: true, new: true },
+        ),
+        this.brandModel.findOneAndUpdate(
+          { _id: brandObjectId },
+          {
+            $set: {
+              template: websiteJson.websiteTemplate,
+              updatedAt: new Date(),
+            },
+          },
+          { upsert: true, new: true },
+        )
+      ])
 
       this.logger.log(`💾 [${brandId}] Website successfully generated and saved.`);
       return { success: true, brandId, data: { website: websiteJson } };

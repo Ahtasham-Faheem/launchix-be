@@ -7,6 +7,7 @@ import { brandIdentityPrompt } from './prompts/brandIdentityPrompt';
 import { websitePrompt } from './prompts/websitePrompt';
 import { contentGeneratePrompt } from './prompts/contentGenratePrompt';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { WebsiteType } from 'src/shared/types';
 
 export const BRAND_FIELDS = ['businessName', 'industry', 'tagline', 'brandStyle'] as const;
 
@@ -14,6 +15,8 @@ export type BrandFields = {
   businessName: string;
   industry: string;
   tagline: string;
+  prompt: string;
+  typeOfWebsite: string;
   brandStyle: string[];
   aiFlags: Record<string, boolean>;
   errors?: string[];
@@ -56,7 +59,7 @@ export class AiService {
   private readonly logger = new Logger(AiService.name);
   private client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-  constructor(private readonly cloudinary: CloudinaryService) {}
+  constructor(private readonly cloudinary: CloudinaryService) { }
 
   async extractFromPrompt(prompt: string): Promise<BrandExtractionResult> {
     // return {
@@ -64,6 +67,8 @@ export class AiService {
     //   industry: 'Health & Wellness',
     //   tagline: 'Empowering Your Best Self',
     //   brandStyle: ['Modern', 'Energetic'],
+    //   typeOfWebsite: WebsiteType.ECOMMERCE,
+    //   prompt,
     //   aiFlags: {
     //     businessName: true,
     //     industry: true,
@@ -120,6 +125,8 @@ export class AiService {
       brandStyle,
       aiFlags,
       errors: [],
+      prompt,
+      typeOfWebsite: json.typeOfWebsite || '',
     };
   }
 
@@ -263,7 +270,7 @@ export class AiService {
     }
   }
 
-  
+
   async generateSingleLogoDall_e_3(prompt: string, type: string): Promise<{ type: string; url: string }> {
     try {
       this.logger.log(`Generating ${type} logo`);

@@ -5,7 +5,19 @@ import { HydratedDocument, Types } from 'mongoose';
 export class Brand {
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   owner: Types.ObjectId;
+  
+  @Prop({ type: Types.ObjectId, ref: 'BrandAssets', required: true })
+  brandAsset: Types.ObjectId;
 
+  @Prop({})
+  prompt?: string;
+  
+  @Prop({})
+  typeOfWebsite?: string;
+  
+  @Prop({})
+  template?: string;
+  
   @Prop({ required: true })
   businessName: string;
 

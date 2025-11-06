@@ -1,590 +1,378 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{lang}}">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="{{meta_description}}" />
-  <title>{{site_title}}</title>
-  <link href="style.css" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{businessName}} | {{tagline}}</title>
+    <link rel="stylesheet" href="{{fontAwesomeCDN}}">
+    <link href="style.css" rel="stylesheet" />
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png"
-    href="https://res.cloudinary.com/dudpoehph/image/upload/v1762181222/White_app_Icon_3x_d8xx6q.png" />
-  <link rel="shortcut icon" type="image/png"
-    href="https://res.cloudinary.com/dudpoehph/image/upload/v1762181222/White_app_Icon_3x_d8xx6q.png" />
+    <!-- Favicon -->
+    <link rel="icon" type="image/png"
+        href="https://res.cloudinary.com/dudpoehph/image/upload/v1762181222/White_app_Icon_3x_d8xx6q.png" />
+    <link rel="shortcut icon" type="image/png"
+        href="https://res.cloudinary.com/dudpoehph/image/upload/v1762181222/White_app_Icon_3x_d8xx6q.png" />
 
-  <!-- Launchix Meta Tags -->
-  <meta name="description"
-    content="Launchix.ai helps entrepreneurs instantly create logos, websites, and e-commerce stores powered by AI. Build your brand in minutes and launch your business with confidence." />
-  <meta property="og:title" content="{{businessName}} - {{tagline}}" />
-  <meta property="og:description"
-    content="Launchix.ai empowers you to launch your business fast with AI-powered branding, website creation, and store setup." />
-  <meta property="og:image"
-    content="https://res.cloudinary.com/dudpoehph/image/upload/v1762181222/White_app_Icon_3x_d8xx6q.png" />
-  <meta property="og:url" content="https://launchix.ai" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="{{businessName}} - {{tagline}}" />
-  <meta name="twitter:description"
-    content="AI-powered business builder by Launchix — instantly create your logo, website, and store." />
-  <meta name="twitter:image"
-    content="https://res.cloudinary.com/dudpoehph/image/upload/v1762181222/White_app_Icon_3x_d8xx6q.png" />
+    <!-- Launchix Meta Tags -->
+    <meta name="description"
+        content="Launchix.ai helps entrepreneurs instantly create logos, websites, and e-commerce stores powered by AI. Build your brand in minutes and launch your business with confidence." />
+    <meta property="og:title" content="{{businessName}} - {{tagline}}" />
+    <meta property="og:description"
+        content="Launchix.ai empowers you to launch your business fast with AI-powered branding, website creation, and store setup." />
+    <meta property="og:image"
+        content="https://res.cloudinary.com/dudpoehph/image/upload/v1762181222/White_app_Icon_3x_d8xx6q.png" />
+    <meta property="og:url" content="https://launchix.ai" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{businessName}} - {{tagline}}" />
+    <meta name="twitter:description"
+        content="AI-powered business builder by Launchix — instantly create your logo, website, and store." />
+    <meta name="twitter:image"
+        content="https://res.cloudinary.com/dudpoehph/image/upload/v1762181222/White_app_Icon_3x_d8xx6q.png" />
 </head>
 
 <body>
-  <!-- NAV -->
-  <nav class="navigation" aria-label="Main">
-    <div class="nav-wrapper">
-      <div class="brand">
-        <span class="brand-icon" aria-hidden="true">🕹️</span>
-        <span class="brand-name">{{nav_brand}}</span>
-      </div>
-      <div class="menu-toggle" aria-label="{{nav_toggle_aria}}" role="button" tabindex="0">
-        <span class="hamburger"></span>
-      </div>
-      <ul class="menu-list">
-        <li class="menu-item"><a class="menu-link active" href="#home">{{nav_home}}</a></li>
-        <li class="menu-item"><a class="menu-link" href="#features">{{nav_gameplay}}</a></li>
-        <li class="menu-item"><a class="menu-link" href="#solutions">{{nav_modes}}</a></li>
-        <li class="menu-item"><a class="menu-link" href="#projects">{{nav_screens}}</a></li>
-        <li class="menu-item"><a class="menu-link" href="#testimonials">{{nav_reviews}}</a></li>
-        <li class="menu-item"><a class="menu-link" href="#pricing">{{nav_battle_pass}}</a></li>
-        <li class="menu-item"><a class="menu-link" href="#team">{{nav_clan}}</a></li>
-        <li class="menu-item"><a class="menu-link" href="#contact">{{nav_join_beta}}</a></li>
-      </ul>
-    </div>
-  </nav>
+    <!-- Header -->
+    <header id="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">
+                    <img class="logo-svg" src="{{logoUrl}}" />
+                    <span class="logo-text">{{businessName}}</span>
+                </a>
+                <div class="mobile-toggle">
+                    <i class="{{iconMenu}}"></i>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#home">{{navHome}}</a></li>
+                    <li><a href="#about">{{navAbout}}</a></li>
+                    <li><a href="#services">{{navServices}}</a></li>
+                    <li><a href="#portfolio">{{navPortfolio}}</a></li>
+                    <li><a href="#testimonials">{{navTestimonials}}</a></li>
+                    <li><a href="#contact">{{navContact}}</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-  <!-- HERO -->
-  <section id="home" class="banner" aria-label="Hero">
-    <div class="banner-container">
-      <div class="banner-content">
-        <span class="badge">{{hero_badge}}</span>
-        <h1 class="banner-heading">{{hero_title}}</h1>
-        <p class="banner-description">{{hero_description}}</p>
-        <div class="banner-actions">
-          <a href="#contact" class="action-btn action-primary">{{hero_cta_primary}}</a>
-          <a href="#features" class="action-btn action-outline">{{hero_cta_secondary}}</a>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>{{heroTitle}}</h1>
+                    <p>{{heroSubtitle}}</p>
+                    <div class="hero-btns">
+                        <a href="#portfolio" class="btn">{{btnPrimary}}</a>
+                        <a href="#contact" class="btn btn-outline">{{btnSecondary}}</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="{{heroImage}}" alt="{{heroAlt}}">
+                </div>
+            </div>
         </div>
-        <div class="projects-masonry" style="margin-top:1rem">
-          <div class="project-tile">
-            <div class="tile-overlay">
-              <span class="project-category">{{hero_stat1_label}}</span>
-              <h3 class="project-name">{{hero_stat1_title}}</h3>
-              <p class="project-brief">{{hero_stat1_desc}}</p>
-            </div>
-          </div>
-          <div class="project-tile">
-            <div class="tile-overlay">
-              <span class="project-category">{{hero_stat2_label}}</span>
-              <h3 class="project-name">{{hero_stat2_title}}</h3>
-              <p class="project-brief">{{hero_stat2_desc}}</p>
-            </div>
-          </div>
-          <div class="project-tile">
-            <div class="tile-overlay">
-              <span class="project-category">{{hero_stat3_label}}</span>
-              <h3 class="project-name">{{hero_stat3_title}}</h3>
-              <p class="project-brief">{{hero_stat3_desc}}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="banner-visual" aria-hidden="true">
-        <div class="visual-box box-1"></div>
-        <div class="visual-box box-2"></div>
-        <div class="visual-box box-3"></div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- GAMEPLAY FEATURES -->
-  <section id="features" class="features-area" aria-label="Gameplay">
-    <div class="content-wrapper">
-      <div class="section-header">
-        <span class="section-label">{{features_label}}</span>
-        <h2 class="section-heading">{{features_title}}</h2>
-        <p class="section-description">{{features_description}}</p>
-      </div>
-      <div class="features-container">
-        <div class="feature-box">
-          <div class="feature-icon">⚔️</div>
-          <h3 class="feature-heading">{{feature1_title}}</h3>
-          <p class="feature-text">{{feature1_text}}</p>
+    <!-- About Section -->
+    <section class="about section-alt" id="about">
+        <div class="container">
+            <h2>{{aboutHeading}}</h2>
+            <div class="about-content">
+                <div class="about-image">
+                    <img src="{{aboutImage}}" alt="{{aboutAlt}}">
+                </div>
+                <div class="about-text">
+                    <h3>{{aboutSubheading}}</h3>
+                    <p>{{aboutPara1}}</p>
+                    <p>{{aboutPara2}}</p>
+                    <div class="stats">
+                        <div class="stat">
+                            <span class="stat-number">{{projectsCompleted}}</span>
+                            <span class="stat-label">{{projectsLabel}}</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">{{clientsCount}}</span>
+                            <span class="stat-label">{{clientsLabel}}</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">{{yearsExp}}</span>
+                            <span class="stat-label">{{yearsLabel}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="feature-box">
-          <div class="feature-icon">🎯</div>
-          <h3 class="feature-heading">{{feature2_title}}</h3>
-          <p class="feature-text">{{feature2_text}}</p>
-        </div>
-        <div class="feature-box">
-          <div class="feature-icon">🧪</div>
-          <h3 class="feature-heading">{{feature3_title}}</h3>
-          <p class="feature-text">{{feature3_text}}</p>
-        </div>
-        <div class="feature-box">
-          <div class="feature-icon">🧬</div>
-          <h3 class="feature-heading">{{feature4_title}}</h3>
-          <p class="feature-text">{{feature4_text}}</p>
-        </div>
-        <div class="feature-box">
-          <div class="feature-icon">🛰️</div>
-          <h3 class="feature-heading">{{feature5_title}}</h3>
-          <p class="feature-text">{{feature5_text}}</p>
-        </div>
-        <div class="feature-box">
-          <div class="feature-icon">🧩</div>
-          <h3 class="feature-heading">{{feature6_title}}</h3>
-          <p class="feature-text">{{feature6_text}}</p>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- MODES -->
-  <section id="solutions" class="solutions-area" aria-label="Modes">
-    <div class="content-wrapper">
-      <div class="section-header">
-        <span class="section-label">{{modes_label}}</span>
-        <h2 class="section-heading">{{modes_title}}</h2>
-      </div>
-      <div class="solutions-layout">
-        <article class="solution-item">
-          <div class="solution-image">
-            <div class="image-placeholder">🏟️</div>
-          </div>
-          <div class="solution-details">
-            <h3 class="solution-title">{{mode1_title}}</h3>
-            <p class="solution-summary">{{mode1_summary}}</p>
-            <ul class="solution-points">
-              <li class="point-item">{{mode1_point1}}</li>
-              <li class="point-item">{{mode1_point2}}</li>
-              <li class="point-item">{{mode1_point3}}</li>
-              <li class="point-item">{{mode1_point4}}</li>
-            </ul>
-            <a class="solution-cta" href="#contact">{{mode1_cta}}</a>
-          </div>
-        </article>
-        <article class="solution-item reverse">
-          <div class="solution-image">
-            <div class="image-placeholder">🧟‍♂️</div>
-          </div>
-          <div class="solution-details">
-            <h3 class="solution-title">{{mode2_title}}</h3>
-            <p class="solution-summary">{{mode2_summary}}</p>
-            <ul class="solution-points">
-              <li class="point-item">{{mode2_point1}}</li>
-              <li class="point-item">{{mode2_point2}}</li>
-              <li class="point-item">{{mode2_point3}}</li>
-              <li class="point-item">{{mode2_point4}}</li>
-            </ul>
-            <a class="solution-cta" href="#contact">{{mode2_cta}}</a>
-          </div>
-        </article>
-        <article class="solution-item">
-          <div class="solution-image">
-            <div class="image-placeholder">🏴‍☠️</div>
-          </div>
-          <div class="solution-details">
-            <h3 class="solution-title">{{mode3_title}}</h3>
-            <p class="solution-summary">{{mode3_summary}}</p>
-            <ul class="solution-points">
-              <li class="point-item">{{mode3_point1}}</li>
-              <li class="point-item">{{mode3_point2}}</li>
-              <li class="point-item">{{mode3_point3}}</li>
-              <li class="point-item">{{mode3_point4}}</li>
-            </ul>
-            <a class="solution-cta" href="#contact">{{mode3_cta}}</a>
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="container">
+            <h2>{{servicesHeading}}</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="{{iconWebDev}}"></i>
+                    </div>
+                    <h3>{{service1Title}}</h3>
+                    <p>{{service1Desc}}</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="{{iconUIDesign}}"></i>
+                    </div>
+                    <h3>{{service2Title}}</h3>
+                    <p>{{service2Desc}}</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="{{iconEcom}}"></i>
+                    </div>
+                    <h3>{{service3Title}}</h3>
+                    <p>{{service3Desc}}</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="{{iconMarketing}}"></i>
+                    </div>
+                    <h3>{{service4Title}}</h3>
+                    <p>{{service4Desc}}</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="{{iconMobile}}"></i>
+                    </div>
+                    <h3>{{service5Title}}</h3>
+                    <p>{{service5Desc}}</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="{{iconSEO}}"></i>
+                    </div>
+                    <h3>{{service6Title}}</h3>
+                    <p>{{service6Desc}}</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <!-- SCREENS -->
-  <section id="projects" class="projects-showcase" aria-label="Screenshots">
-    <div class="content-wrapper">
-      <div class="section-header">
-        <span class="section-label">{{screens_label}}</span>
-        <h2 class="section-heading">{{screens_title}}</h2>
-      </div>
-      <div class="projects-masonry">
-        <div class="project-tile large">
-          <div class="tile-overlay">
-            <span class="project-category">{{screen1_category}}</span>
-            <h3 class="project-name">{{screen1_title}}</h3>
-            <p class="project-brief">{{screen1_desc}}</p>
-            <div class="project-tags">
-              <span class="tag">{{screen1_tag1}}</span>
-              <span class="tag">{{screen1_tag2}}</span>
+    <!-- Portfolio Section -->
+    <section class="portfolio section-alt" id="portfolio">
+        <div class="container">
+            <h2>{{portfolioHeading}}</h2>
+            <div class="portfolio-filter">
+                <button class="filter-btn active" data-filter="all">{{filterAll}}</button>
+                <button class="filter-btn" data-filter="web">{{filterWeb}}</button>
+                <button class="filter-btn" data-filter="app">{{filterApp}}</button>
+                <button class="filter-btn" data-filter="branding">{{filterBranding}}</button>
             </div>
-          </div>
-        </div>
-        <div class="project-tile">
-          <div class="tile-overlay">
-            <span class="project-category">{{screen2_category}}</span>
-            <h3 class="project-name">{{screen2_title}}</h3>
-            <p class="project-brief">{{screen2_desc}}</p>
-          </div>
-        </div>
-        <div class="project-tile">
-          <div class="tile-overlay">
-            <span class="project-category">{{screen3_category}}</span>
-            <h3 class="project-name">{{screen3_title}}</h3>
-            <p class="project-brief">{{screen3_desc}}</p>
-          </div>
-        </div>
-        <div class="project-tile large">
-          <div class="tile-overlay">
-            <span class="project-category">{{screen4_category}}</span>
-            <h3 class="project-name">{{screen4_title}}</h3>
-            <p class="project-brief">{{screen4_desc}}</p>
-            <div class="project-tags">
-              <span class="tag">{{screen4_tag1}}</span>
-              <span class="tag">{{screen4_tag2}}</span>
+            <div class="portfolio-grid">
+                <div class="portfolio-item" data-category="web">
+                    <div class="portfolio-image">
+                        <img src="{{portfolio1Image}}" alt="{{portfolio1Alt}}">
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>{{portfolio1Title}}</h3>
+                        <p>{{portfolio1Desc}}</p>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="app">
+                    <div class="portfolio-image">
+                        <img src="{{portfolio2Image}}" alt="{{portfolio2Alt}}">
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>{{portfolio2Title}}</h3>
+                        <p>{{portfolio2Desc}}</p>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="branding">
+                    <div class="portfolio-image">
+                        <img src="{{portfolio3Image}}" alt="{{portfolio3Alt}}">
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>{{portfolio3Title}}</h3>
+                        <p>{{portfolio3Desc}}</p>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="web">
+                    <div class="portfolio-image">
+                        <img src="{{portfolio4Image}}" alt="{{portfolio4Alt}}">
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>{{portfolio4Title}}</h3>
+                        <p>{{portfolio4Desc}}</p>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-        <div class="project-tile">
-          <div class="tile-overlay">
-            <span class="project-category">{{screen5_category}}</span>
-            <h3 class="project-name">{{screen5_title}}</h3>
-            <p class="project-brief">{{screen5_desc}}</p>
-          </div>
-        </div>
-        <div class="project-tile">
-          <div class="tile-overlay">
-            <span class="project-category">{{screen6_category}}</span>
-            <h3 class="project-name">{{screen6_title}}</h3>
-            <p class="project-brief">{{screen6_desc}}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- REVIEWS -->
-  <section id="testimonials" class="testimonials-showcase" aria-label="Reviews">
-    <div class="content-wrapper">
-      <div class="section-header">
-        <span class="section-label">{{reviews_label}}</span>
-        <h2 class="section-heading">{{reviews_title}}</h2>
-      </div>
-      <div class="testimonials-slider">
-        <div class="testimonial-block">
-          <div class="testimonial-rating">{{review1_stars}}</div>
-          <p class="testimonial-quote">“{{review1_quote}}”</p>
-          <div class="testimonial-profile">
-            <div class="profile-avatar">{{review1_avatar}}</div>
-            <div class="profile-info">
-              <h4 class="profile-name">{{review1_name}}</h4>
-              <p class="profile-position">{{review1_role}}</p>
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <h2>{{testimonialsHeading}}</h2>
+            <div class="testimonials-slider">
+                <div class="testimonial">
+                    <div class="client-image">
+                        <img src="{{clientImage}}" alt="{{clientAlt}}">
+                    </div>
+                    <h3 class="client-name">{{clientName}}</h3>
+                    <p class="client-role">{{clientRole}}</p>
+                    <p class="quote">{{clientQuote}}</p>
+                </div>
             </div>
-          </div>
         </div>
-        <div class="testimonial-block">
-          <div class="testimonial-rating">{{review2_stars}}</div>
-          <p class="testimonial-quote">“{{review2_quote}}”</p>
-          <div class="testimonial-profile">
-            <div class="profile-avatar">{{review2_avatar}}</div>
-            <div class="profile-info">
-              <h4 class="profile-name">{{review2_name}}</h4>
-              <p class="profile-position">{{review2_role}}</p>
-            </div>
-          </div>
-        </div>
-        <div class="testimonial-block">
-          <div class="testimonial-rating">{{review3_stars}}</div>
-          <p class="testimonial-quote">“{{review3_quote}}”</p>
-          <div class="testimonial-profile">
-            <div class="profile-avatar">{{review3_avatar}}</div>
-            <div class="profile-info">
-              <h4 class="profile-name">{{review3_name}}</h4>
-              <p class="profile-position">{{review3_role}}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- BATTLE PASS -->
-  <section id="pricing" class="pricing-section" aria-label="Battle Pass">
-    <div class="content-wrapper">
-      <div class="section-header">
-        <span class="section-label">{{pricing_label}}</span>
-        <h2 class="section-heading">{{pricing_title}}</h2>
-        <p class="section-description">{{pricing_description}}</p>
-      </div>
-      <div class="pricing-cards">
-        <div class="price-card">
-          <div class="plan-header">
-            <h3 class="plan-name">{{plan1_name}}</h3>
-            <p class="plan-subtitle">{{plan1_subtitle}}</p>
-          </div>
-          <div class="plan-price">
-            <span class="currency">{{plan1_currency}}</span>
-            <span class="amount">{{plan1_amount}}</span>
-            <span class="period">{{plan1_period}}</span>
-          </div>
-          <ul class="plan-features">
-            <li class="plan-feature included">{{plan1_feat1}}</li>
-            <li class="plan-feature included">{{plan1_feat2}}</li>
-            <li class="plan-feature included">{{plan1_feat3}}</li>
-            <li class="plan-feature excluded">{{plan1_feat4}}</li>
-          </ul>
-          <a class="plan-button" href="#contact">{{plan1_cta}}</a>
+    <!-- Contact Section -->
+    <section class="contact section-alt" id="contact">
+        <div class="container">
+            <h2>{{contactHeading}}</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>{{contactSubheading}}</h3>
+                    <p>{{contactText}}</p>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="{{iconLocation}}"></i>
+                        </div>
+                        <div>
+                            <h4>{{officeTitle}}</h4>
+                            <p>{{officeAddress}}</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="{{iconPhone}}"></i>
+                        </div>
+                        <div>
+                            <h4>{{phoneTitle}}</h4>
+                            <p>{{phoneNumber}}</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="{{iconEmail}}"></i>
+                        </div>
+                        <div>
+                            <h4>{{emailTitle}}</h4>
+                            <p>{{emailAddress}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="{{formNamePlaceholder}}" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control" placeholder="{{formEmailPlaceholder}}" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="{{formSubjectPlaceholder}}">
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control" placeholder="{{formMessagePlaceholder}}" required></textarea>
+                        </div>
+                        <button type="submit" class="btn">{{formButton}}</button>
+                    </form>
+                </div>
+            </div>
         </div>
+    </section>
 
-        <div class="price-card featured">
-          <div class="popular-badge">{{plan2_badge}}</div>
-          <div class="plan-header">
-            <h3 class="plan-name">{{plan2_name}}</h3>
-            <p class="plan-subtitle">{{plan2_subtitle}}</p>
-          </div>
-          <div class="plan-price">
-            <span class="currency">{{plan2_currency}}</span>
-            <span class="amount">{{plan2_amount}}</span>
-            <span class="period">{{plan2_period}}</span>
-          </div>
-          <ul class="plan-features">
-            <li class="plan-feature included">{{plan2_feat1}}</li>
-            <li class="plan-feature included">{{plan2_feat2}}</li>
-            <li class="plan-feature included">{{plan2_feat3}}</li>
-            <li class="plan-feature included">{{plan2_feat4}}</li>
-          </ul>
-          <a class="plan-button" href="#contact">{{plan2_cta}}</a>
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <img class="logo-svg" src="{{footerLogo}}" />
+                        <span class="logo-text">{{businessName}}</span>
+                    </div>
+                    <p>{{footerText}}</p>
+                    <div class="social-links">
+                        <a href="{{socialFacebook}}" class="social-link"><i class="{{iconFacebook}}"></i></a>
+                        <a href="{{socialTwitter}}" class="social-link"><i class="{{iconTwitter}}"></i></a>
+                        <a href="{{socialInstagram}}" class="social-link"><i class="{{iconInstagram}}"></i></a>
+                        <a href="{{socialLinkedIn}}" class="social-link"><i class="{{iconLinkedIn}}"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h3>{{footerLinksHeading}}</h3>
+                    <ul>
+                        <li><a href="#home">{{navHome}}</a></li>
+                        <li><a href="#about">{{navAbout}}</a></li>
+                        <li><a href="#services">{{navServices}}</a></li>
+                        <li><a href="#portfolio">{{navPortfolio}}</a></li>
+                        <li><a href="#testimonials">{{navTestimonials}}</a></li>
+                        <li><a href="#contact">{{navContact}}</a></li>
+                    </ul>
+                </div>
+                <div class="footer-newsletter">
+                    <h3>{{newsletterHeading}}</h3>
+                    <p>{{newsletterText}}</p>
+                    <form class="newsletter-form">
+                        <input type="email" class="newsletter-input" placeholder="{{newsletterPlaceholder}}">
+                        <button type="submit" class="newsletter-btn">
+                            <i class="{{iconSend}}"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>{{footerCopyright}}</p>
+            </div>
         </div>
+    </footer>
 
-        <div class="price-card">
-          <div class="plan-header">
-            <h3 class="plan-name">{{plan3_name}}</h3>
-            <p class="plan-subtitle">{{plan3_subtitle}}</p>
-          </div>
-          <div class="plan-price">
-            <span class="currency">{{plan3_currency}}</span>
-            <span class="amount">{{plan3_amount}}</span>
-            <span class="period">{{plan3_period}}</span>
-          </div>
-          <ul class="plan-features">
-            <li class="plan-feature included">{{plan3_feat1}}</li>
-            <li class="plan-feature included">{{plan3_feat2}}</li>
-            <li class="plan-feature included">{{plan3_feat3}}</li>
-            <li class="plan-feature included">{{plan3_feat4}}</li>
-          </ul>
-          <a class="plan-button" href="#contact">{{plan3_cta}}</a>
-        </div>
-      </div>
-    </div>
-  </section>
+    <script>
+        // Mobile Navigation Toggle
+        document.querySelector('.mobile-toggle').addEventListener('click', function () {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
 
-  <!-- CLAN -->
-  <section id="team" class="team-showcase" aria-label="Clan">
-    <div class="content-wrapper">
-      <div class="section-header">
-        <span class="section-label">{{team_label}}</span>
-        <h2 class="section-heading">{{team_title}}</h2>
-      </div>
-      <div class="team-layout">
-        <div class="member-profile">
-          <div class="member-photo">
-            <div class="photo-placeholder">🛡️</div>
-          </div>
-          <div class="member-details">
-            <h3 class="member-name">{{member1_name}}</h3>
-            <p class="member-title">{{member1_title}}</p>
-            <p class="member-description">{{member1_bio}}</p>
-            <div class="member-social">
-              <a class="social-icon" href="#">{{member1_social1}}</a>
-              <a class="social-icon" href="#">{{member1_social2}}</a>
-              <a class="social-icon" href="#">{{member1_social3}}</a>
-            </div>
-          </div>
-        </div>
-        <div class="member-profile">
-          <div class="member-photo">
-            <div class="photo-placeholder">🏹</div>
-          </div>
-          <div class="member-details">
-            <h3 class="member-name">{{member2_name}}</h3>
-            <p class="member-title">{{member2_title}}</p>
-            <p class="member-description">{{member2_bio}}</p>
-            <div class="member-social">
-              <a class="social-icon" href="#">{{member2_social1}}</a>
-              <a class="social-icon" href="#">{{member2_social2}}</a>
-              <a class="social-icon" href="#">{{member2_social3}}</a>
-            </div>
-          </div>
-        </div>
-        <div class="member-profile">
-          <div class="member-photo">
-            <div class="photo-placeholder">💊</div>
-          </div>
-          <div class="member-details">
-            <h3 class="member-name">{{member3_name}}</h3>
-            <p class="member-title">{{member3_title}}</p>
-            <p class="member-description">{{member3_bio}}</p>
-            <div class="member-social">
-              <a class="social-icon" href="#">{{member3_social1}}</a>
-              <a class="social-icon" href="#">{{member3_social2}}</a>
-              <a class="social-icon" href="#">{{member3_social3}}</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+        // Header Scroll Effect
+        window.addEventListener('scroll', function () {
+            const header = document.getElementById('header');
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
 
-  <!-- JOIN BETA -->
-  <section id="contact" class="contact-area" aria-label="Join Beta">
-    <div class="content-wrapper">
-      <div class="contact-layout">
-        <div class="contact-information">
-          <h2 class="contact-heading">{{contact_title}}</h2>
-          <p class="contact-intro">{{contact_intro}}</p>
-          <div class="info-blocks">
-            <div class="info-block">
-              <div class="info-icon">🎮</div>
-              <div class="info-content">
-                <h4 class="info-title">{{contact_block1_title}}</h4>
-                <p class="info-text">{{contact_block1_text}}</p>
-              </div>
-            </div>
-            <div class="info-block">
-              <div class="info-icon">🌐</div>
-              <div class="info-content">
-                <h4 class="info-title">{{contact_block2_title}}</h4>
-                <p class="info-text">{{contact_block2_text}}</p>
-              </div>
-            </div>
-            <div class="info-block">
-              <div class="info-icon">🗓️</div>
-              <div class="info-content">
-                <h4 class="info-title">{{contact_block3_title}}</h4>
-                <p class="info-text">{{contact_block3_text}}</p>
-              </div>
-            </div>
-          </div>
-          <div class="connect-section">
-            <h4 class="connect-title">{{contact_follow_title}}</h4>
-            <div class="social-buttons">
-              <a class="social-btn" href="#">{{contact_follow1}}</a>
-              <a class="social-btn" href="#">{{contact_follow2}}</a>
-              <a class="social-btn" href="#">{{contact_follow3}}</a>
-            </div>
-          </div>
-        </div>
-        <div class="contact-form-wrapper">
-          <form class="inquiry-form">
-            <div class="form-row">
-              <div class="input-wrapper">
-                <label class="input-label" for="gamer">{{form_gamer_label}}</label>
-                <input class="input-field" id="gamer" placeholder="{{form_gamer_placeholder}}" required />
-              </div>
-              <div class="input-wrapper">
-                <label class="input-label" for="platform">{{form_platform_label}}</label>
-                <select class="input-field" id="platform">
-                  <option>{{form_platform_option1}}</option>
-                  <option>{{form_platform_option2}}</option>
-                  <option>{{form_platform_option3}}</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="input-wrapper">
-                <label class="input-label" for="email">{{form_email_label}}</label>
-                <input class="input-field" id="email" type="email" placeholder="{{form_email_placeholder}}" required />
-              </div>
-              <div class="input-wrapper">
-                <label class="input-label" for="region">{{form_region_label}}</label>
-                <select class="input-field" id="region">
-                  <option>{{form_region_option1}}</option>
-                  <option>{{form_region_option2}}</option>
-                  <option>{{form_region_option3}}</option>
-                </select>
-              </div>
-            </div>
-            <div class="input-wrapper">
-              <label class="input-label" for="notes">{{form_why_label}}</label>
-              <textarea class="input-field textarea-field" id="notes" rows="5"
-                placeholder="{{form_why_placeholder}}"></textarea>
-            </div>
-            <div class="checkbox-wrapper">
-              <input class="checkbox-field" id="nda" type="checkbox" />
-              <label class="checkbox-label" for="nda">{{form_nda_label}}</label>
-            </div>
-            <div class="checkbox-wrapper">
-              <input class="checkbox-field" id="agree" type="checkbox" required />
-              <label class="checkbox-label" for="agree">{{form_privacy_label}}</label>
-            </div>
-            <button class="submit-button" type="submit">{{form_submit}}</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </section>
+        // Portfolio Filter
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const portfolioItems = document.querySelectorAll('.portfolio-item');
 
-  <!-- PATCH NOTES -->
-  <section class="newsletter-section" aria-label="Patch Notes">
-    <div class="content-wrapper">
-      <div class="newsletter-content">
-        <h2 class="newsletter-heading">{{news_title}}</h2>
-        <p class="newsletter-text">{{news_text}}</p>
-        <form class="newsletter-form">
-          <input class="newsletter-input" type="email" placeholder="{{news_input_placeholder}}" required />
-          <button class="newsletter-button" type="submit">{{news_button}}</button>
-        </form>
-      </div>
-    </div>
-  </section>
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
 
-  <!-- FOOTER -->
-  <footer class="site-footer" aria-label="Footer">
-    <div class="content-wrapper">
-      <div class="footer-grid">
-        <div class="footer-column">
-          <h3 class="footer-heading"><span class="brand-icon" aria-hidden="true">🕹️</span> {{footer_brand}}</h3>
-          <p class="footer-about">{{footer_about}}</p>
-        </div>
-        <div class="footer-column">
-          <h4 class="column-title">{{footer_col1_title}}</h4>
-          <ul class="footer-menu">
-            <li class="menu-option"><a class="footer-anchor" href="#features">{{footer_col1_link1}}</a></li>
-            <li class="menu-option"><a class="footer-anchor" href="#solutions">{{footer_col1_link2}}</a></li>
-            <li class="menu-option"><a class="footer-anchor" href="#projects">{{footer_col1_link3}}</a></li>
-            <li class="menu-option"><a class="footer-anchor" href="#team">{{footer_col1_link4}}</a></li>
-          </ul>
-        </div>
-        <div class="footer-column">
-          <h4 class="column-title">{{footer_col2_title}}</h4>
-          <ul class="footer-menu">
-            <li class="menu-option"><a class="footer-anchor" href="#">{{footer_col2_link1}}</a></li>
-            <li class="menu-option"><a class="footer-anchor" href="#">{{footer_col2_link2}}</a></li>
-            <li class="menu-option"><a class="footer-anchor" href="#">{{footer_col2_link3}}</a></li>
-            <li class="menu-option"><a class="footer-anchor" href="#">{{footer_col2_link4}}</a></li>
-          </ul>
-        </div>
-        <div class="footer-column">
-          <h4 class="column-title">{{footer_col3_title}}</h4>
-          <ul class="footer-menu">
-            <li class="menu-option"><a class="footer-anchor" href="#">{{footer_col3_link1}}</a></li>
-            <li class="menu-option"><a class="footer-anchor" href="#">{{footer_col3_link2}}</a></li>
-            <li class="menu-option"><a class="footer-anchor" href="#">{{footer_col3_link3}}</a></li>
-            <li class="menu-option"><a class="footer-anchor" href="#">{{footer_col3_link4}}</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-divider"></div>
-      <div class="footer-bottom">
-        <p class="copyright-text">{{footer_copyright}}</p>
-        <div class="footer-socials">
-          <a class="footer-social-link" href="#">{{footer_social1}}</a>
-          <a class="footer-social-link" href="#">{{footer_social2}}</a>
-          <a class="footer-social-link" href="#">{{footer_social3}}</a>
-        </div>
-      </div>
-    </div>
-  </footer>
+                // Add active class to clicked button
+                this.classList.add('active');
+
+                const filterValue = this.getAttribute('data-filter');
+
+                portfolioItems.forEach(item => {
+                    if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Form Submission
+        document.getElementById('contactForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            alert('Thank you for your message! We will get back to you soon.');
+            this.reset();
+        });
+    </script>
 </body>
 
 </html>

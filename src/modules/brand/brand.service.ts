@@ -65,6 +65,7 @@ export class BrandService {
     }
 
     const data = { ...parsed } as BrandFields;
+    console.log('data', data)
     const brand = await this.brandModel.create({
       owner: user._id,
       businessName: data.businessName,
@@ -72,6 +73,8 @@ export class BrandService {
       tagline: data.tagline,
       brandStyle: data.brandStyle,
       aiFlags: data.aiFlags,
+      prompt: data.prompt,
+      typeOfWebsite: data.typeOfWebsite,
     });
 
     return brand;

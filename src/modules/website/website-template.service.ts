@@ -4,10 +4,12 @@ import * as path from 'path';
 import { AiService } from '../ai/ai.service';
 import { existsSync } from 'fs';
 import { getUserPrompt } from './prompts/getUserPrompt';
+import { WebsiteType } from 'src/shared/types';
 
 
 
 interface WebsiteResult {
+    websiteTemplate,
     grapesjs: {
         html: string;
         css: string;
@@ -49,11 +51,12 @@ export class WebsiteTemplateService {
         vision: string,
         mission: string,
         logoUrl: string,
+        typeOfWebsite: string,
         colorScheme?: Record<string, string>,
     ): Promise<WebsiteResult> {
         this.logger.log(`⚡ Building template website for ${businessName}`);
 
-        const selected = this.selectTemplate();
+        const selected = this.selectTemplate(typeOfWebsite as WebsiteType);
         const [htmlRaw, cssRaw, variablesRaw] = await this.loadTemplate(selected);
 
         // 🧠 Step 1: Generate brand-specific content via AI
@@ -87,6 +90,7 @@ export class WebsiteTemplateService {
 
         // 🧩 Step 6: Return structured website result
         return {
+            websiteTemplate: selected,
             grapesjs: {
                 html,
                 css,
@@ -105,8 +109,8 @@ export class WebsiteTemplateService {
         };
     }
 
-    private selectTemplate(): string {
-        const templateList = [
+    private selectTemplate(typeOfWebsite: WebsiteType): string {
+        const defaultTemplates = [
             'template1',
             'template2',
             'template3',
@@ -115,11 +119,27 @@ export class WebsiteTemplateService {
             'template6',
             'template7'
         ];
-        const key = templateList[Math.floor(Math.random() * templateList.length)];
-        return key || 'template2'
-        
-        return 'template5'
+
+        const ecommerceTemplates = [
+            'template9-e',
+            'template10-e',
+            'template11-e'
+        ];
+
+        // Helper function for random selection
+        const randomPick = (templates: string[]) => {
+            return templates[Math.floor(Math.random() * templates.length)];
+        };
+
+        // Choose template set based on website type
+        if (typeOfWebsite === WebsiteType.ECOMMERCE) {
+            return randomPick(ecommerceTemplates);
+        }
+
+        // For all other types, use default templates
+        return randomPick(defaultTemplates);
     }
+
 
     private getTemplateBasePath(): string {
         // When running in production (dist), adjust base directory

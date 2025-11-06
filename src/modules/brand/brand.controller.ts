@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UseGuards, Req, HttpCode, HttpStatus, Delete } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards, Req, HttpCode, HttpStatus, Delete, BadRequestException, Put } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { BrandService } from './brand.service';
 import { ParsePromptDto } from './dto/prompt.dto';
@@ -9,6 +9,7 @@ import { AssetOrchestrationService } from '../queue/services/asset-orchestration
 import { QueueService } from '../queue/services/queue.service';
 import { CurrentUser } from 'src/decorator/auth.decorator';
 import { BrandLimitGuard } from 'src/guards/limit-brand.guard';
+import { UpdateBrandDto } from './dto/update-brand.dto';
 
 @ApiTags('brand')
 @ApiBearerAuth()
@@ -153,6 +154,7 @@ export class BrandController {
       brand.tagline,
       brand.industry,
       brand.brandStyle,
+      brand.typeOfWebsite
     );
 
     return {
@@ -181,6 +183,23 @@ export class BrandController {
       status: 'queued',
       message: 'Mockup generation job queued',
     };
+  }
+
+  /**
+   * ✅ Update brand details (partial or full)
+   * @route PUT /brands/:id
+   */
+  
+  @Put(':id')
+  @ApiOperation({
+    summary: 'Update Brand',
+  })
+  async updateBrand(
+    @Param('id') brandId: string,
+    @Body() updateData: Partial<UpdateBrandDto>,
+  ) {
+    if (!brandId) throw new BadRequestException('Brand ID is required');
+    return this.service.updateBrand(brandId, updateData);
   }
 
   /**

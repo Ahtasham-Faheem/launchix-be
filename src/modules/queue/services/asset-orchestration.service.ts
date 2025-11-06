@@ -64,6 +64,7 @@ export class AssetOrchestrationService {
         brand.tagline,
         brand.industry,
         palette,
+        brand.typeOfWebsite,
         priority,
       ),
       this.queueService.addMockupGenerationJob(brandObjectId, priority),

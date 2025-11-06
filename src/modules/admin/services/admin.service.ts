@@ -91,6 +91,7 @@ export class AdminService {
             // ✅ Get all brands owned by the user + populate BrandAssets
             this.brandModel
                 .find({ owner: user._id })
+                .sort({ createdAt: -1 })
                 .populate({
                     path: 'owner',
                     select: 'firstName lastName email',
@@ -101,6 +102,7 @@ export class AdminService {
             // ✅ Subscriptions with Plan details
             this.subModel
                 .find({ user: user._id })
+                .sort({ createdAt: -1 })
                 .populate('plan')
                 .lean(),
 

@@ -1,0 +1,347 @@
+/* =============================
+       GLOBAL VARIABLES
+    ============================== */
+:root {
+    --color-primary: {{color_primary}};
+    --color-accent: {{color_accent}};
+    --color-bg: {{color_bg}};
+    --color-text: {{color_text}};
+    --color-muted: {{color_muted}};
+    --color-surface: {{color_surface}};
+    --radius: {{radius}};
+    --shadow: {{shadow}};
+    --transition: {{transition}};
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Inter", sans-serif;
+    color: var(--color-text);
+    background: var(--color-bg);
+    line-height: 1.6;
+    scroll-behavior: smooth;
+}
+
+h1,
+h2,
+h3 {
+    font-weight: 700;
+}
+
+img {
+    width: 100%;
+    display: block;
+    border-radius: var(--radius);
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    transition: var(--transition);
+}
+
+/* =============================
+       HEADER
+    ============================== */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: var(--color-bg);
+    box-shadow: var(--shadow);
+    z-index: 50;
+}
+
+nav {
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-links a {
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.nav-links a:hover {
+    color: var(--color-primary);
+}
+
+/* =============================
+       HERO
+    ============================== */
+.hero {
+    margin-top: 6rem;
+    text-align: center;
+    background: linear-gradient(to right, #e0f2fe, #fef9c3);
+    padding: 5rem 1rem;
+    animation: fadeIn 1s ease-in;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    color: var(--color-muted);
+    max-width: 600px;
+    margin: auto;
+    margin-bottom: 2rem;
+}
+
+.hero button {
+    background: var(--color-primary);
+    color: #fff;
+    padding: 0.8rem 1.6rem;
+    border-radius: var(--radius);
+    font-weight: 600;
+}
+
+.hero button:hover {
+    background: var(--color-accent);
+}
+
+/* =============================
+       CATEGORIES
+    ============================== */
+.categories {
+    max-width: 1200px;
+    margin: 4rem auto;
+    padding: 0 1rem;
+}
+
+.categories h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.category {
+    background: var(--color-surface);
+    box-shadow: var(--shadow);
+    text-align: center;
+    padding: 1rem;
+    border-radius: var(--radius);
+    transition: var(--transition);
+}
+
+.category:hover {
+    transform: translateY(-5px);
+}
+
+/* =============================
+       PRODUCTS
+    ============================== */
+.products {
+    background: var(--color-surface);
+    padding: 4rem 1rem;
+}
+
+.products h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.product-grid {
+    max-width: 1200px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.product-card {
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+.product-content {
+    padding: 1rem;
+    text-align: center;
+}
+
+.product-content h3 {
+    margin-bottom: 0.5rem;
+}
+
+.product-content p {
+    color: var(--color-muted);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.price {
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.buy-btn {
+    background: var(--color-primary);
+    color: #fff;
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--radius);
+    font-weight: 600;
+}
+
+.buy-btn:hover {
+    background: var(--color-accent);
+}
+
+/* =============================
+       ABOUT
+    ============================== */
+.about {
+    max-width: 1200px;
+    margin: 4rem auto;
+    padding: 2rem 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: center;
+}
+
+.about img {
+    border-radius: var(--radius);
+}
+
+/* =============================
+       TESTIMONIALS
+    ============================== */
+.testimonials {
+    background: #f9fafb;
+    padding: 4rem 1rem;
+}
+
+.testimonials h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.testimonial-grid {
+    max-width: 1000px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.testimonial {
+    background: #fff;
+    padding: 2rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    text-align: center;
+    transition: var(--transition);
+}
+
+.testimonial:hover {
+    transform: scale(1.03);
+}
+
+.testimonial p {
+    color: var(--color-muted);
+    margin-bottom: 1rem;
+    font-style: italic;
+}
+
+/* =============================
+       NEWSLETTER
+    ============================== */
+.newsletter {
+    text-align: center;
+    padding: 4rem 1rem;
+    background: linear-gradient(to right, #dbeafe, #fff7ed);
+}
+
+.newsletter h2 {
+    margin-bottom: 1rem;
+}
+
+.newsletter input {
+    padding: 0.8rem;
+    width: 250px;
+    border: 1px solid #d1d5db;
+    border-radius: var(--radius);
+    margin-right: 0.5rem;
+}
+
+.newsletter button {
+    background: var(--color-primary);
+    color: #fff;
+    padding: 0.8rem 1.4rem;
+    border-radius: var(--radius);
+    font-weight: 600;
+}
+
+/* =============================
+       FOOTER
+    ============================== */
+footer {
+    background: var(--color-primary);
+    color: #fff;
+    text-align: center;
+    padding: 1.5rem;
+    margin-top: 3rem;
+}
+
+/* =============================
+       ANIMATIONS
+    ============================== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .about {
+        grid-template-columns: 1fr;
+    }
+}

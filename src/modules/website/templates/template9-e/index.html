@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="{{lang}}">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{businessName}} – {{tagline}}</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link href="style.css" rel="stylesheet" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png"
+    href="https://res.cloudinary.com/dudpoehph/image/upload/v1762181222/White_app_Icon_3x_d8xx6q.png" />
+  <link rel="shortcut icon" type="image/png"
+    href="https://res.cloudinary.com/dudpoehph/image/upload/v1762181222/White_app_Icon_3x_d8xx6q.png" />
+
+  <!-- Launchix Meta Tags -->
+  <meta name="description"
+    content="Launchix.ai helps entrepreneurs instantly create logos, websites, and e-commerce stores powered by AI. Build your brand in minutes and launch your business with confidence." />
+  <meta property="og:title" content="{{businessName}} - {{tagline}}" />
+  <meta property="og:description"
+    content="Launchix.ai empowers you to launch your business fast with AI-powered branding, website creation, and store setup." />
+  <meta property="og:image"
+    content="https://res.cloudinary.com/dudpoehph/image/upload/v1762181222/White_app_Icon_3x_d8xx6q.png" />
+  <meta property="og:url" content="https://launchix.ai" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{businessName}} - {{tagline}}" />
+  <meta name="twitter:description"
+    content="AI-powered business builder by Launchix — instantly create your logo, website, and store." />
+  <meta name="twitter:image"
+    content="https://res.cloudinary.com/dudpoehph/image/upload/v1762181222/White_app_Icon_3x_d8xx6q.png" />
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header>
+    <nav>
+      <div class="logo">{{businessName}}</div>
+      <div class="nav-links">
+        <a href="#categories">{{navCategories}}</a>
+        <a href="#products">{{navProducts}}</a>
+        <a href="#about">{{navAbout}}</a>
+        <a href="#contact">{{navContact}}</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>{{heroTitle}}</h1>
+    <p>{{heroSubtitle}}</p>
+    <button onclick="document.getElementById('products').scrollIntoView({behavior: 'smooth'})">{{heroButton}}</button>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section class="categories" id="categories">
+    <h2>{{categoriesHeading}}</h2>
+    <div class="category-grid">
+      <div class="category"><img src="{{category1Image}}">
+        <h3>{{category1Title}}</h3>
+      </div>
+      <div class="category"><img src="{{category2Image}}">
+        <h3>{{category2Title}}</h3>
+      </div>
+      <div class="category"><img src="{{category3Image}}">
+        <h3>{{category3Title}}</h3>
+      </div>
+      <div class="category"><img src="{{category4Image}}">
+        <h3>{{category4Title}}</h3>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section class="products" id="products">
+    <h2>{{productsHeading}}</h2>
+    <div class="product-grid">
+      <div class="product-card">
+        <img src="{{product1Image}}">
+        <div class="product-content">
+          <h3>{{product1Title}}</h3>
+          <p>{{product1Desc}}</p>
+          <span class="price">{{product1Price}}</span>
+          <button class="buy-btn" onclick="buyNow('{{product1Title}}')">{{buyButton}}</button>
+        </div>
+      </div>
+      <div class="product-card">
+        <img src="{{product2Image}}">
+        <div class="product-content">
+          <h3>{{product2Title}}</h3>
+          <p>{{product2Desc}}</p>
+          <span class="price">{{product2Price}}</span>
+          <button class="buy-btn" onclick="buyNow('{{product2Title}}')">{{buyButton}}</button>
+        </div>
+      </div>
+      <div class="product-card">
+        <img src="{{product3Image}}">
+        <div class="product-content">
+          <h3>{{product3Title}}</h3>
+          <p>{{product3Desc}}</p>
+          <span class="price">{{product3Price}}</span>
+          <button class="buy-btn" onclick="buyNow('{{product3Title}}')">{{buyButton}}</button>
+        </div>
+      </div>
+      <div class="product-card">
+        <img src="{{product4Image}}">
+        <div class="product-content">
+          <h3>{{product4Title}}</h3>
+          <p>{{product4Desc}}</p>
+          <span class="price">{{product4Price}}</span>
+          <button class="buy-btn" onclick="buyNow('{{product4Title}}')">{{buyButton}}</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <img src="{{aboutImage}}">
+    <div>
+      <h2>{{aboutHeading}}</h2>
+      <p>{{aboutText}}</p>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials">
+    <h2>{{testimonialsHeading}}</h2>
+    <div class="testimonial-grid">
+      <div class="testimonial">
+        <p>{{testimonial1Text}}</p>
+        <h4>{{testimonial1Author}}</h4>
+      </div>
+      <div class="testimonial">
+        <p>{{testimonial2Text}}</p>
+        <h4>{{testimonial2Author}}</h4>
+      </div>
+      <div class="testimonial">
+        <p>{{testimonial3Text}}</p>
+        <h4>{{testimonial3Author}}</h4>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter" id="contact">
+    <h2>{{newsletterHeading}}</h2>
+    <p>{{newsletterText}}</p>
+    <input type="email" placeholder="{{newsletterPlaceholder}}">
+    <button>{{newsletterButton}}</button>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    {{footerText}}
+  </footer>
+
+  <script>
+    function buyNow(product) {
+      alert(`Thank you for choosing ${product}! Proceeding to checkout...`);
+    }
+  </script>
+</body>
+
+</html>
