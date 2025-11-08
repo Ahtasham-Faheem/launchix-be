@@ -6,7 +6,7 @@ export class Brand {
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   owner: Types.ObjectId;
   
-  @Prop({ type: Types.ObjectId, ref: 'BrandAssets', required: true })
+  @Prop({ type: Types.ObjectId, ref: 'BrandAssets', required: false })
   brandAsset: Types.ObjectId;
 
   @Prop({})
