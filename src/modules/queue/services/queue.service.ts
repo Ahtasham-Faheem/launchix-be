@@ -21,7 +21,8 @@ export class QueueService {
     @InjectQueue(QUEUE_NAMES.WEBSITE_GENERATION) private websiteQueue: Queue,
     @InjectQueue(QUEUE_NAMES.MOCKUP_GENERATION) private mockupQueue: Queue,
     @InjectQueue(QUEUE_NAMES.ASSET_AGGREGATION) private assetQueue: Queue,
-  ) {}
+    @InjectQueue(QUEUE_NAMES.WEBSITE_REGENERATION) private regenQueue: Queue,
+  ) { }
 
   async addColorGenerationJob(
     brandId: Types.ObjectId,
@@ -29,7 +30,7 @@ export class QueueService {
     tagline: string,
     industry: string,
     brandStyles: string[],
-    priority : number = JOB_PRIORITIES.NORMAL,
+    priority: number = JOB_PRIORITIES.NORMAL,
   ) {
     const jobData: ColorGenerationJobData = { brandId, businessName, industry, brandStyles, tagline, };
 
@@ -49,7 +50,7 @@ export class QueueService {
     brandStyles: string[],
     colors: string[],
     industry: string,
-    priority : number = JOB_PRIORITIES.NORMAL,
+    priority: number = JOB_PRIORITIES.NORMAL,
   ) {
     const variants: Array<'primary' | 'secondary' | 'icon' | 'text'> = ['primary', 'icon'];
     const jobs = [];
@@ -83,8 +84,8 @@ export class QueueService {
     tagline: string,
     industry: string,
     brandStyle: string[],
-    typeOfWebsite : string,
-    priority : number = JOB_PRIORITIES.NORMAL,
+    typeOfWebsite: string,
+    priority: number = JOB_PRIORITIES.NORMAL,
   ) {
     const jobData: WebsiteGenerationJobData = {
       brandId,
@@ -104,7 +105,7 @@ export class QueueService {
     return job;
   }
 
-  async addMockupGenerationJob(brandId: Types.ObjectId, priority : number = JOB_PRIORITIES.NORMAL) {
+  async addMockupGenerationJob(brandId: Types.ObjectId, priority: number = JOB_PRIORITIES.NORMAL) {
     const jobData: MockupGenerationJobData = { brandId };
 
     const job = await this.mockupQueue.add(JOB_NAMES.GENERATE_MOCKUPS, jobData, {
@@ -122,7 +123,7 @@ export class QueueService {
     logos: { type: string; url: string }[],
     websiteJson: any,
     mockups: string[],
-    priority : number = JOB_PRIORITIES.HIGH, // Higher priority for final aggregation
+    priority: number = JOB_PRIORITIES.HIGH, // Higher priority for final aggregation
   ) {
     const jobData: AssetAggregationJobData = {
       brandId,
@@ -138,6 +139,23 @@ export class QueueService {
     });
 
     this.logger.log(`Added asset aggregation job: ${job.id} for brand: ${brandId}`);
+    return job;
+  }
+
+  async addWebsiteRegenerationJob(brandId: Types.ObjectId, prompt: string) {
+    const jobId = `regen-${brandId}`;
+    const job = await this.regenQueue.add(
+      JOB_NAMES.REGENERATE_WEBSITE,
+      { brandId, prompt },
+      {
+        jobId,
+        removeOnComplete: true,
+        attempts: 3,
+        backoff: { type: 'exponential', delay: 10000 },
+      },
+    );
+
+    this.logger.log(`Added website regeneration job: ${job.id} for brand: ${brandId}`);
     return job;
   }
 
@@ -189,6 +207,7 @@ export class QueueService {
       `website-${brandId}`,
       `mockup-${brandId}`,
       `aggregate-${brandId}`,
+      `regen-${brandId}`,
     ];
 
     const statuses = {};
@@ -233,6 +252,9 @@ export class QueueService {
         break;
       case QUEUE_NAMES.ASSET_AGGREGATION:
         queue = this.assetQueue;
+        break;
+      case QUEUE_NAMES.WEBSITE_REGENERATION:
+        queue = this.regenQueue;
         break;
       default:
         return;

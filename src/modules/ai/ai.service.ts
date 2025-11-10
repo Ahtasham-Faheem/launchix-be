@@ -485,6 +485,54 @@ Return ONLY valid JSON with no markdown or comments.
   }
 
   /**
+  * ✅ Update an existing website (HTML + CSS) based on user prompt
+  */
+  async updateWebsite(prompt: string, html: string, css: string) {
+    this.logger.log(`🎨 Updating website with AI prompt: "${prompt}"`);
+
+    const systemPrompt = `
+    You are a professional web designer and front-end developer.
+    The user will provide an existing website's HTML and CSS plus an instruction (prompt).
+    Your task: update the HTML and/or CSS accordingly.
+    Keep structure clean and valid. Do not remove necessary elements.
+    Respond strictly in JSON format:
+    {
+      "html": "UPDATED_HTML_CODE",
+      "css": "UPDATED_CSS_CODE"
+    }
+    `;
+
+        const userPrompt = `
+    User prompt: "${prompt}"
+
+    Current HTML:
+    ${html}
+
+    Current CSS:
+    ${css}
+    `;
+
+    const completion = await this.client.chat.completions.create({
+      model: 'gpt-4o-mini',
+      response_format: { type: 'json_object' },
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt },
+      ],
+    });
+
+    const content = completion.choices[0].message.content;
+    try {
+      const json = JSON.parse(content);
+
+      return { html: json.html || html, css: json.css || css };
+    } catch (err) {
+      this.logger.error('Failed to parse AI response', err);
+      return { html, css }; // fallback to original
+    }
+  }
+
+  /**
    * Generate fallback CSS if AI doesn't provide valid CSS
    */
   private generateFallbackCSS(): string {

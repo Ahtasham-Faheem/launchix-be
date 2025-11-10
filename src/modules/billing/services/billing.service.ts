@@ -15,6 +15,8 @@ import { CreatePlanDto, UpdatePlanDto } from '../dto/create-plan.dto';
 import { CreateSubscriptionDto } from '../dto/create-subscription.dto';
 import { CancelSubscriptionDto } from '../dto/cancel-subscription.dto';
 import { MailService } from 'src/shared/mail/mail.service';
+import { SafepayService } from 'src/modules/payments/services/safepay.service';
+import { PaymentMethod, PaymentMethodDocument } from 'src/modules/payments/schemas/payment-method.schema';
 
 @Injectable()
 export class BillingService {
@@ -26,8 +28,10 @@ export class BillingService {
     @InjectModel(Subscription.name) private subModel: Model<SubscriptionDocument>,
     @InjectModel(Invoice.name) private invoiceModel: Model<InvoiceDocument>,
     @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectModel(PaymentMethod.name) private paymentMethodModel: Model<PaymentMethodDocument>,
     private readonly emailService: MailService,
-  ) {}
+    private readonly safepayService: SafepayService,
+  ) { }
 
   // ===================================================
   // ✅ PLAN MANAGEMENT (ADMIN)
@@ -86,6 +90,35 @@ export class BillingService {
     });
 
     const invoice = await this.generateInvoiceForSubscription(sub, plan, coupon ?? undefined);
+
+
+    const user = await this.userModel.findById(userId);
+    const currency = plan.currency.toUpperCase() === 'PKR' ? 'PKR' : 'USD';
+
+    // if you want auto-charge via Safepay:
+    const safepayCustomer = await this.safepayService.createCustomer({
+      userId,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    });
+
+    // Get default payment method from DB
+    const paymentMethod = await this.paymentMethodModel.findOne({
+      user: userId,
+      isDefault: true,
+    });
+
+    if (paymentMethod) {
+      await this.safepayService.chargeSubscription({
+        userId,
+        subscriptionId: sub._id.toString(),
+        paymentMethodId: paymentMethod.token,
+        amount: plan.amount / 100, // convert from cents to main unit
+        currency,
+      });
+    }
+
     await this.sendInvoiceEmail(invoice._id.toString());
 
     return { subscription: sub, invoice };

@@ -20,7 +20,8 @@ export class AdminGuard implements CanActivate {
 
     const role: UserRole = user.role || UserRole.USER;
     const isAdminFlag = user.isAdmin === true;
-
+    console.log('isAdminFlag', isAdminFlag)
+    console.log('role', role)
     const hasRole =
       isAdminFlag ||
       (role && allowedAdminPannelRoles.includes(role));

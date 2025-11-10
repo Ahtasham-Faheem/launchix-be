@@ -15,6 +15,8 @@ import { Brand, BrandSchema } from '../../schemas/brand.schema';
 import { BrandAssets, BrandAssetsSchema } from '../../schemas/assets.schema';
 import { ImageOverlayService } from '../imageOverlay/imageOverlay.service';
 import { WebsiteTemplateService } from '../website/website-template.service';
+import { WebsiteRegenerationProcessor } from './processors/website-regeneration.processor';
+
 
 @Module({
   imports: [
@@ -25,6 +27,7 @@ import { WebsiteTemplateService } from '../website/website-template.service';
       { name: QUEUE_NAMES.WEBSITE_GENERATION },
       { name: QUEUE_NAMES.MOCKUP_GENERATION },
       { name: QUEUE_NAMES.ASSET_AGGREGATION },
+      { name: QUEUE_NAMES.WEBSITE_REGENERATION },
     ),
     MongooseModule.forFeature([
       { name: Brand.name, schema: BrandSchema },
@@ -38,6 +41,7 @@ import { WebsiteTemplateService } from '../website/website-template.service';
     WebsiteGenerationProcessor,
     MockupGenerationProcessor,
     AssetAggregationProcessor,
+    WebsiteRegenerationProcessor,
     QueueService,
     AssetOrchestrationService,
     ImageOverlayService,

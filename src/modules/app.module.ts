@@ -16,6 +16,8 @@ import { HostingModule } from './hosting/hosting.module';
 import { EmailModule } from './email/email.module';
 import { BillingModule } from './billing/billing.module';
 import { AdminModule } from './admin/admin.module';
+import { PaymentsModule } from './payments/payments.module';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Module({
   imports: [
@@ -50,13 +52,18 @@ import { AdminModule } from './admin/admin.module';
     HealthModule,
     HostingModule,
     EmailModule,
+    PaymentsModule,
     BillingModule,
-    AdminModule
+    AdminModule,
   ],
   providers: [
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard, // ✅ Add this
     },
   ],
 })

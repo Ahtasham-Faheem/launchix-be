@@ -5,6 +5,7 @@ export const QUEUE_NAMES = {
   WEBSITE_GENERATION: 'website-generation',
   MOCKUP_GENERATION: 'mockup-generation',
   ASSET_AGGREGATION: 'asset-aggregation',
+  WEBSITE_REGENERATION: 'website-regeneration', 
 } as const;
 
 export const JOB_NAMES = {
@@ -12,6 +13,7 @@ export const JOB_NAMES = {
   GENERATE_IDENTITY: 'generate-identity',
   GENERATE_LOGO: 'generate-logo',
   GENERATE_WEBSITE: 'generate-website',
+  REGENERATE_WEBSITE: 'regenerate-website', // ✅ NEW
   GENERATE_MOCKUPS: 'generate-mockups',
   AGGREGATE_ASSETS: 'aggregate-assets',
 } as const;

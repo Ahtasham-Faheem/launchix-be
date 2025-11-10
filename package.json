@@ -25,6 +25,7 @@
     "@nestjs/schedule": "^6.0.1",
     "@nestjs/swagger": "^7.3.0",
     "@nestjs/throttler": "^6.0.0",
+    "@sfpy/node-core": "^0.2.9",
     "axios": "^1.13.1",
     "bullmq": "^5.62.0",
     "class-transformer": "^0.5.1",

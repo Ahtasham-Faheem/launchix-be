@@ -9,14 +9,3 @@ export const CurrentUser = createParamDecorator(
     return data ? user?.[data] : user;
   },
 );
-
-// Usage example:
-// @Get('profile')
-// getUserProfile(@CurrentUser() user: any) {
-//   return user;
-// }
-//
-// @Get('email')
-// getUserEmail(@CurrentUser('email') email: string) {
-//   return { email };
-// }

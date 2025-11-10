@@ -15,6 +15,8 @@ import { User, UserSchema } from 'src/schemas/user.schema';
 import { MailModule } from 'src/shared/mail/mail.module';
 import { CouponController } from './controllers/coupon.controller';
 import { CouponService } from './services/coupon.service';
+import { PaymentsModule } from '../payments/payments.module';
+import { PaymentMethod, PaymentMethodSchema } from '../payments/schemas/payment-method.schema';
 
 @Module({
   imports: [
@@ -25,9 +27,11 @@ import { CouponService } from './services/coupon.service';
       { name: Subscription.name, schema: SubscriptionSchema },
       { name: Invoice.name, schema: InvoiceSchema },
       { name: User.name, schema: UserSchema },
+      { name: PaymentMethod.name, schema: PaymentMethodSchema },
     ]),
     // Resend-based mail service
     MailModule,
+    PaymentsModule,
   ],
   controllers: [
     BillingController,

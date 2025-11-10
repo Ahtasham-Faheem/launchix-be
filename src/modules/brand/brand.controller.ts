@@ -10,6 +10,7 @@ import { QueueService } from '../queue/services/queue.service';
 import { CurrentUser } from 'src/decorator/auth.decorator';
 import { BrandLimitGuard } from 'src/guards/limit-brand.guard';
 import { UpdateBrandDto } from './dto/update-brand.dto';
+import { RegenerateWebsiteDto } from './dto/regenerate-website.dto';
 
 @ApiTags('brand')
 @ApiBearerAuth()
@@ -185,11 +186,21 @@ export class BrandController {
     };
   }
 
+  @Post(':brandId/regenerate-website')
+  async regenerateWebsite(@Param('brandId') brandId: string,  @Body() body: RegenerateWebsiteDto,) {
+    const brand = await this.service.getBrandById(brandId);
+    if (!brand) {
+      return { error: 'Brand not found' };
+    }
+    const job = await this.queueService.addWebsiteRegenerationJob(brand._id, body.prompt);
+    return { message: 'Website regeneration queued', jobId: job.id };
+  }
+
   /**
    * ✅ Update brand details (partial or full)
    * @route PUT /brands/:id
    */
-  
+
   @Put(':id')
   @ApiOperation({
     summary: 'Update Brand',
