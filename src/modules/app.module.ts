@@ -45,6 +45,7 @@ import { AuthGuard } from 'src/guards/auth.guard';
     // Application modules
     UserModule,
     AuthModule,
+    PaymentsModule,
     BrandModule,
     AiModule,
     QueueModule,
@@ -52,7 +53,6 @@ import { AuthGuard } from 'src/guards/auth.guard';
     HealthModule,
     HostingModule,
     EmailModule,
-    PaymentsModule,
     BillingModule,
     AdminModule,
   ],
