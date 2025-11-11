@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { SafepayService } from './services/safepay.service';
 import { SafepayController } from './controllers/safepay.controller';
@@ -6,6 +6,7 @@ import { SafepayCustomer, SafepayCustomerSchema } from './schemas/safepay-custom
 import { PaymentMethod, PaymentMethodSchema } from './schemas/payment-method.schema';
 import { User, UserSchema } from 'src/schemas/user.schema';
 
+@Global()
 @Module({
   imports: [
     MongooseModule.forFeature([

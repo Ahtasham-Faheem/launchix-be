@@ -32,7 +32,7 @@ export class SafepayService {
       first_name: dto.firstName ?? '',
       last_name: dto.lastName ?? '',
       email: dto.email,
-      phone_number: dto.phoneNumber ?? '',
+      phone_number: dto.phoneNumber && dto.phoneNumber.trim() ? dto.phoneNumber : '+923001234567',
       country: dto.country ?? 'PK',
       is_guest: false,
     });

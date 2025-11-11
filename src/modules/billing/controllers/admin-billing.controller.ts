@@ -1,6 +1,20 @@
 // src/billing/admin-billing.controller.ts
-import { Controller, Post, Get, Patch, Delete, Body, Param, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  Controller,
+  Post,
+  Get,
+  Patch,
+  Delete,
+  Body,
+  Param,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+} from '@nestjs/swagger';
 import { BillingService } from '../services/billing.service';
 import { CreatePlanDto, UpdatePlanDto } from '../dto/create-plan.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
@@ -8,7 +22,7 @@ import { AdminGuard } from 'src/guards/admin.guard';
 
 @ApiTags('billing-admin')
 @ApiBearerAuth()
-@UseGuards(AuthGuard, AdminGuard)
+@UseGuards(AuthGuard)
 @Controller('billing/admin')
 export class AdminBillingController {
   constructor(private readonly billing: BillingService) {}

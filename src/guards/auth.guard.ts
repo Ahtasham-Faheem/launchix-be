@@ -11,15 +11,14 @@ import { Model } from 'mongoose';
 import { User, UserDocument } from '../schemas/user.schema';
 import { SafepayService } from 'src/modules/payments/services/safepay.service';
 
-
 @Injectable()
 export class AuthGuard implements CanActivate {
   private readonly logger = new Logger(AuthGuard.name);
 
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
-    // private readonly safepayService: SafepayService,
-  ) { }
+    private readonly safepayService: SafepayService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
@@ -50,26 +49,26 @@ export class AuthGuard implements CanActivate {
 
       const localUser = await this.findOrCreateLocalUser(user);
 
-      // // ✅ Auto-create Safepay Customer if missing
-      // if (!localUser.metadata?.safepayCustomerToken) {
-      //   const safepayCustomer = await this.safepayService.createCustomer({
-      //     userId: localUser._id.toString(),
-      //     email: localUser.email,
-      //     firstName: localUser.firstName,
-      //     lastName: localUser.lastName,
-      //     country: 'PK', // default
-      //   });
+      // ✅ Auto-create Safepay Customer if missing
+      if (!localUser.metadata?.safepayCustomerToken) {
+        const safepayCustomer = await this.safepayService.createCustomer({
+          userId: localUser._id.toString(),
+          email: localUser.email,
+          firstName: localUser.firstName,
+          lastName: localUser.lastName,
+          country: 'PK', // default
+        });
 
-      //   localUser.metadata = {
-      //     ...localUser.metadata,
-      //     safepayCustomerToken: safepayCustomer.customerToken,
-      //   };
-      //   await localUser.save();
+        localUser.metadata = {
+          ...localUser.metadata,
+          safepayCustomerToken: safepayCustomer.customerToken,
+        };
+        await localUser.save();
 
-      //   this.logger.log(
-      //     `Safepay customer created for ${localUser.email} (${localUser._id})`,
-      //   );
-      // }
+        this.logger.log(
+          `Safepay customer created for ${localUser.email} (${localUser._id})`,
+        );
+      }
 
       request.user = localUser;
       return true;
@@ -83,7 +82,9 @@ export class AuthGuard implements CanActivate {
 
   private async findOrCreateLocalUser(clerkUser: any): Promise<UserDocument> {
     const email = clerkUser.emailAddresses?.[0]?.emailAddress;
-    const existingUser = await this.userModel.findOne({ clerkId: clerkUser.id });
+    const existingUser = await this.userModel.findOne({
+      clerkId: clerkUser.id,
+    });
     if (existingUser) return existingUser;
 
     const newUser = new this.userModel({
