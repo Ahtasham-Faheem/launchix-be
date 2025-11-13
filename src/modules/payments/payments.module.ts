@@ -4,6 +4,7 @@ import { SafepayService } from './services/safepay.service';
 import { SafepayController } from './controllers/safepay.controller';
 import { SafepayCustomer, SafepayCustomerSchema } from './schemas/safepay-customer.schema';
 import { PaymentMethod, PaymentMethodSchema } from './schemas/payment-method.schema';
+import { Plan, PlanSchema } from '../billing/schemas/plan.schema';
 import { User, UserSchema } from 'src/schemas/user.schema';
 
 @Global()
@@ -12,6 +13,7 @@ import { User, UserSchema } from 'src/schemas/user.schema';
     MongooseModule.forFeature([
       { name: SafepayCustomer.name, schema: SafepayCustomerSchema },
       { name: PaymentMethod.name, schema: PaymentMethodSchema },
+      { name: Plan.name, schema: PlanSchema },
       { name: User.name, schema: UserSchema },
     ]),
   ],

@@ -1,21 +1,32 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsString, IsOptional, IsBoolean } from 'class-validator';
 
 export class CreateCustomerDto {
-  @ApiProperty({ example: '123abc', description: 'Mongo User ID' })
-  userId: string;
+  @IsString()
+  @ApiProperty({ example: 'Hassan' })
+  firstName: string;
 
-  @ApiProperty({ example: 'John', required: false })
-  firstName?: string;
+  @IsString()
+  @ApiProperty({ example: 'Zaidi' })
+  lastName: string;
 
-  @ApiProperty({ example: 'Doe', required: false })
-  lastName?: string;
-
-  @ApiProperty({ example: 'john@example.com' })
+  @IsString()
+  @ApiProperty({ example: 'hassan@example.com' })
   email: string;
 
-  @ApiProperty({ example: '+923001234567', required: false })
-  phoneNumber?: string;
+  @IsString()
+  @ApiProperty({ example: '+923331234567' })
+  phoneNumber: string;
 
+  @IsOptional()
+  @IsString()
   @ApiProperty({ example: 'PK', required: false })
   country?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  @ApiProperty({ example: true, required: false })
+  isGuest?: boolean;
+
+  userId?: string;
 }

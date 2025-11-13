@@ -9,9 +9,13 @@ export class SafepayCustomer {
   @Prop({ required: true })
   customerToken: string; // Safepay customer token
 
+  @Prop({ required: true })
+  merchantApiKey: string; // Safepay customer token
+
   @Prop({ default: 'safepay' })
   provider: string;
 }
 
 export type SafepayCustomerDocument = HydratedDocument<SafepayCustomer>;
-export const SafepayCustomerSchema = SchemaFactory.createForClass(SafepayCustomer);
+export const SafepayCustomerSchema =
+  SchemaFactory.createForClass(SafepayCustomer);

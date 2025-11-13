@@ -51,12 +51,13 @@ export class AuthGuard implements CanActivate {
 
       // ✅ Auto-create Safepay Customer if missing
       if (!localUser.metadata?.safepayCustomerToken) {
-        const safepayCustomer = await this.safepayService.createCustomer({
-          userId: localUser._id.toString(),
+        const safepayCustomer = await this.safepayService.createCustomer(localUser._id.toString(), {
+          firstName: localUser.firstName || 'User',
+          lastName: localUser.lastName || 'Name',
           email: localUser.email,
-          firstName: localUser.firstName,
-          lastName: localUser.lastName,
-          country: 'PK', // default
+          phoneNumber: '+923001234567',
+          country: 'PK',
+          isGuest: false,
         });
 
         localUser.metadata = {
