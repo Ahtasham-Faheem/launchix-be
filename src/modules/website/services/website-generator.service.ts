@@ -1,11 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import OpenAI from 'openai';
-import {
-  generateCompleteWebsitePrompt,
-  WebsiteGenerationInput
-} from '../prompts/generateCompleteWebsitePrompt';
+
 import * as fs from 'fs/promises';
 import * as path from 'path';
+import { WebsiteGenerationInput } from '../interfaces/types';
+import { generateCompleteWebsitePrompt } from '../prompts/generatecompletewebsiteprompt';
 
 @Injectable()
 export class WebsiteGeneratorService {
@@ -27,7 +26,7 @@ export class WebsiteGeneratorService {
     this.logger.log(`🌐 Generating complete website for: ${input.businessName}`);
 
     try {
-      const prompt = generateCompleteWebsitePrompt(input);
+      const prompt = generateCompleteWebsitePrompt(input as any);
 
       let fullHtml = '';
       let attempt = 0;

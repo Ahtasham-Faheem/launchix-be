@@ -55,7 +55,7 @@ export class LaunchixIntegrationService {
 
       // Generate the website
       const website = await this.websiteGenerator.generateAndSaveWebsite(
-        websiteInput,
+        websiteInput as any,
         userId
       );
 
@@ -152,7 +152,7 @@ export class LaunchixIntegrationService {
       };
 
       const website = await this.websiteGenerator.generateAndSaveWebsite(
-        websiteInput,
+        websiteInput as any,
         input.userId
       );
 
@@ -209,7 +209,7 @@ export class LaunchixIntegrationService {
 
     // Regenerate website with new branding
     const updatedWebsite = await this.websiteGenerator.generateAndSaveWebsite(
-      updatedInput,
+      updatedInput as any,
       userId
     );
 
@@ -246,7 +246,7 @@ export class LaunchixIntegrationService {
       };
 
       const website = await this.websiteGenerator.generateAndSaveWebsite(
-        websiteInput,
+        websiteInput as any,
         userId
       );
 
