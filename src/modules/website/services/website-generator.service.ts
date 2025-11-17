@@ -4,7 +4,7 @@ import OpenAI from 'openai';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 import { WebsiteGenerationInput } from '../interfaces/types';
-import { generateCompleteWebsitePrompt } from '../prompts/generatecompletewebsiteprompt';
+import { generateCompleteWebsitePrompt } from '../prompts/generate-complet-website-prompt';
 
 @Injectable()
 export class WebsiteGeneratorService {
