@@ -249,7 +249,9 @@
 
       <div class="team-grid">
         <div class="team-member">
-          <div class="member-photo">👨‍💼</div>
+          <div class="member-photo">
+            <img src="{{team_member_1_image}}" alt="{{team_member_1_name}}"/>
+          </div>
           <h3 class="member-name">{{team_member_1_name}}</h3>
           <p class="member-role">{{team_member_1_role}}</p>
           <p class="member-description">{{team_member_1_bio}}</p>
@@ -261,7 +263,9 @@
         </div>
 
         <div class="team-member">
-          <div class="member-photo">👩‍💻</div>
+          <div class="member-photo">
+            <img src="{{team_member_2_image}}" alt="{{team_member_2_name}}"/>
+          </div>
           <h3 class="member-name">{{team_member_2_name}}</h3>
           <p class="member-role">{{team_member_2_role}}</p>
           <p class="member-description">{{team_member_2_bio}}</p>
@@ -273,7 +277,9 @@
         </div>
 
         <div class="team-member">
-          <div class="member-photo">👨‍🎨</div>
+          <div class="member-photo">
+            <img src="{{team_member_3_image}}" alt="{{team_member_3_name}}"/>
+          </div>
           <h3 class="member-name">{{team_member_3_name}}</h3>
           <p class="member-role">{{team_member_3_role}}</p>
           <p class="member-description">{{team_member_3_bio}}</p>
@@ -285,7 +291,9 @@
         </div>
 
         <div class="team-member">
-          <div class="member-photo">👩‍💼</div>
+          <div class="member-photo">
+            <img src="{{team_member_4_image}}" alt="{{team_member_4_name}}"/>
+          </div>
           <h3 class="member-name">{{team_member_4_name}}</h3>
           <p class="member-role">{{team_member_4_role}}</p>
           <p class="member-description">{{team_member_4_bio}}</p>
@@ -467,16 +475,16 @@
     });
 
     // Header scroll effect
-    window.addEventListener("scroll", () => {
-      const header = document.querySelector(".site-header");
-      if (window.scrollY > 100) {
-        header.style.backgroundColor = "{{header_scroll_bg}}";
-        header.style.padding = "{{header_scroll_padding}}";
-      } else {
-        header.style.backgroundColor = "{{header_default_bg}}";
-        header.style.padding = "{{header_default_padding}}";
-      }
-    });
+    // window.addEventListener("scroll", () => {
+    //   const header = document.querySelector(".site-header");
+    //   if (window.scrollY > 100) {
+    //     header.style.backgroundColor = "{{header_scroll_bg}}";
+    //     header.style.padding = "{{header_scroll_padding}}";
+    //   } else {
+    //     header.style.backgroundColor = "{{header_default_bg}}";
+    //     header.style.padding = "{{header_default_padding}}";
+    //   }
+    // });
   </script>
 </body>
 

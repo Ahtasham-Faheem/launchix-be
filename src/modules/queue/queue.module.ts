@@ -14,8 +14,14 @@ import { AiModule } from '../ai/ai.module';
 import { Brand, BrandSchema } from '../../schemas/brand.schema';
 import { BrandAssets, BrandAssetsSchema } from '../../schemas/assets.schema';
 import { ImageOverlayService } from '../imageOverlay/imageOverlay.service';
-import { WebsiteTemplateService } from '../website/website-template.service';
-import { WebsiteRegenerationProcessor } from './processors/website-regeneration.processor';
+import { WebsiteTemplateService } from '../website/services/website-template.service';
+import { WebsiteRegenerationProcessor } from './processors/regenerate/regeneration-website.processor';
+import { REGENERATE_QUEUE_NAMES } from './constants/regenerate-queue.constants';
+import { BannerGenerationProcessor } from './processors/banner-generation.processor';
+import { RegenerateQueueService } from './services/regenerate-queue.service';
+import { ColorPalleteReGenerationProcessor } from './processors/regenerate/regeneration-color-pallete.processor';
+import { LogoRegenerationProcessor } from './processors/regenerate/regeneration-logo.processor';
+import { BannerRegenerationProcessor } from './processors/regenerate/regeneration-banner.processor';
 
 
 @Module({
@@ -27,7 +33,17 @@ import { WebsiteRegenerationProcessor } from './processors/website-regeneration.
       { name: QUEUE_NAMES.WEBSITE_GENERATION },
       { name: QUEUE_NAMES.MOCKUP_GENERATION },
       { name: QUEUE_NAMES.ASSET_AGGREGATION },
-      { name: QUEUE_NAMES.WEBSITE_REGENERATION },
+      { name: QUEUE_NAMES.BANNER_GENERATION },
+
+      /* REGENERATION QUEUE */ 
+      { name: REGENERATE_QUEUE_NAMES.WEBSITE_REGENERATE},
+      { name: REGENERATE_QUEUE_NAMES.LOGO_REGENERATE},
+      { name: REGENERATE_QUEUE_NAMES.TYPOGRAPHY_REGENERATE},
+      { name: REGENERATE_QUEUE_NAMES.COLOR_PALETTE_REGENERATE},
+      { name: REGENERATE_QUEUE_NAMES.MISSION_REGENERATE},
+      { name: REGENERATE_QUEUE_NAMES.VISION_REGENERATE},
+      { name: REGENERATE_QUEUE_NAMES.BANNER_REGENERATE},
+
     ),
     MongooseModule.forFeature([
       { name: Brand.name, schema: BrandSchema },
@@ -41,12 +57,20 @@ import { WebsiteRegenerationProcessor } from './processors/website-regeneration.
     WebsiteGenerationProcessor,
     MockupGenerationProcessor,
     AssetAggregationProcessor,
+    BannerGenerationProcessor,
+    
+    // Regenerate Processor
+    ColorPalleteReGenerationProcessor,
     WebsiteRegenerationProcessor,
+    LogoRegenerationProcessor,
+    BannerRegenerationProcessor,
+
     QueueService,
+    RegenerateQueueService,
     AssetOrchestrationService,
     ImageOverlayService,
     WebsiteTemplateService
   ],
-  exports: [QueueService, AssetOrchestrationService],
+  exports: [QueueService, AssetOrchestrationService, RegenerateQueueService],
 })
 export class QueueModule {}

@@ -8,7 +8,7 @@ import { WebsiteGenerationJobData, JobResult } from '../interfaces/job-data.inte
 import { AiService } from '../../ai/ai.service';
 import { BrandAssets } from 'src/schemas/assets.schema';
 import { QueueService } from '../services/queue.service';
-import { WebsiteTemplateService } from 'src/modules/website/website-template.service';
+import { WebsiteTemplateService } from 'src/modules/website/services/website-template.service';
 import { WebsiteType } from 'src/shared/types';
 import { Brand } from 'src/schemas/brand.schema';
 
@@ -38,34 +38,6 @@ export class WebsiteGenerationProcessor extends WorkerHost {
     "logoUrl": "https://res.cloudinary.com/dudpoehph/image/upload/v1762169569/launchix_ai_logos/jaonuioucodeni4jfo8o.png",
     "colorScheme": { "primary": "#0077B3", "secondary": "#00A3E0", "accent": "#0095D9", "background": "#E7F6FF", "text": "#002B36" }
   }
-
-  private buildColorScheme(colors?: {
-    primary?: string;
-    secondary?: string;
-    accent?: string;
-    background?: string;
-    text?: string;
-  }) {
-    if (
-      !colors ||
-      !colors.primary ||
-      !colors.secondary ||
-      !colors.accent ||
-      !colors.background ||
-      !colors.text
-    ) {
-      return undefined;
-    }
-
-    return {
-      primary: colors.primary,
-      secondary: colors.secondary,
-      accent: colors.accent,
-      background: colors.background,
-      text: colors.text,
-    };
-  }
-
 
   async process(job: Job<WebsiteGenerationJobData>): Promise<JobResult> {
     const { brandId, businessName, tagline, industry, typeOfWebsite } = job.data;
@@ -106,13 +78,15 @@ export class WebsiteGenerationProcessor extends WorkerHost {
 
       // STEP 3️⃣ — Generate website JSON using AI
       const websiteJson = await this.webTemplateService.buildWebsite(
-        businessName,
-        industry,
-        tagline,
-        vision,
-        mission,
-        logoUrl,
-        typeOfWebsite,
+        {
+          businessName,
+          industry,
+          tagline,
+          vision,
+          mission,
+          logoUrl,
+          typeOfWebsite,
+        }
         // colorScheme,
       );
 

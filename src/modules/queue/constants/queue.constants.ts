@@ -2,18 +2,18 @@ export const QUEUE_NAMES = {
   BRAND_CREATION: 'brand-creation',
   IDENTITY_GENERATION: 'identity-generation',
   LOGO_GENERATION: 'logo-generation',
+  BANNER_GENERATION: 'banner-generation',
   WEBSITE_GENERATION: 'website-generation',
   MOCKUP_GENERATION: 'mockup-generation',
   ASSET_AGGREGATION: 'asset-aggregation',
-  WEBSITE_REGENERATION: 'website-regeneration', 
 } as const;
 
 export const JOB_NAMES = {
   CREATE_BRAND: 'create-brand',
   GENERATE_IDENTITY: 'generate-identity',
   GENERATE_LOGO: 'generate-logo',
+  GENERATE_BANNER: 'generate-banner',
   GENERATE_WEBSITE: 'generate-website',
-  REGENERATE_WEBSITE: 'regenerate-website', // ✅ NEW
   GENERATE_MOCKUPS: 'generate-mockups',
   AGGREGATE_ASSETS: 'aggregate-assets',
 } as const;

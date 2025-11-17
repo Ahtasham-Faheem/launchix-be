@@ -9,7 +9,11 @@ import {
   WebsiteGenerationJobData,
   MockupGenerationJobData,
   AssetAggregationJobData,
+  BannerGenerationJobData,
+  LogoVariant,
+  BannerVariant,
 } from '../interfaces/job-data.interface';
+import { Brand } from 'src/schemas/brand.schema';
 
 @Injectable()
 export class QueueService {
@@ -21,7 +25,7 @@ export class QueueService {
     @InjectQueue(QUEUE_NAMES.WEBSITE_GENERATION) private websiteQueue: Queue,
     @InjectQueue(QUEUE_NAMES.MOCKUP_GENERATION) private mockupQueue: Queue,
     @InjectQueue(QUEUE_NAMES.ASSET_AGGREGATION) private assetQueue: Queue,
-    @InjectQueue(QUEUE_NAMES.WEBSITE_REGENERATION) private regenQueue: Queue,
+    @InjectQueue(QUEUE_NAMES.BANNER_GENERATION) private bannerQueue: Queue,
   ) { }
 
   async addColorGenerationJob(
@@ -52,8 +56,30 @@ export class QueueService {
     industry: string,
     priority: number = JOB_PRIORITIES.NORMAL,
   ) {
-    const variants: Array<'primary' | 'secondary' | 'icon' | 'text'> = ['primary', 'icon'];
+    const variants: LogoVariant[] = [LogoVariant.PRIMARY, LogoVariant.ICON];
     const jobs = [];
+
+    const bannerVariants: BannerVariant[] = [BannerVariant.TWITTER, BannerVariant.FACEBOOK];
+
+    for (const brannerVariant of bannerVariants) {
+      const jobData: BannerGenerationJobData = {
+        brandId,
+        brandName,
+        tagline,
+        brandStyles,
+        colors,
+        variant: brannerVariant,
+        industry
+      };
+
+      const job = await this.bannerQueue.add(JOB_NAMES.GENERATE_BANNER, jobData, {
+        jobId: `banner-${brannerVariant}-${brandId}`,
+        priority,
+      });
+
+      jobs.push(job);
+      this.logger.log(`Added banner generation job: ${job.id} for variant: ${brannerVariant}`);
+    }
 
     for (const variant of variants) {
       const jobData: LogoGenerationJobData = {
@@ -142,23 +168,6 @@ export class QueueService {
     return job;
   }
 
-  async addWebsiteRegenerationJob(brandId: Types.ObjectId, prompt: string) {
-    const jobId = `regen-${brandId}`;
-    const job = await this.regenQueue.add(
-      JOB_NAMES.REGENERATE_WEBSITE,
-      { brandId, prompt },
-      {
-        jobId,
-        removeOnComplete: true,
-        attempts: 3,
-        backoff: { type: 'exponential', delay: 10000 },
-      },
-    );
-
-    this.logger.log(`Added website regeneration job: ${job.id} for brand: ${brandId}`);
-    return job;
-  }
-
   async getJobStatus(queueName: string, jobId: string) {
     let queue: Queue;
 
@@ -177,6 +186,9 @@ export class QueueService {
         break;
       case QUEUE_NAMES.ASSET_AGGREGATION:
         queue = this.assetQueue;
+        break;
+      case QUEUE_NAMES.BANNER_GENERATION:
+        queue = this.bannerQueue;
         break;
       default:
         throw new Error(`Unknown queue: ${queueName}`);
@@ -207,7 +219,10 @@ export class QueueService {
       `website-${brandId}`,
       `mockup-${brandId}`,
       `aggregate-${brandId}`,
-      `regen-${brandId}`,
+      `banner-linkedin-${brandId}`,
+      `banner-twitter-${brandId}`,
+      `banner-facebook-${brandId}`,
+      `banner-instagram-${brandId}`,
     ];
 
     const statuses = {};
@@ -231,6 +246,7 @@ export class QueueService {
     if (jobId.startsWith('website-')) return QUEUE_NAMES.WEBSITE_GENERATION;
     if (jobId.startsWith('mockup-')) return QUEUE_NAMES.MOCKUP_GENERATION;
     if (jobId.startsWith('aggregate-')) return QUEUE_NAMES.ASSET_AGGREGATION;
+    if (jobId.startsWith('banner-')) return QUEUE_NAMES.BANNER_GENERATION;
     return null;
   }
 
@@ -253,8 +269,8 @@ export class QueueService {
       case QUEUE_NAMES.ASSET_AGGREGATION:
         queue = this.assetQueue;
         break;
-      case QUEUE_NAMES.WEBSITE_REGENERATION:
-        queue = this.regenQueue;
+      case QUEUE_NAMES.BANNER_GENERATION:
+        queue = this.bannerQueue;
         break;
       default:
         return;

@@ -18,6 +18,7 @@ import { BillingModule } from './billing/billing.module';
 import { AdminModule } from './admin/admin.module';
 import { PaymentsModule } from './payments/payments.module';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { WebsiteGeneratorModule } from './website/website-generator.module';
 
 @Module({
   imports: [
@@ -55,6 +56,7 @@ import { AuthGuard } from 'src/guards/auth.guard';
     EmailModule,
     BillingModule,
     AdminModule,
+    WebsiteGeneratorModule,
   ],
   providers: [
     {

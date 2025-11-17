@@ -322,6 +322,34 @@ export class AiService {
     }
   }
 
+  async generateBannerAndUploadGPTImage(
+    prompt: string,
+    type: 'linkedin' | 'twitter' | 'facebook' | 'instagram',
+  ): Promise<{ type: string; url: string }> {
+    try {
+
+      const img = await this.client.images.generate({
+        model: 'gpt-image-1',
+        prompt,
+        size: '1536x1024',
+        quality: 'low',
+        n: 1,
+      });
+
+      const base64 = img.data?.[0]?.b64_json;
+      if (!base64) throw new Error('No base64 image data returned from OpenAI');
+
+      // Upload to Cloudinary (store in specific folder per banner type)
+      const uploadFolder = `launchix_ai_banners/${type}`;
+      const url = await this.cloudinary.uploadBase64Image(base64, uploadFolder);
+
+      return { type, url };
+    } catch (error) {
+      console.error(`❌ Failed to generate ${type} banner:`, error.message);
+      throw error;
+    }
+  }
+
 
   /**
    * Generate premium website with AI-generated colors, working images, and logo
@@ -502,7 +530,7 @@ Return ONLY valid JSON with no markdown or comments.
     }
     `;
 
-        const userPrompt = `
+    const userPrompt = `
     User prompt: "${prompt}"
 
     Current HTML:
