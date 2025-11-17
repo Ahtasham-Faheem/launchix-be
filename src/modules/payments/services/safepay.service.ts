@@ -93,44 +93,6 @@ export class SafepayService {
     return { deleted: res.deletedCount > 0 };
   }
 
-  // Create checkout session for Express Checkout
-  async createCheckoutSession(userId: string, dto: any) {
-    const customer = await this.customerModel.findOne({ user: userId });
-
-    // Step 1: Create payment session
-    const session = await this.safepayClient.payments.session.setup({
-      merchant_api_key: process.env.SAFEPAY_PUBLIC_KEY,
-      user: customer?.customerToken || dto.customerToken,
-      intent: dto.intent,
-      mode: 'payment',
-      entry_mode: 'raw',
-      currency: dto.currency,
-      amount: dto.amount,
-      // metadata: dto.metadata,
-      include_fees: dto.includeFees ?? false,
-    });
-
-    // Step 2: Create authentication token
-    const authToken = await this.safepayClient.client.passport.create();
-
-    // Step 3: Generate checkout URL
-    const checkoutUrl = this.safepayClient.checkouts.createCheckoutUrl({
-      tracker: session.data.tracker.token,
-      tbt: authToken.data,
-      environment: session.data.tracker.environment,
-      source: 'hosted',
-      user_id: customer?.customerToken || dto.customerToken,
-      redirect_url: dto.successUrl,
-      cancel_url: dto.cancelUrl,
-    });
-
-    return {
-      checkoutUrl,
-      tracker: session.data.tracker.token,
-      environment: session.data.tracker.environment,
-    };
-  }
-
   // Get payment status by tracker
   async getPaymentStatus(tracker: string) {
     const response = await this.safepayClient.reporter.payments.fetch(tracker);
@@ -145,15 +107,45 @@ export class SafepayService {
     if (!customer) throw new BadRequestException('Customer not found');
     if (!plan) throw new BadRequestException('Plan not found');
 
-    // Create checkout session for plan payment
-    return this.createCheckoutSession(dto.userId, {
+    const session = await this.safepayClient.payments.session.setup({
+      merchant_api_key: process.env.SAFEPAY_PUBLIC_KEY,
+      user: customer?.customerToken,
+      intent: 'CYBERSOURCE',
+      mode: 'payment',
+      entry_mode: 'raw',
       currency: plan.currency.toUpperCase(),
       amount: plan.amount,
-      intent: 'CYBERSOURCE',
-      customerToken: customer.customerToken,
-      metadata: { planId: dto.planId },
-      successUrl: `${process.env.FRONTEND_URL}/payment/success`,
-      cancelUrl: `${process.env.FRONTEND_URL}/payment/cancel`,
+      include_fees: false,
     });
+
+    let authToken: any;
+    try {
+      const apiKey = process.env.SAFEPAY_API_KEY;
+      const host = process.env.SAFEPAY_API_HOST ?? 'https://api.getsafepay.com';
+      const newsafepayClient = await new Safepay(apiKey, {
+        authType: 'jwt',
+        host,
+      });
+
+      authToken = await newsafepayClient.client.passport.create();
+    } catch (error) {
+      console.log(error);
+    }
+
+    const checkoutUrl = await this.safepayClient.checkout.createCheckoutUrl({
+      env: session.data.tracker.environment,
+      tracker: session.data.tracker.token,
+      tbt: authToken.data,
+      source: 'hosted',
+      user_id: customer?.customerToken,
+      redirect_url: `${process.env.FRONTEND_URL}/payment/success`,
+      cancel_url: `${process.env.FRONTEND_URL}/payment/cancel`,
+    });
+
+    return {
+      checkoutUrl,
+      tracker: session.data.tracker.token,
+      environment: session.data.tracker.environment,
+    };
   }
 }

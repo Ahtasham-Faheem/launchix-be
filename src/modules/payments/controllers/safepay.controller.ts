@@ -30,12 +30,12 @@ import { CurrentUser } from 'src/decorator/auth.decorator';
 export class SafepayController {
   constructor(private readonly safepay: SafepayService) {}
 
-  @Post('customer')
-  @ApiOperation({ summary: 'Create a customer for payments' })
-  @ApiResponse({ status: 201 })
-  async createCustomer(@CurrentUser() user, @Body() dto: CreateCustomerDto) {
-    return this.safepay.createCustomer(user._id, dto);
-  }
+  // @Post('customer')
+  // @ApiOperation({ summary: 'Create a customer for payments' })
+  // @ApiResponse({ status: 201 })
+  // async createCustomer(@CurrentUser() user, @Body() dto: CreateCustomerDto) {
+  //   return this.safepay.createCustomer(user._id, dto);
+  // }
 
   @Post('subscription/charge')
   @ApiOperation({ summary: 'Charge a subscription plan' })
