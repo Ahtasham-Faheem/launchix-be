@@ -70,7 +70,7 @@ export class WebsiteGeneratorController {
 
       // Generate website
       const result = await this.websiteGeneratorService.generateAndSaveWebsite(
-        dto,
+        dto as any,
         userId
       );
 
@@ -110,7 +110,7 @@ export class WebsiteGeneratorController {
     try {
       this.logger.log(`👁️ Website preview request for: ${dto.businessName}`);
 
-      const html = await this.websiteGeneratorService.generateCompleteWebsite(dto);
+      const html = await this.websiteGeneratorService.generateCompleteWebsite(dto as any);
       const sections = this.websiteGeneratorService.extractSections(html);
 
       return {
@@ -142,7 +142,7 @@ export class WebsiteGeneratorController {
       const updatedHtml = await this.websiteGeneratorService.regenerateSection(
         dto.originalHtml,
         dto.sectionId,
-        dto.websiteInput
+        dto.websiteInput as any
       );
 
       return {
