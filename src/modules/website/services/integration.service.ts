@@ -5,7 +5,7 @@
 
 import { Injectable, Logger } from '@nestjs/common';
 import { WebsiteGeneratorService } from './website-generator.service';
-import { WebsiteGenerationInput } from '../prompts/generateCompleteWebsitePrompt';
+import { WebsiteGenerationInput } from '../prompts/generate-complet-website-prompt';
 
 @Injectable()
 export class LaunchixIntegrationService {
