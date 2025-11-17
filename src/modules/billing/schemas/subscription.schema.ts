@@ -6,6 +6,7 @@ import { BillingInterval } from './plan.schema';
 export type SubscriptionDocument = HydratedDocument<Subscription>;
 
 export type SubscriptionStatus =
+  | 'in_progress'
   | 'trialing'
   | 'active'
   | 'past_due'
@@ -20,7 +21,7 @@ export class Subscription {
   @Prop({ type: Types.ObjectId, ref: 'Plan', required: true })
   plan: Types.ObjectId;
 
-  @Prop({ default: 'active', enum: ['trialing','active','past_due','canceled','expired'] })
+  @Prop({ default: 'in_progress', enum: ['in_progress','trialing','active','past_due','canceled','expired'] })
   status: SubscriptionStatus;
 
   @Prop({ default: 'month', enum: ['month', 'year', 'custom'] })

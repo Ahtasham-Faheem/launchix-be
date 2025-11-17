@@ -6,6 +6,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AllExceptionsFilter } from './shared/filters/all-exceptions.filter';
 import { Logger } from 'nestjs-pino';
 import { ConfigService } from '@nestjs/config';
+import * as express from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
@@ -17,18 +18,34 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   // ─────────────────────────────
+  // ✅ Raw Body for Stripe Webhooks (BEFORE other middleware)
+  // ─────────────────────────────
+  const expressApp = app.getHttpAdapter().getInstance();
+
+  expressApp.use(
+    '/api/v1/stripe/webhook',
+    express.raw({ type: 'application/json' }),
+    (req: any, res: any, next: any) => {
+      req.rawBody = req.body;
+      next();
+    },
+  );
+
+  expressApp.use(express.json());
+  // ─────────────────────────────
   // ✅ Security Middleware
   // ─────────────────────────────
   app.use(helmet());
 
   // Enable CORS with values from environment
   const corsOrigins = configService.get<string>('CORS_ORIGIN');
-  const origins = corsOrigins ? corsOrigins.split(',').map(o => o.trim()) : true;
+  const origins = corsOrigins
+    ? corsOrigins.split(',').map((o) => o.trim())
+    : true;
   app.enableCors({
     origin: origins,
     credentials: true,
   });
-
 
   // app.use(clerkAuth, attachUser); // Apply globally
   // ─────────────────────────────
@@ -51,7 +68,11 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('api/docs', app, document);
+  SwaggerModule.setup('api/docs', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  });
 
   // ─────────────────────────────
   // ✅ Start Server

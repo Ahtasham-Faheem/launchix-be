@@ -8,15 +8,19 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Plan, PlanDocument } from '../schemas/plan.schema';
 import { Coupon, CouponDocument } from '../schemas/coupon.schema';
-import { Subscription, SubscriptionDocument } from '../schemas/subscription.schema';
+import {
+  Subscription,
+  SubscriptionDocument,
+} from '../schemas/subscription.schema';
 import { Invoice, InvoiceDocument } from '../schemas/invoice.schema';
 import { User, UserDocument } from 'src/schemas/user.schema';
 import { CreatePlanDto, UpdatePlanDto } from '../dto/create-plan.dto';
 import { CreateSubscriptionDto } from '../dto/create-subscription.dto';
 import { CancelSubscriptionDto } from '../dto/cancel-subscription.dto';
 import { MailService } from 'src/shared/mail/mail.service';
-import { SafepayService } from 'src/modules/payments/services/safepay.service';
-import { PaymentMethod, PaymentMethodDocument } from 'src/modules/payments/schemas/payment-method.schema';
+// import { SafepayService } from 'src/modules/payments/services/safepay.service';
+import { StripeService } from 'src/modules/payments/services/stripe.service';
+// import { PaymentMethod, PaymentMethodDocument } from 'src/modules/payments/schemas/payment-method.schema';
 
 @Injectable()
 export class BillingService {
@@ -25,13 +29,15 @@ export class BillingService {
   constructor(
     @InjectModel(Plan.name) private planModel: Model<PlanDocument>,
     @InjectModel(Coupon.name) private couponModel: Model<CouponDocument>,
-    @InjectModel(Subscription.name) private subModel: Model<SubscriptionDocument>,
+    @InjectModel(Subscription.name)
+    private subModel: Model<SubscriptionDocument>,
     @InjectModel(Invoice.name) private invoiceModel: Model<InvoiceDocument>,
     @InjectModel(User.name) private userModel: Model<UserDocument>,
-    @InjectModel(PaymentMethod.name) private paymentMethodModel: Model<PaymentMethodDocument>,
+    // @InjectModel(PaymentMethod.name) private paymentMethodModel: Model<PaymentMethodDocument>,
     private readonly emailService: MailService,
-    private readonly safepayService: SafepayService,
-  ) { }
+    // private readonly safepayService: SafepayService,
+    private readonly stripeService: StripeService,
+  ) {}
 
   // ===================================================
   // ✅ PLAN MANAGEMENT (ADMIN)
@@ -54,7 +60,9 @@ export class BillingService {
       status: { $in: ['trialing', 'active', 'past_due'] },
     });
     if (subCount > 0) {
-      throw new BadRequestException('Cannot delete plan with active subscriptions');
+      throw new BadRequestException(
+        'Cannot delete plan with active subscriptions',
+      );
     }
     await this.planModel.deleteOne({ _id: id });
     return { success: true };
@@ -69,77 +77,59 @@ export class BillingService {
 
     const now = new Date();
     const end = new Date(now);
-    if (plan.interval === 'year') end.setFullYear(end.getFullYear() + plan.intervalCount);
-    else if (plan.interval === 'month') end.setMonth(end.getMonth() + plan.intervalCount);
+    if (plan.interval === 'year')
+      end.setFullYear(end.getFullYear() + plan.intervalCount);
+    else if (plan.interval === 'month')
+      end.setMonth(end.getMonth() + plan.intervalCount);
     else end.setDate(end.getDate() + 30 * plan.intervalCount);
 
     let coupon: CouponDocument | null = null;
     if (dto.couponCode) {
-      coupon = await this.couponModel.findOne({ code: dto.couponCode, isActive: true });
+      coupon = await this.couponModel.findOne({
+        code: dto.couponCode,
+        isActive: true,
+      });
     }
 
     const sub = await this.subModel.create({
       user: new Types.ObjectId(userId),
       plan: plan._id,
-      status: 'active',
+      status: 'in_progress', // Start as in_progress until payment
       interval: plan.interval,
       intervalCount: plan.intervalCount,
       coupon: coupon?._id ?? null,
       currentPeriodStart: now,
       currentPeriodEnd: end,
+      paymentProvider: 'stripe',
     });
 
-    const invoice = await this.generateInvoiceForSubscription(sub, plan, coupon ?? undefined);
-
-
-    const user = await this.userModel.findById(userId);
-    const currency = plan.currency.toUpperCase() === 'PKR' ? 'PKR' : 'USD';
-
-    // if you want auto-charge via Safepay:
-    const safepayCustomer = await this.safepayService.createCustomer({
-      userId,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-    });
-
-    // Get default payment method from DB
-    const paymentMethod = await this.paymentMethodModel.findOne({
-      user: userId,
-      isDefault: true,
-    });
-
-    if (paymentMethod) {
-      await this.safepayService.chargeSubscription({
-        userId,
-        subscriptionId: sub._id.toString(),
-        paymentMethodId: paymentMethod.token,
-        amount: plan.amount / 100, // convert from cents to main unit
-        currency,
-      });
-    }
-
-    await this.sendInvoiceEmail(invoice._id.toString());
-
-    return { subscription: sub, invoice };
+    return { subscriptionId: sub._id.toString() };
   }
 
   // ===================================================
   // ✅ CANCEL SUBSCRIPTION
   // ===================================================
-  async cancelSubscription(userId: string, subId: string, dto: CancelSubscriptionDto) {
+  async cancelSubscription(
+    userId: string,
+    subId: string,
+    dto: CancelSubscriptionDto,
+  ) {
     const sub = await this.subModel
       .findOne({ _id: subId, user: userId })
       .populate('plan');
 
     if (!sub) throw new NotFoundException('Subscription not found');
-    if (sub.status === 'canceled') throw new BadRequestException('Already canceled');
+    if (sub.status === 'canceled')
+      throw new BadRequestException('Already canceled');
 
     if (dto.cancelAtPeriodEnd) {
       sub.cancelAtPeriodEnd = true;
       await sub.save();
       this.logger.log(`Subscription ${sub._id} marked for period-end cancel`);
-      return { message: 'Subscription will cancel at period end', cancelDate: sub.currentPeriodEnd };
+      return {
+        message: 'Subscription will cancel at period end',
+        cancelDate: sub.currentPeriodEnd,
+      };
     }
 
     // Immediate cancellation
@@ -173,12 +163,21 @@ export class BillingService {
   // ===================================================
   // ✅ GET SUBSCRIPTIONS + INVOICES
   // ===================================================
-  async getUserSubscriptions(userId: string) {
-    return this.subModel.find({ user: userId }).populate('plan').sort({ createdAt: -1 });
+  async getUserSubscriptions(userId: string, status?: string) {
+    const filter: any = { user: userId };
+
+    // Default to in_progress if no status specified
+    if (status) {
+      filter.status = status;
+    }
+
+    return this.subModel.find(filter).populate('plan').sort({ createdAt: -1 });
   }
 
   async getUserInvoices(userId: string) {
-    return this.invoiceModel.find({ user: userId }).populate('subscription subscription.plan');
+    return this.invoiceModel
+      .find({ user: userId })
+      .populate('subscription subscription.plan');
   }
 
   async getAllSubscriptions() {
@@ -202,8 +201,10 @@ export class BillingService {
 
     let amountDue = planDoc.amount;
     if (coupon) {
-      if (coupon.percentOff) amountDue = Math.round(amountDue * (1 - coupon.percentOff / 100));
-      else if (coupon.amountOff) amountDue = Math.max(0, amountDue - coupon.amountOff);
+      if (coupon.percentOff)
+        amountDue = Math.round(amountDue * (1 - coupon.percentOff / 100));
+      else if (coupon.amountOff)
+        amountDue = Math.max(0, amountDue - coupon.amountOff);
     }
 
     const dueDate = new Date();
@@ -232,12 +233,17 @@ export class BillingService {
     if (providerInvoiceId) invoice.providerInvoiceId = providerInvoiceId;
     await invoice.save();
 
-    await this.subModel.updateOne({ _id: invoice.subscription }, { $set: { status: 'active' } });
+    await this.subModel.updateOne(
+      { _id: invoice.subscription },
+      { $set: { status: 'active' } },
+    );
     return invoice;
   }
 
   async sendInvoiceEmail(invoiceId: string) {
-    const invoice = await this.invoiceModel.findById(invoiceId).populate('user subscription');
+    const invoice = await this.invoiceModel
+      .findById(invoiceId)
+      .populate('user subscription');
     if (!invoice) return;
 
     const user = invoice.user as any as UserDocument;
@@ -281,12 +287,85 @@ export class BillingService {
   // ===================================================
   async getBrandLimitForUser(userId: string): Promise<{ maxBrands: number }> {
     const sub = await this.subModel
-      .findOne({ user: userId, status: { $in: ['active', 'trialing', 'past_due'] } })
+      .findOne({
+        user: userId,
+        status: { $in: ['active', 'trialing', 'past_due'] },
+      })
       .populate('plan');
     if (!sub) return { maxBrands: 2 };
 
     const plan = sub.plan as any as PlanDocument;
-    if (!plan || plan.maxBrands === 0) return { maxBrands: Number.MAX_SAFE_INTEGER };
+    if (!plan || plan.maxBrands === 0)
+      return { maxBrands: Number.MAX_SAFE_INTEGER };
     return { maxBrands: plan.maxBrands };
+  }
+
+  async findInvoiceByProviderInvoiceId(providerInvoiceId: string) {
+    return this.invoiceModel.findOne({ providerInvoiceId });
+  }
+
+  async activateSubscription(
+    subscriptionId: string,
+    paymentIntentId: string,
+    paymentDetails?: {
+      originalAmount: number;
+      discountAmount: number;
+      couponCode: string | null;
+      planId: string;
+    },
+  ) {
+    const subscription = await this.subModel
+      .findById(subscriptionId)
+      .populate('plan user');
+    if (!subscription) {
+      throw new BadRequestException('Subscription not found');
+    }
+
+    // Update subscription status to active
+    subscription.status = 'active';
+    subscription.providerSubscriptionId = paymentIntentId;
+    await subscription.save();
+
+    // Create and mark invoice as paid
+    const plan = subscription.plan as any as PlanDocument;
+    const invoice = await this.generateInvoiceForSubscription(
+      subscription,
+      plan,
+    );
+
+    // Update invoice with actual payment details if provided
+    if (paymentDetails) {
+      invoice.metadata = {
+        ...invoice.metadata,
+        originalAmount: paymentDetails.originalAmount,
+        discountAmount: paymentDetails.discountAmount,
+        couponCode: paymentDetails.couponCode,
+        actualAmountPaid:
+          paymentDetails.originalAmount - paymentDetails.discountAmount,
+      };
+      await invoice.save();
+    }
+
+    await this.markInvoicePaid(invoice._id.toString(), paymentIntentId);
+
+    // Send confirmation email
+    const user = subscription.user as any as UserDocument;
+    if (user?.email) {
+      await this.emailService.sendEmail({
+        to: user.email,
+        subject: 'Subscription Activated',
+        template: 'subscription-activated',
+        variables: {
+          planName: plan.name,
+          amount: plan.amount / 100,
+          currency: plan.currency.toUpperCase(),
+        },
+      });
+    }
+
+    this.logger.log(
+      `Subscription ${subscriptionId} activated for user ${user.email}`,
+    );
+    return subscription;
   }
 }

@@ -5,23 +5,36 @@ import {
   UnauthorizedException,
   Logger,
 } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import { clerkClient } from '@clerk/clerk-sdk-node';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from '../schemas/user.schema';
 import { SafepayService } from 'src/modules/payments/services/safepay.service';
-
+import { StripeService } from 'src/modules/payments/services/stripe.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   private readonly logger = new Logger(AuthGuard.name);
 
   constructor(
+    private reflector: Reflector,
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
-    // private readonly safepayService: SafepayService,
-  ) { }
+    private readonly safepayService: SafepayService,
+    private readonly stripeService: StripeService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    // Check if authentication should be skipped
+    const skipAuth = this.reflector.getAllAndOverride<boolean>('skipAuth', [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    
+    if (skipAuth) {
+      return true;
+    }
+
     const request = context.switchToHttp().getRequest();
     const authHeader = request.headers.authorization;
 
@@ -50,7 +63,27 @@ export class AuthGuard implements CanActivate {
 
       const localUser = await this.findOrCreateLocalUser(user);
 
-      // // ✅ Auto-create Safepay Customer if missing
+      // ✅ Auto-create Stripe Customer if missing
+      if (!localUser.metadata?.stripeCustomerId) {
+        const stripeCustomer = await this.stripeService.createCustomer({
+          userId: localUser._id.toString(),
+          email: localUser.email,
+          firstName: localUser.firstName,
+          lastName: localUser.lastName,
+        });
+
+        localUser.metadata = {
+          ...localUser.metadata,
+          stripeCustomerId: stripeCustomer.stripeCustomerId,
+        };
+        await localUser.save();
+
+        this.logger.log(
+          `Stripe customer created for ${localUser.email} (${localUser._id})`,
+        );
+      }
+
+      // ✅ Auto-create Safepay Customer if missing (COMMENTED OUT FOR NOW)
       // if (!localUser.metadata?.safepayCustomerToken) {
       //   const safepayCustomer = await this.safepayService.createCustomer({
       //     userId: localUser._id.toString(),
@@ -83,7 +116,9 @@ export class AuthGuard implements CanActivate {
 
   private async findOrCreateLocalUser(clerkUser: any): Promise<UserDocument> {
     const email = clerkUser.emailAddresses?.[0]?.emailAddress;
-    const existingUser = await this.userModel.findOne({ clerkId: clerkUser.id });
+    const existingUser = await this.userModel.findOne({
+      clerkId: clerkUser.id,
+    });
     if (existingUser) return existingUser;
 
     const newUser = new this.userModel({

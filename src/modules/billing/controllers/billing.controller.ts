@@ -7,6 +7,7 @@ import {
   UseGuards,
   HttpCode,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { BillingService } from '../services/billing.service';
@@ -46,8 +47,11 @@ export class BillingController {
 
   @Get('subscriptions')
   @ApiOperation({ summary: 'List all subscriptions for current user' })
-  getUserSubscriptions(@CurrentUser() user: any) {
-    return this.billing.getUserSubscriptions(user._id);
+  getUserSubscriptions(
+    @CurrentUser() user: any,
+    @Query('status') status?: string
+  ) {
+    return this.billing.getUserSubscriptions(user._id, status);
   }
 
   @Get('invoices')

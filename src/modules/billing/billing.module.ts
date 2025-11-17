@@ -4,6 +4,7 @@ import { BillingService } from './services/billing.service';
 import { BillingController } from './controllers/billing.controller';
 import { AdminBillingController } from './controllers/admin-billing.controller';
 import { BillingWebhookController } from './controllers/webhook.controller';
+import { StripeWebhookController } from './controllers/stripe-webhook.controller';
 import { BillingCron } from './billing.cron';
 
 import { Plan, PlanSchema } from './schemas/plan.schema';
@@ -16,7 +17,7 @@ import { MailModule } from 'src/shared/mail/mail.module';
 import { CouponController } from './controllers/coupon.controller';
 import { CouponService } from './services/coupon.service';
 import { PaymentsModule } from '../payments/payments.module';
-import { PaymentMethod, PaymentMethodSchema } from '../payments/schemas/payment-method.schema';
+// import { PaymentMethod, PaymentMethodSchema } from '../payments/schemas/payment-method.schema';
 
 @Module({
   imports: [
@@ -27,7 +28,7 @@ import { PaymentMethod, PaymentMethodSchema } from '../payments/schemas/payment-
       { name: Subscription.name, schema: SubscriptionSchema },
       { name: Invoice.name, schema: InvoiceSchema },
       { name: User.name, schema: UserSchema },
-      { name: PaymentMethod.name, schema: PaymentMethodSchema },
+      // { name: PaymentMethod.name, schema: PaymentMethodSchema },
     ]),
     // Resend-based mail service
     MailModule,
@@ -37,6 +38,7 @@ import { PaymentMethod, PaymentMethodSchema } from '../payments/schemas/payment-
     BillingController,
     AdminBillingController,
     BillingWebhookController,
+    StripeWebhookController,
     CouponController
   ],
   providers: [BillingService, BillingCron, CouponService],

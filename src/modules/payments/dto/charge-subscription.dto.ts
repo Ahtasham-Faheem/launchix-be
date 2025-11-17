@@ -1,18 +1,18 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { IsString, IsNumber, IsOptional } from 'class-validator';
 
 export class ChargeSubscriptionDto {
-  @ApiProperty({ example: '64f1a1...' })
+  @IsString()
   userId: string;
 
-  @ApiProperty({ example: 'sub_78910' })
+  @IsString()
   subscriptionId: string;
 
-  @ApiProperty({ example: 'pm_123456' })
+  @IsString()
   paymentMethodId: string;
 
-  @ApiProperty({ example: 25 })
+  @IsNumber()
   amount: number;
 
-  @ApiProperty({ example: 'USD', description: 'USD or PKR' })
-  currency: 'USD' | 'PKR';
+  @IsString()
+  currency: string;
 }
