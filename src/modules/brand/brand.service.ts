@@ -158,15 +158,21 @@ export class BrandService {
   /**
    * ✅ Check Brand Limit
    */
-  async checkBrandLimit(ownerId: string, maxLimit: number) {
+  async checkBrandLimit(ownerId: string) {
+    const user = await this.userModel.findById(ownerId).populate('currentPlan');
+    if (!user) throw new NotFoundException('User not found');
+
+    const plan = user.currentPlan as any;
+    const maxLimit = plan?.brandCount || 1;
     const count = await this.brandModel.countDocuments({ owner: ownerId });
-    const remaining = Math.max(0, maxLimit - count);
+    const remaining = maxLimit === -1 ? Infinity : Math.max(0, maxLimit - count);
 
     return {
-      limit: maxLimit,
+      limit: maxLimit === -1 ? 'Unlimited' : maxLimit,
       used: count,
-      remaining,
-      canCreateMore: remaining > 0,
+      remaining: maxLimit === -1 ? 'Unlimited' : remaining,
+      canCreateMore: maxLimit === -1 || remaining > 0,
+      currentPlan: plan?.name || (plan?.type === 'free' ? 'Starter' : plan?.type || 'free'),
     };
   }
 }
