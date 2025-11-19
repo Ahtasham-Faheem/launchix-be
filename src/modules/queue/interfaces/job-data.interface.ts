@@ -1,4 +1,5 @@
 import { Types } from 'mongoose';
+import { Brand } from 'src/schemas/brand.schema';
 
 export interface BrandCreationJobData {
   userId: Types.ObjectId;
@@ -12,7 +13,29 @@ export interface ColorGenerationJobData {
   tagline: string;
   industry: string;
   brandStyles: string[];
+  typeOfWebsite?: string
 }
+
+export enum LogoVariant {
+  PRIMARY = 'primary',
+  SECONDARY = 'secondary',
+  ICON = 'icon',
+  TEXT = 'text',
+}
+
+export enum BannerVariant {
+  LINKEDIN = 'linkedin',
+  TWITTER = 'twitter',
+  FACEBOOK = 'facebook',
+  INSTAGRAM = 'instagram',
+}
+
+export interface LogoRegenerationJobData {
+  brandId: Types.ObjectId;
+  brand: Brand
+  variant: LogoVariant;
+}
+
 
 export interface LogoGenerationJobData {
   brandId: Types.ObjectId;
@@ -21,7 +44,17 @@ export interface LogoGenerationJobData {
   brandStyles: string[];
   colors: string[];
   industry: string;
-  variant: 'primary' | 'secondary' | 'icon' | 'text';
+  variant: LogoVariant;
+}
+
+export interface BannerGenerationJobData {
+  brandId: Types.ObjectId;
+  brandName: string;
+  tagline?: string;
+  brandStyles: string[];
+  colors: string[];
+  industry: string;
+  variant: BannerVariant;
 }
 
 export interface WebsiteGenerationJobData {

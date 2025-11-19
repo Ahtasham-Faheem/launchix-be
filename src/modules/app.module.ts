@@ -56,6 +56,7 @@ import { PaymentsModule } from './payments/payments.module';
     HostingModule,
     EmailModule,
     AdminModule,
+    WebsiteGeneratorModule,
   ],
   providers: [
     {

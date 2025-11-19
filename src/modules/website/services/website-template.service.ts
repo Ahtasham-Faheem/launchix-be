@@ -1,9 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import { AiService } from '../ai/ai.service';
+import { AiService } from '../../ai/ai.service';
 import { existsSync } from 'fs';
-import { getUserPrompt } from './prompts/getUserPrompt';
+import { getUserPrompt } from '../prompts/getUserPrompt';
 import { WebsiteType } from 'src/shared/types';
 
 
@@ -27,7 +27,19 @@ interface WebsiteResult {
     };
 }
 
+export interface BuildWebsiteDto {
+    businessName: string;
+    industry: string;
+    tagline: string;
+    vision: string;
+    mission: string;
+    logoUrl: string;
+    typeOfWebsite: string;
+    colorScheme?: Record<string, string>;
+    existingTemplate?: string;
+}
 
+interface TemplateParams { typeOfWebsite: WebsiteType, existingTemplate?: string }
 
 @Injectable()
 export class WebsiteTemplateService {
@@ -44,19 +56,23 @@ export class WebsiteTemplateService {
         text: '#111827',
     };
 
-    async buildWebsite(
-        businessName: string,
-        industry: string,
-        tagline: string,
-        vision: string,
-        mission: string,
-        logoUrl: string,
-        typeOfWebsite: string,
-        colorScheme?: Record<string, string>,
-    ): Promise<WebsiteResult> {
+    async buildWebsite({
+        businessName,
+        industry,
+        tagline,
+        vision,
+        mission,
+        logoUrl,
+        typeOfWebsite,
+        colorScheme,
+        existingTemplate
+    }: BuildWebsiteDto): Promise<WebsiteResult> {
         this.logger.log(`⚡ Building template website for ${businessName}`);
 
-        const selected = this.selectTemplate(typeOfWebsite as WebsiteType);
+        const selected = this.selectTemplate({
+            typeOfWebsite: typeOfWebsite as WebsiteType,
+            existingTemplate
+        });
         const [htmlRaw, cssRaw, variablesRaw] = await this.loadTemplate(selected);
 
         // 🧠 Step 1: Generate brand-specific content via AI
@@ -109,7 +125,7 @@ export class WebsiteTemplateService {
         };
     }
 
-    private selectTemplate(typeOfWebsite: WebsiteType): string {
+    private selectTemplate({ typeOfWebsite, existingTemplate }: TemplateParams): string {
         const defaultTemplates = [
             'template1',
             'template2',
@@ -117,27 +133,44 @@ export class WebsiteTemplateService {
             'template4',
             'template5',
             'template6',
-            'template7'
+            'template7',
         ];
 
         const ecommerceTemplates = [
             'template9-e',
             'template10-e',
-            'template11-e'
+            'template11-e',
         ];
 
-        // Helper function for random selection
-        const randomPick = (templates: string[]) => {
-            return templates[Math.floor(Math.random() * templates.length)];
+        // Helper for random pick
+        const randomPick = (templates: string[]) =>
+            templates[Math.floor(Math.random() * templates.length)];
+
+        // Exclude existing template if provided
+        const excludeTemplate = (templates: string[], exclude?: string): string[] => {
+            if (!exclude) return templates;
+            return templates.filter((t) => t !== exclude);
         };
 
-        // Choose template set based on website type
+        // Select template set based on type
+        let templatesPool: string[];
+
         if (typeOfWebsite === WebsiteType.ECOMMERCE) {
-            return randomPick(ecommerceTemplates);
+            templatesPool = excludeTemplate(ecommerceTemplates, existingTemplate);
+        } else {
+            templatesPool = excludeTemplate(defaultTemplates, existingTemplate);
         }
 
-        // For all other types, use default templates
-        return randomPick(defaultTemplates);
+        // Safety fallback — if all templates are filtered out, reuse all
+        if (templatesPool.length === 0) {
+            templatesPool =
+                typeOfWebsite === WebsiteType.ECOMMERCE
+                    ? ecommerceTemplates
+                    : defaultTemplates;
+        }
+
+        return randomPick(templatesPool);
+        return 'template5';
     }
 
 

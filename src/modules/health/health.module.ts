@@ -11,7 +11,7 @@ import { QUEUE_NAMES } from '../queue/constants/queue.constants';
       { name: QUEUE_NAMES.WEBSITE_GENERATION },
       { name: QUEUE_NAMES.MOCKUP_GENERATION },
       { name: QUEUE_NAMES.ASSET_AGGREGATION },
-      { name: QUEUE_NAMES.WEBSITE_REGENERATION },
+      { name: QUEUE_NAMES.BANNER_GENERATION },
     ),
   ],
   controllers: [HealthController],

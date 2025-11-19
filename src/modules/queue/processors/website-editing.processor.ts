@@ -7,13 +7,14 @@ import { AiService } from 'src/modules/ai/ai.service';
 import { BrandAssets } from 'src/schemas/assets.schema';
 import { Brand } from 'src/schemas/brand.schema';
 import { QUEUE_NAMES } from 'src/modules/queue/constants/queue.constants';
+import { REGENERATE_JOB_NAMES } from '../constants/regenerate-queue.constants';
 
 interface RegenerationJobData {
   brandId: string;
   prompt: string;
 }
 
-@Processor(QUEUE_NAMES.WEBSITE_REGENERATION, { concurrency: 2 })
+@Processor('REGENERATE_JOB_NAMES.WEBSITE_REGENERATE', { concurrency: 2 })
 export class WebsiteRegenerationProcessor extends WorkerHost {
   private readonly logger = new Logger(WebsiteRegenerationProcessor.name);
 

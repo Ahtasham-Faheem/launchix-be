@@ -35,7 +35,6 @@
     <nav class="navigation">
         <div class="nav-wrapper">
             <div class="brand">
-                <span class="brand-icon">⚡</span>
                 <span class="brand-name">{{brand_name}}</span>
             </div>
             <div class="menu-toggle">
@@ -411,7 +410,9 @@
             <div class="team-layout">
                 <div class="member-profile">
                     <div class="member-photo">
-                        <div class="photo-placeholder">👨‍💼</div>
+                        <div class="photo-placeholder">
+                            <img src="{{member1_image}}" alt="{{member1_name}}">
+                        </div>
                     </div>
                     <div class="member-details">
                         <h3 class="member-name">{{member1_name}}</h3>
@@ -427,7 +428,9 @@
 
                 <div class="member-profile">
                     <div class="member-photo">
-                        <div class="photo-placeholder">👩‍💻</div>
+                        <div class="photo-placeholder">
+                            <img src="{{member2_image}}" alt="{{member2_name}}">
+                        </div>
                     </div>
                     <div class="member-details">
                         <h3 class="member-name">{{member2_name}}</h3>
@@ -443,7 +446,9 @@
 
                 <div class="member-profile">
                     <div class="member-photo">
-                        <div class="photo-placeholder">👨‍🎨</div>
+                        <div class="photo-placeholder">
+                            <img src="{{member3_image}}" alt="{{member3_name}}">
+                        </div>
                     </div>
                     <div class="member-details">
                         <h3 class="member-name">{{member3_name}}</h3>
@@ -650,7 +655,6 @@
             <div class="footer-grid">
                 <div class="footer-column">
                     <h3 class="footer-heading">
-                        <span class="brand-icon">⚡</span>
                         {{footer_brand}}
                     </h3>
                     <p class="footer-about">{{footer_about}}</p>
