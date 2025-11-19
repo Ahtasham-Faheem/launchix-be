@@ -1,18 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum } from 'class-validator';
+import { IsEnum, IsArray, ArrayNotEmpty } from 'class-validator';
 import { RegenerateJobType } from 'src/modules/queue/constants/regenerate-queue.constants';
-
-
 
 export class GetRegeneratedJobStatusDto {
   @ApiProperty({
-    example: RegenerateJobType.WEBSITE_REGENERATE,
+    example: [RegenerateJobType.WEBSITE_REGENERATE, RegenerateJobType.LOGO_PRIMARY_REGENERATE],
     enum: RegenerateJobType,
-    enumName: 'RegenerateJobType', // 👈 Ensures Swagger renders a dropdown
-    description: 'Select the type of job to check the status for',
+    enumName: 'RegenerateJobType',
+    description: 'Select the types of jobs to check the status for',
+    isArray: true,
+    type: [RegenerateJobType],
   })
-  @IsEnum(RegenerateJobType)
-  jobType: RegenerateJobType;
-
-
+  @IsArray()
+  @ArrayNotEmpty() // 👈 Ensures the array is not empty
+  @IsEnum(RegenerateJobType, { each: true })
+  jobTypes: RegenerateJobType[];
 }

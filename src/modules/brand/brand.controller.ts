@@ -256,128 +256,149 @@ export class BrandController {
     description: 'Check the status of a queued job by providing brandId and jobType.',
   })
   @ApiResponse({ status: 404, description: 'Job not found or invalid parameters' })
-  async getJobStatus(@Param('id') id: string, @Body() body: GetRegeneratedJobStatusDto) {
+  async getJobStatus(@Param('id') id: string) {
     const brand = await this.service.getBrandById(id);
     if (!brand) {
       return { error: 'Brand not found' };
     }
 
-    return this.regenerateQueueService.getJobStatus(brand._id.toString(), body.jobType);
+    return this.regenerateQueueService.getAssetRegenerationStatus(brand._id.toString());
   }
 
-  @Post(':id/regenerate/color-palette')
+  @Post(':id/regenerate/assets')
   @HttpCode(HttpStatus.ACCEPTED)
   @ApiOperation({ summary: 'Generate brand mockups' })
   @ApiResponse({ status: 202, description: 'Mockup generation job queued' })
-  async regenerateColorPallete(@Param('id') id: string) {
+  async regenerateJobs(@Param('id') id: string, @Body() body: GetRegeneratedJobStatusDto) {
     const brand = await this.service.getBrandById(id);
     if (!brand) {
       return { error: 'Brand not found' };
     }
+    const assets = await this.service.getBrandAssets(id);
 
-    const job = await this.regenerateQueueService.regenerateColorPallete(
-      brand._id,
-      brand.businessName,
-      brand.tagline,
-      brand.industry,
-      brand.brandStyle,
-      brand.typeOfWebsite
-    );
-
-    return {
-      jobId: job.id,
-      brandId: id,
-      status: 'queued',
-      message: 'Color pallete generation job queued',
-    };
-  }
-
-  // New: website regeneration
-  @Post(':id/regenerate/website')
-  @HttpCode(HttpStatus.ACCEPTED)
-  @ApiOperation({ summary: 'Regenerate website JSON' })
-  @ApiResponse({ status: 202, description: 'Website regeneration job queued' })
-  async regenerateWebsite(@Param('id') id: string) {
-    const brand = await this.service.getBrandById(id);
-    if (!brand) return { error: 'Brand not found' };
-
-    const job = await this.regenerateQueueService.regenerateWebsite(
-      brand._id,
-      brand,
-    );
-
-    return {
-      jobId: job.id,
-      brandId: id,
-      status: 'queued',
-      message: 'Website regeneration job queued',
-    };
-  }
-
-  @Post(':id/regenerate/logos')
-  @HttpCode(HttpStatus.ACCEPTED)
-  @ApiOperation({ summary: 'Regenerate logo variants by type' })
-  @ApiResponse({ status: 202, description: 'Logo regeneration jobs queued' })
-  async regenerateLogos(
-    @Param('id') id: string,
-    @Body() body: RegenerateLogosDto,
-  ) {
-    const brand = await this.service.getBrandById(id);
-    if (!brand) return { error: 'Brand not found' };
-
-    const jobs = await this.regenerateQueueService.regenerateLogos(
-      brand._id,
-      body.variant,
-      brand
-    );
+    const jobs = await this.regenerateQueueService.regenerateAssets(body.jobTypes, brand, assets);
 
     return {
       jobIds: jobs.map((j) => j.id),
       brandId: id,
-      variant: body.variant,
       status: 'queued',
-      message: `${jobs.length} logo regeneration jobs queued for types: ${body.variant}`,
+      message: `${jobs.length} regeneration jobs queued.`,
     };
   }
 
-  // New: banner regeneration
-  @Post(':id/regenerate/banner')
-  @HttpCode(HttpStatus.ACCEPTED)
-  @ApiOperation({ summary: 'Regenerate banners (supports types: linkedin|twitter|facebook|instagram)' })
-  @ApiResponse({ status: 202, description: 'Banner regeneration job queued' })
-  async regenerateBanner(
-    @Param('id') id: string,
-    @Body() body: RegenerateBannerDto,
-  ) {
-    const brand = await this.service.getBrandById(id);
-    if (!brand) return { error: 'Brand not found' };
+  // @Post(':id/regenerate/color-palette')
+  // @HttpCode(HttpStatus.ACCEPTED)
+  // @ApiOperation({ summary: 'Generate brand mockups' })
+  // @ApiResponse({ status: 202, description: 'Mockup generation job queued' })
+  // async regenerateColorPallete(@Param('id') id: string) {
+  //   const brand = await this.service.getBrandById(id);
+  //   if (!brand) {
+  //     return { error: 'Brand not found' };
+  //   }
 
-    const bannerType : BannerVariant = body?.type || BannerVariant.LINKEDIN;
+  //   const job = await this.regenerateQueueService.regenerateColorPallete(
+  //     brand._id,
+  //     brand.businessName,
+  //     brand.tagline,
+  //     brand.industry,
+  //     brand.brandStyle,
+  //     brand.typeOfWebsite
+  //   );
+
+  //   return {
+  //     jobId: job.id,
+  //     brandId: id,
+  //     status: 'queued',
+  //     message: 'Color pallete generation job queued',
+  //   };
+  // }
+
+  // // New: website regeneration
+  // @Post(':id/regenerate/website')
+  // @HttpCode(HttpStatus.ACCEPTED)
+  // @ApiOperation({ summary: 'Regenerate website JSON' })
+  // @ApiResponse({ status: 202, description: 'Website regeneration job queued' })
+  // async regenerateWebsite(@Param('id') id: string) {
+  //   const brand = await this.service.getBrandById(id);
+  //   if (!brand) return { error: 'Brand not found' };
+
+  //   const job = await this.regenerateQueueService.regenerateWebsite(
+  //     brand._id,
+  //     brand,
+  //   );
+
+  //   return {
+  //     jobId: job.id,
+  //     brandId: id,
+  //     status: 'queued',
+  //     message: 'Website regeneration job queued',
+  //   };
+  // }
+
+  // @Post(':id/regenerate/logos')
+  // @HttpCode(HttpStatus.ACCEPTED)
+  // @ApiOperation({ summary: 'Regenerate logo variants by type' })
+  // @ApiResponse({ status: 202, description: 'Logo regeneration jobs queued' })
+  // async regenerateLogos(
+  //   @Param('id') id: string,
+  //   @Body() body: RegenerateLogosDto,
+  // ) {
+  //   const brand = await this.service.getBrandById(id);
+  //   if (!brand) return { error: 'Brand not found' };
+
+  //   const jobs = await this.regenerateQueueService.regenerateLogos(
+  //     brand._id,
+  //     body.variant,
+  //     brand
+  //   );
+
+  //   return {
+  //     jobIds: jobs.map((j) => j.id),
+  //     brandId: id,
+  //     variant: body.variant,
+  //     status: 'queued',
+  //     message: `${jobs.length} logo regeneration jobs queued for types: ${body.variant}`,
+  //   };
+  // }
+
+  // // New: banner regeneration
+  // @Post(':id/regenerate/banner')
+  // @HttpCode(HttpStatus.ACCEPTED)
+  // @ApiOperation({ summary: 'Regenerate banners (supports types: linkedin|twitter|facebook|instagram)' })
+  // @ApiResponse({ status: 202, description: 'Banner regeneration job queued' })
+  // async regenerateBanner(
+  //   @Param('id') id: string,
+  //   @Body() body: RegenerateBannerDto,
+  // ) {
+  //   const brand = await this.service.getBrandById(id);
+  //   if (!brand) return { error: 'Brand not found' };
+
+  //   const bannerType: BannerVariant = body?.type || BannerVariant.LINKEDIN;
 
 
 
-    const assets = await this.service.getBrandAssets(id);
-    const colors = assets?.palette || [];
+  //   const assets = await this.service.getBrandAssets(id);
+  //   const colors = assets?.palette || [];
 
 
-    const job = await this.regenerateQueueService.regenerateBanner(
-      brand._id,
-      brand.businessName,
-      brand.tagline,
-      brand.brandStyle,
-      brand.industry,
-      bannerType,
-      colors
-    );
+  //   const job = await this.regenerateQueueService.regenerateBanner(
+  //     brand._id,
+  //     brand.businessName,
+  //     brand.tagline,
+  //     brand.brandStyle,
+  //     brand.industry,
+  //     bannerType,
+  //     colors
+  //   );
 
-    return {
-      jobId: job.id,
-      brandId: id,
-      bannerType,
-      status: 'queued',
-      message: `Banner regeneration job queued for type '${bannerType}'`,
-    };
-  }
+  //   return {
+  //     jobId: job.id,
+  //     brandId: id,
+  //     bannerType,
+  //     status: 'queued',
+  //     message: `Banner regeneration job queued for type '${bannerType}'`,
+  //   };
+  // }
 
   //   // New: typography regeneration
   // @Post(':id/regenerate/typography')

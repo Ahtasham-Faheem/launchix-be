@@ -6,6 +6,7 @@ import { Types } from 'mongoose';
 import { JOB_PRIORITIES } from '../constants/queue.constants';
 import { BannerGenerationJobData, BannerVariant, ColorGenerationJobData, LogoRegenerationJobData, LogoVariant } from '../interfaces/job-data.interface';
 import { Brand } from 'src/schemas/brand.schema';
+import { BrandAssets } from 'src/schemas/assets.schema';
 
 @Injectable()
 export class RegenerateQueueService {
@@ -20,6 +21,131 @@ export class RegenerateQueueService {
     @InjectQueue(REGENERATE_QUEUE_NAMES.MISSION_REGENERATE) private readonly missionRegenerateQueue: Queue,
     @InjectQueue(REGENERATE_QUEUE_NAMES.VISION_REGENERATE) private readonly visionRegenerateQueue: Queue,
   ) { }
+
+  async createJobs(
+    brandId: string,
+    queueName: string,
+    queue: Queue,
+    jobData: LogoRegenerationJobData,
+    jobIdPrefix: string,
+    priority: number = JOB_PRIORITIES.NORMAL
+  ) {
+    const jobId = `${jobIdPrefix}-${brandId}`;
+    const existingJob = await queue.getJob(jobId);
+    if (existingJob) {
+      await existingJob.remove();
+    }
+
+    const job = await queue.add(queueName, jobData, {
+      jobId,
+      priority,
+    });
+    this.logger.log(`Added logo regeneration job: ${job.id} (${jobIdPrefix}) for brand: ${brandId}`);
+    return job
+  };
+
+  async regenerateAssets(
+    jobTypes: RegenerateJobType[],
+    brand: Brand,
+    brandAssets?: BrandAssets,
+  ) {
+    const jobs = [];
+    const brandId = brand._id.toString();
+
+    for (const jobType of jobTypes) {
+      switch (jobType) {
+        case RegenerateJobType.WEBSITE_REGENERATE:
+          const websiteJob = await this.regenerateWebsite(brandId, brand);
+          jobs.push(websiteJob);
+          break;
+
+        case RegenerateJobType.COLOR_PALETTE_REGENERATE:
+          const colorJob = await this.regenerateColorPallete(
+            brand._id,
+            brand.businessName,
+            brand.tagline,
+            brand.industry,
+            brand.brandStyle,
+            brand.typeOfWebsite,
+          );
+          jobs.push(colorJob);
+          break;
+
+        case RegenerateJobType.LOGO_PRIMARY_REGENERATE:
+        case RegenerateJobType.LOGO_ICON_REGENERATE:
+          const variant = jobType === RegenerateJobType.LOGO_PRIMARY_REGENERATE ? LogoVariant.PRIMARY : LogoVariant.ICON;
+          const logoJobs = await this.regenerateLogos(brand._id, variant, brand);
+          jobs.push(...logoJobs);
+          break;
+
+        // case RegenerateJobType.TYPOGRAPHY_REGENERATE:
+        //   const typographyJob = await this.regenerateTypography(
+        //     brand._id,
+        //     brand.businessName,
+        //     brand.tagline,
+        //     brand.brandStyle,
+        //     brand.industry,
+        //   );
+        //   jobs.push(typographyJob);
+        //   break;
+
+        case RegenerateJobType.BANNER_TWITTER_REGENERATE:
+        case RegenerateJobType.BANNER_FACEBOOK_REGENERATE:
+        case RegenerateJobType.BANNER_LINKEDIN_REGENERATE:
+        case RegenerateJobType.BANNER_INSTAGRAM_REGENERATE:
+          if (!brandAssets) {
+            this.logger.warn(`Skipping banner regeneration for brand ${brandId} due to missing BrandAssets`);
+            break;
+          }
+          const bannerVariantMap = {
+            [RegenerateJobType.BANNER_TWITTER_REGENERATE]: BannerVariant.TWITTER,
+            [RegenerateJobType.BANNER_FACEBOOK_REGENERATE]: BannerVariant.FACEBOOK,
+            [RegenerateJobType.BANNER_LINKEDIN_REGENERATE]: BannerVariant.LINKEDIN,
+            [RegenerateJobType.BANNER_INSTAGRAM_REGENERATE]: BannerVariant.INSTAGRAM,
+          };
+          const bannerVariant = bannerVariantMap[jobType];
+          const colors = brandAssets.palette || [];
+          const bannerJob = await this.regenerateBanner(
+            brand._id,
+            brand.businessName,
+            brand.tagline,
+            brand.brandStyle,
+            brand.industry,
+            bannerVariant,
+            colors,
+          );
+          jobs.push(bannerJob);
+          break;
+
+        // case RegenerateJobType.MISSION_REGENERATE:
+        //   const missionJob = await this.regenerateMission(
+        //     brand._id,
+        //     brand.businessName,
+        //     brand.tagline,
+        //     brand.industry,
+        //     brand.brandStyle,
+        //   );
+        //   jobs.push(missionJob);
+        //   break;
+
+        // case RegenerateJobType.VISION_REGENERATE:
+        //   const visionJob = await this.regenerateVision(
+        //     brand._id,
+        //     brand.businessName,
+        //     brand.tagline,
+        //     brand.industry,
+        //     brand.brandStyle,
+        //   );
+        //   jobs.push(visionJob);
+        //   break;
+
+        default:
+          this.logger.warn(`Unsupported regeneration job type: ${jobType} for brand: ${brandId}`);
+      }
+    }
+
+    return jobs;
+  }
 
 
   async regenerateColorPallete(
@@ -166,9 +292,9 @@ export class RegenerateQueueService {
     const jobId = `banner-${variant}-regeneration-${brandId}`;
 
     const existingJob = await this.bannerRegenerateQueue.getJob(jobId);
-      if (existingJob) {
-        await existingJob.remove();
-      }
+    if (existingJob) {
+      await existingJob.remove();
+    }
 
 
     const job = await this.bannerRegenerateQueue.add(
@@ -260,24 +386,61 @@ export class RegenerateQueueService {
     }
   }
 
-  async getJobStatus(brandId: string, jobType: RegenerateJobType): Promise<any> {
-    const queue = this.mapJobTypeToQueue(jobType);
+  async getBrandJobStatuses(brandId: string) {
 
+    const jobs = Object.values(RegenerateJobType).map(value => ({
+      jobId: `${value}-${brandId}`,
+      jobType: value
+    }));
 
-    const jobId = `${jobType}-${brandId}`;
-    const job = await queue.getJob(jobId);
+    const statuses = {};
 
-    if (!job) {
-      this.logger.warn(`No job found for ${jobId}`);
-      return { brandId, jobType, status: 'not-found', message: 'No job found for this brand and type' };
+    for (const { jobId, jobType } of jobs) {
+      const jobQueue = this.mapJobTypeToQueue(jobType);
+      if (jobQueue) {
+        const status = await this.getJobStatus(jobQueue, jobId);
+        if (status) {
+          statuses[jobId] = status;
+        }
+      }
     }
 
-    const state = await job.getState();
+    return statuses;
+  }
+
+  /**
+   * Get the current status of asset generation for a brand
+   */
+  async getAssetRegenerationStatus(brandId: string) {
+    const statuses = await this.getBrandJobStatuses(brandId);
+
+    const allCompleted = Object.values(statuses).every((s: any) => s.state === 'completed');
+    const anyFailed = Object.values(statuses).some((s: any) => s.state === 'failed');
+
+    let overallStatus = 'processing';
+    if (allCompleted) {
+      overallStatus = 'completed';
+    } else if (anyFailed) {
+      overallStatus = 'partial_failure';
+    }
 
     return {
       brandId,
-      jobType,
+      status: overallStatus,
+      agents: statuses,
+    };
+  }
+
+  private async getJobStatus(queue: Queue, jobId: string) {
+    const job = await queue.getJob(jobId);
+    if (!job) return null;
+
+    const state = await job.getState();
+    return {
+      id: job.id,
       state,
+      progress: job.progress,
+      data: job.data,
       returnvalue: job.returnvalue,
       failedReason: job.failedReason,
       attemptsMade: job.attemptsMade,
