@@ -15,9 +15,12 @@ export class User {
 
   @Prop({ default: false }) isAdmin: boolean;
   @Prop({ default: 'user' }) role: string;
-  
   @Prop({ type: Object, default: {} })
   metadata: any;
+
+  /** Subscription fields */
+  @Prop({ type: String, ref: 'Plan' }) currentPlan?: string;
+  @Prop() stripeSubscriptionId?: string;
 
   /** ✅ Soft delete fields */
   @Prop({ default: false }) isDeleted: boolean;

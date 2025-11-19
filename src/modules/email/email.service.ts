@@ -42,10 +42,15 @@ export class EmailService {
 
     try {
       const result = await this.sendEmail('New Feedback – Launchix', html);
-      this.logger.log(`✅ Feedback email sent successfully. Message: "${data.message}"`);
+      this.logger.log(
+        `✅ Feedback email sent successfully. Message: "${data.message}"`,
+      );
       return result;
     } catch (err) {
-      this.logger.error(`❌ Failed to send feedback email: ${err.message}`, err.stack);
+      this.logger.error(
+        `❌ Failed to send feedback email: ${err.message}`,
+        err.stack,
+      );
       throw err;
     }
   }
@@ -75,12 +80,36 @@ export class EmailService {
     </div>`;
 
     try {
-      const result = await this.sendEmail('New Support Request – Launchix', html);
+      const result = await this.sendEmail(
+        'New Support Request – Launchix',
+        html,
+      );
       this.logger.log(`📨 Support email sent successfully from ${data.email}`);
       return result;
     } catch (err) {
-      this.logger.error(`❌ Failed to send support email from ${data.email}: ${err.message}`, err.stack);
+      this.logger.error(
+        `❌ Failed to send support email from ${data.email}: ${err.message}`,
+        err.stack,
+      );
       throw err;
+    }
+  }
+
+  /** 📧 Send email to specific user */
+  async sendEmailToUser(to: string, subject: string, html: string) {
+    try {
+      const response = await this.resend.emails.send({
+        from: 'Launchix AI <no-reply@launchix.ai>',
+        to,
+        subject,
+        html,
+      });
+
+      this.logger.debug(`Email sent to ${to}: ${JSON.stringify(response)}`);
+      return response;
+    } catch (error) {
+      this.logger.error(`Failed to send email to ${to}: ${error.message}`, error.stack);
+      throw error;
     }
   }
 

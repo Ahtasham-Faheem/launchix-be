@@ -14,35 +14,37 @@ import { UserModule } from './user/user.module';
 import { QueueModule } from './queue/queue.module';
 import { HostingModule } from './hosting/hosting.module';
 import { EmailModule } from './email/email.module';
-import { BillingModule } from './billing/billing.module';
 import { AdminModule } from './admin/admin.module';
-import { PaymentsModule } from './payments/payments.module';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { PaymentsModule } from './payments/payments.module';
 import { WebsiteGeneratorModule } from './website/website-generator.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    
+
     LoggerModule.forRoot({
       pinoHttp: {
-        transport: process.env.NODE_ENV !== 'production' ? { target: 'pino-pretty' } : undefined,
+        transport:
+          process.env.NODE_ENV !== 'production'
+            ? { target: 'pino-pretty' }
+            : undefined,
         level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
       },
     }),
-    
+
     ThrottlerModule.forRoot([
       {
         ttl: parseInt(process.env.RATE_LIMIT_TTL || '60', 10),
         limit: parseInt(process.env.RATE_LIMIT_LIMIT || '120', 10),
       },
     ]),
-    
+
     MongooseModule.forRoot(process.env.MONGODB_URI),
-    
+
     // Queue configuration (Redis + BullMQ)
     QueueConfigModule,
-    
+
     // Application modules
     UserModule,
     AuthModule,
@@ -54,7 +56,6 @@ import { WebsiteGeneratorModule } from './website/website-generator.module';
     HealthModule,
     HostingModule,
     EmailModule,
-    BillingModule,
     AdminModule,
     WebsiteGeneratorModule,
   ],

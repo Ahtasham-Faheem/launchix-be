@@ -1,21 +1,25 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { SafepayService } from './services/safepay.service';
-import { SafepayController } from './controllers/safepay.controller';
-import { SafepayCustomer, SafepayCustomerSchema } from './schemas/safepay-customer.schema';
-import { PaymentMethod, PaymentMethodSchema } from './schemas/payment-method.schema';
+import { StripeService } from './services/stripe.service';
+import { PlansService } from './services/plans.service';
+import { WebhookService } from './services/webhook.service';
+import { StripeController } from './controllers/stripe.controller';
+import { PlansController } from './controllers/plans.controller';
+import { WebhookController } from './controllers/webhook.controller';
+import { EmailService } from '../email/email.service';
 import { User, UserSchema } from 'src/schemas/user.schema';
+import { Plan, PlanSchema } from 'src/schemas/plan.schema';
 
+@Global()
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: SafepayCustomer.name, schema: SafepayCustomerSchema },
-      { name: PaymentMethod.name, schema: PaymentMethodSchema },
       { name: User.name, schema: UserSchema },
+      { name: Plan.name, schema: PlanSchema },
     ]),
   ],
-  controllers: [SafepayController],
-  providers: [SafepayService],
-  exports: [SafepayService, MongooseModule],
+  controllers: [StripeController, PlansController, WebhookController],
+  providers: [StripeService, PlansService, WebhookService, EmailService],
+  exports: [StripeService, PlansService, MongooseModule],
 })
-export class PaymentsModule { }
+export class PaymentsModule {}

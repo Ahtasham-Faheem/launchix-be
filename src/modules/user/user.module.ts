@@ -9,13 +9,15 @@ import { Brand, BrandSchema } from 'src/schemas/brand.schema';
 import { BrandAssets, BrandAssetsSchema } from 'src/schemas/assets.schema';
 
 @Module({
-  imports: [MongooseModule.forFeature([
-    { name: User.name, schema: UserSchema },
-    { name: Brand.name, schema: BrandSchema },
-    { name: BrandAssets.name, schema: BrandAssetsSchema },
-  ])],
+  imports: [
+    MongooseModule.forFeature([
+      { name: User.name, schema: UserSchema },
+      { name: Brand.name, schema: BrandSchema },
+      { name: BrandAssets.name, schema: BrandAssetsSchema },
+    ]),
+  ],
   controllers: [UserController],
   providers: [UserService],
   exports: [UserService],
 })
-export class UserModule { }
+export class UserModule {}

@@ -1,5 +1,23 @@
-import { Body, Controller, Get, Param, Post, UseGuards, Req, HttpCode, HttpStatus, Delete, BadRequestException, Put } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+  Req,
+  HttpCode,
+  HttpStatus,
+  Delete,
+  BadRequestException,
+  Put,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+} from '@nestjs/swagger';
 import { BrandService } from './brand.service';
 import { ParsePromptDto } from './dto/prompt.dto';
 import { RegenerateFieldsDto } from './dto/regenerate.dto';
@@ -27,11 +45,11 @@ export class BrandController {
     private readonly orchestrationService: AssetOrchestrationService,
     private readonly queueService: QueueService,
     private readonly regenerateQueueService: RegenerateQueueService,
-  ) { }
+  ) {}
 
   /**
-  * ✅ Get all brands for the currently authenticated user
-  */
+   * ✅ Get all brands for the currently authenticated user
+   */
   @Get('my')
   @ApiOperation({
     summary: 'Get Current User Brands',
@@ -46,7 +64,11 @@ export class BrandController {
   @UseGuards(BrandLimitGuard)
   @ApiOperation({ summary: 'Parse prompt and create brand' })
   @ApiResponse({ status: 201, description: 'Brand created successfully' })
-  async parse(@Body() dto: ParsePromptDto, @Req() req: Request, @CurrentUser() user: any) {
+  async parse(
+    @Body() dto: ParsePromptDto,
+    @Req() req: Request,
+    @CurrentUser() user: any,
+  ) {
     return this.service.createFromPrompt(user, dto.prompt);
   }
 
@@ -70,13 +92,13 @@ export class BrandController {
   @HttpCode(HttpStatus.ACCEPTED)
   @ApiOperation({
     summary: 'Initiate complete asset generation (async)',
-    description: 'Starts asset generation in background. Returns immediately with job status.'
+    description:
+      'Starts asset generation in background. Returns immediately with job status.',
   })
   @ApiResponse({ status: 202, description: 'Asset generation initiated' })
   async initiateAssetGeneration(@Param('id') id: string) {
     return this.orchestrationService.initiateAssetGeneration(id);
   }
-
 
   @Get(':id/assets/status')
   @ApiOperation({ summary: 'Get asset generation status' })
@@ -115,7 +137,10 @@ export class BrandController {
   @HttpCode(HttpStatus.ACCEPTED)
   @ApiOperation({ summary: 'Generate all logo variants' })
   @ApiResponse({ status: 202, description: 'Logo generation jobs queued' })
-  async generateLogos(@Param('id') id: string, @Body() body: { colors?: string[] }) {
+  async generateLogos(
+    @Param('id') id: string,
+    @Body() body: { colors?: string[] },
+  ) {
     const brand = await this.service.getBrandById(id);
     if (!brand) {
       return { error: 'Brand not found' };
@@ -149,7 +174,10 @@ export class BrandController {
   @HttpCode(HttpStatus.ACCEPTED)
   @ApiOperation({ summary: 'Generate website JSON' })
   @ApiResponse({ status: 202, description: 'Website generation job queued' })
-  async generateWebsite(@Param('id') id: string, @Body() body: { colors?: string[] }) {
+  async generateWebsite(
+    @Param('id') id: string,
+    @Body() body: { colors?: string[] },
+  ) {
     const brand = await this.service.getBrandById(id);
     if (!brand) {
       return { error: 'Brand not found' };
@@ -161,7 +189,7 @@ export class BrandController {
       brand.tagline,
       brand.industry,
       brand.brandStyle,
-      brand.typeOfWebsite
+      brand.typeOfWebsite,
     );
 
     return {
@@ -218,7 +246,10 @@ export class BrandController {
     description:
       'Deletes a brand by ID along with all linked BrandAssets records. Useful for cleanup or brand removal.',
   })
-  @ApiResponse({ status: 200, description: 'Brand and assets deleted successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Brand and assets deleted successfully',
+  })
   @ApiResponse({ status: 404, description: 'Brand not found' })
   async deleteBrand(@Param('id') id: string, @CurrentUser() user: any) {
     return this.service.deleteBrandAndAssets(id, user._id);
@@ -246,37 +277,49 @@ export class BrandController {
     },
   })
   async checkBrandLimit(@CurrentUser() user: any) {
-    return this.service.checkBrandLimit(user._id, 2);
+    return this.service.checkBrandLimit(user._id);
   }
-
 
   @Post(':id/regenerate/status')
   @ApiOperation({
     summary: 'Get job status by brand ID and job type',
-    description: 'Check the status of a queued job by providing brandId and jobType.',
+    description:
+      'Check the status of a queued job by providing brandId and jobType.',
   })
-  @ApiResponse({ status: 404, description: 'Job not found or invalid parameters' })
+  @ApiResponse({
+    status: 404,
+    description: 'Job not found or invalid parameters',
+  })
   async getJobStatus(@Param('id') id: string) {
     const brand = await this.service.getBrandById(id);
     if (!brand) {
       return { error: 'Brand not found' };
     }
 
-    return this.regenerateQueueService.getAssetRegenerationStatus(brand._id.toString());
+    return this.regenerateQueueService.getAssetRegenerationStatus(
+      brand._id.toString(),
+    );
   }
 
   @Post(':id/regenerate/assets')
   @HttpCode(HttpStatus.ACCEPTED)
   @ApiOperation({ summary: 'Generate brand mockups' })
   @ApiResponse({ status: 202, description: 'Mockup generation job queued' })
-  async regenerateJobs(@Param('id') id: string, @Body() body: GetRegeneratedJobStatusDto) {
+  async regenerateJobs(
+    @Param('id') id: string,
+    @Body() body: GetRegeneratedJobStatusDto,
+  ) {
     const brand = await this.service.getBrandById(id);
     if (!brand) {
       return { error: 'Brand not found' };
     }
     const assets = await this.service.getBrandAssets(id);
 
-    const jobs = await this.regenerateQueueService.regenerateAssets(body.jobTypes, brand, assets);
+    const jobs = await this.regenerateQueueService.regenerateAssets(
+      body.jobTypes,
+      brand,
+      assets,
+    );
 
     return {
       jobIds: jobs.map((j) => j.id),
@@ -375,11 +418,8 @@ export class BrandController {
 
   //   const bannerType: BannerVariant = body?.type || BannerVariant.LINKEDIN;
 
-
-
   //   const assets = await this.service.getBrandAssets(id);
   //   const colors = assets?.palette || [];
-
 
   //   const job = await this.regenerateQueueService.regenerateBanner(
   //     brand._id,
@@ -474,5 +514,4 @@ export class BrandController {
   //     message: 'Vision regeneration job queued',
   //   };
   // }
-
 }
