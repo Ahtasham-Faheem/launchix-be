@@ -44,12 +44,8 @@ export class BrandController {
     private readonly service: BrandService,
     private readonly orchestrationService: AssetOrchestrationService,
     private readonly queueService: QueueService,
-<<<<<<< HEAD
-  ) {}
-=======
     private readonly regenerateQueueService: RegenerateQueueService,
-  ) { }
->>>>>>> b1c4061e34d80a24cfc3e0b0c671273e84e53aca
+  ) {}
 
   /**
    * ✅ Get all brands for the currently authenticated user
@@ -224,25 +220,6 @@ export class BrandController {
     };
   }
 
-<<<<<<< HEAD
-  @Post(':brandId/regenerate-website')
-  async regenerateWebsite(
-    @Param('brandId') brandId: string,
-    @Body() body: RegenerateWebsiteDto,
-  ) {
-    const brand = await this.service.getBrandById(brandId);
-    if (!brand) {
-      return { error: 'Brand not found' };
-    }
-    const job = await this.queueService.addWebsiteRegenerationJob(
-      brand._id,
-      body.prompt,
-    );
-    return { message: 'Website regeneration queued', jobId: job.id };
-  }
-
-=======
->>>>>>> b1c4061e34d80a24cfc3e0b0c671273e84e53aca
   /**
    * ✅ Update brand details (partial or full)
    * @route PUT /brands/:id
@@ -302,38 +279,47 @@ export class BrandController {
   async checkBrandLimit(@CurrentUser() user: any) {
     return this.service.checkBrandLimit(user._id);
   }
-<<<<<<< HEAD
-}
-=======
-
 
   @Post(':id/regenerate/status')
   @ApiOperation({
     summary: 'Get job status by brand ID and job type',
-    description: 'Check the status of a queued job by providing brandId and jobType.',
+    description:
+      'Check the status of a queued job by providing brandId and jobType.',
   })
-  @ApiResponse({ status: 404, description: 'Job not found or invalid parameters' })
+  @ApiResponse({
+    status: 404,
+    description: 'Job not found or invalid parameters',
+  })
   async getJobStatus(@Param('id') id: string) {
     const brand = await this.service.getBrandById(id);
     if (!brand) {
       return { error: 'Brand not found' };
     }
 
-    return this.regenerateQueueService.getAssetRegenerationStatus(brand._id.toString());
+    return this.regenerateQueueService.getAssetRegenerationStatus(
+      brand._id.toString(),
+    );
   }
 
   @Post(':id/regenerate/assets')
   @HttpCode(HttpStatus.ACCEPTED)
   @ApiOperation({ summary: 'Generate brand mockups' })
   @ApiResponse({ status: 202, description: 'Mockup generation job queued' })
-  async regenerateJobs(@Param('id') id: string, @Body() body: GetRegeneratedJobStatusDto) {
+  async regenerateJobs(
+    @Param('id') id: string,
+    @Body() body: GetRegeneratedJobStatusDto,
+  ) {
     const brand = await this.service.getBrandById(id);
     if (!brand) {
       return { error: 'Brand not found' };
     }
     const assets = await this.service.getBrandAssets(id);
 
-    const jobs = await this.regenerateQueueService.regenerateAssets(body.jobTypes, brand, assets);
+    const jobs = await this.regenerateQueueService.regenerateAssets(
+      body.jobTypes,
+      brand,
+      assets,
+    );
 
     return {
       jobIds: jobs.map((j) => j.id),
@@ -432,11 +418,8 @@ export class BrandController {
 
   //   const bannerType: BannerVariant = body?.type || BannerVariant.LINKEDIN;
 
-
-
   //   const assets = await this.service.getBrandAssets(id);
   //   const colors = assets?.palette || [];
-
 
   //   const job = await this.regenerateQueueService.regenerateBanner(
   //     brand._id,
@@ -531,6 +514,4 @@ export class BrandController {
   //     message: 'Vision regeneration job queued',
   //   };
   // }
-
 }
->>>>>>> b1c4061e34d80a24cfc3e0b0c671273e84e53aca

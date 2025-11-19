@@ -9,8 +9,8 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from 'src/guards/auth.guard';
-import { StripeService } from '../services/stripe.service';
 import { AdminGuard } from 'src/guards/admin.guard';
+import { StripeService } from '../services/stripe.service';
 // import { CreatePaymentIntentDto } from '../dto/create-payment-intent.dto';
 
 @ApiTags('Payments & Billings')
@@ -21,6 +21,7 @@ export class StripeController {
   constructor(private readonly stripeService: StripeService) {}
 
   @Get('admin/subscriptions')
+  @UseGuards(AdminGuard)
   @ApiOperation({ summary: 'Get all Stripe subscriptions (Admin only)' })
   async getAllSubscriptions() {
     const subscriptions = await this.stripeService['stripe'].subscriptions.list(
@@ -37,6 +38,7 @@ export class StripeController {
   }
 
   @Get('admin/invoices')
+  @UseGuards(AdminGuard)
   @ApiOperation({ summary: 'Get all Stripe invoices (Admin only)' })
   async getAllInvoices() {
     const invoices = await this.stripeService['stripe'].invoices.list({

@@ -17,6 +17,7 @@ import { EmailModule } from './email/email.module';
 import { AdminModule } from './admin/admin.module';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { PaymentsModule } from './payments/payments.module';
+import { WebsiteGeneratorModule } from './website/website-generator.module';
 
 @Module({
   imports: [

@@ -69,7 +69,17 @@ export class PlansService {
     return enrichedPlans;
   }
 
-  async createDefaultPlans(): Promise<Plan[]> {
+  async createDefaultPlans(dto?: any): Promise<any> {
+    // Check if plans already exist
+    const existingPlans = await this.planModel.find();
+    if (existingPlans.length > 0) {
+      return { 
+        message: 'Plans already exist', 
+        count: existingPlans.length,
+        plans: existingPlans.map(p => ({ id: p._id, name: p.name, type: p.type }))
+      };
+    }
+
     const plans = [
       {
         name: 'Starter',
@@ -90,11 +100,11 @@ export class PlansService {
       },
       {
         name: 'Standard',
-        stripeProductId: 'prod_TS4G27nfGPdhsT',
-        stripePriceId: 'price_1SVA7iB5kM6e71ICAlezOh06',
+        stripeProductId: dto?.standardProductId || 'prod_TS4G27nfGPdhsT',
+        stripePriceId: dto?.standardPriceId || 'price_1SVA7iB5kM6e71ICAlezOh06',
         type: 'pro',
         brandCount: 5,
-        features: [
+        features: dto?.standardFeatures || [
           'Everything in Starter, plus:',
           'Up to 5 Brands',
           'AI Website Editor',
@@ -108,11 +118,11 @@ export class PlansService {
       },
       {
         name: 'Premium',
-        stripeProductId: 'prod_TS4HUztQnDr8sG',
-        stripePriceId: 'price_1SVA8lB5kM6e71ICw99dN6hQ',
+        stripeProductId: dto?.premiumProductId || 'prod_TS4HUztQnDr8sG',
+        stripePriceId: dto?.premiumPriceId || 'price_1SVA8lB5kM6e71ICw99dN6hQ',
         type: 'pro',
         brandCount: -1,
-        features: [
+        features: dto?.premiumFeatures || [
           'Everything in Standard, plus:',
           'Unlimited Brands',
           'Priority Support',
@@ -122,15 +132,17 @@ export class PlansService {
       },
     ];
 
-    await this.planModel.deleteMany({});
-
     const createdPlans = [];
     for (const planData of plans) {
       const plan = await this.createPlan(planData);
       createdPlans.push(plan);
     }
 
-    return createdPlans;
+    return { 
+      message: 'Plans created successfully', 
+      count: createdPlans.length,
+      plans: createdPlans
+    };
   }
 
   async updateUserSubscription(
@@ -222,5 +234,28 @@ export class PlansService {
     }
 
     return sessionData;
+  }
+
+  async getUserCurrentPlan(userId: string) {
+    const user = await this.userModel.findById(userId).populate('currentPlan');
+    
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    if (!user.currentPlan) {
+      return { plan: null, message: 'No active plan' };
+    }
+
+    return {
+      plan: {
+        id: (user.currentPlan as any)._id,
+        name: (user.currentPlan as any).name,
+        type: (user.currentPlan as any).type,
+        brandCount: (user.currentPlan as any).brandCount,
+        features: (user.currentPlan as any).features
+      },
+      subscriptionId: user.stripeSubscriptionId
+    };
   }
 }
